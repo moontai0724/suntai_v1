@@ -52,12 +52,14 @@ const CallTimer = require('./functions/CallTimer'); //ok
 /* ================================================== My Functions Over ================================================== */
 /* ================================================== Start My Program ================================================== */
 
+var owners, owners_notice;
+
 // 不會寫入資料庫的變數
 var msg_log = [], msg_log_UUID = [], msg_count = [], msg_countime_UUID = [];
 
 // 獲取資料庫中的資料
-var owners = ConnectDB.readDB(DBref.indexOf('owners') + 1);
-var owners_notice = ConnectDB.readDB(DBref.indexOf('owners_notice') + 1);
+ConnectDB.readDB(DBref.indexOf('owners') + 1).then(function (data) { owners = data; });
+ConnectDB.readDB(DBref.indexOf('owners_notice') + 1).then(function (data) { owners_notice = data; });
 
 // Message handler
 async function MessageHandler(event) {
@@ -689,7 +691,7 @@ async function MessageHandler(event) {
 // 開機提醒
 setTimeout(function () {
 	for (let i = 0; i < owners_notice.length; i++) {
-		LineBotClient.pushMessage(owners_notice[i], UTC8Time.getNowTime() + '\n日太已啟動完成。');
+		LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太已啟動完成。'));
 		console.log('send: ' + owners_notice[i] + ';msg: ' + UTC8Time.getNowTime() + '\n日太已啟動完成。');
 	}
 }, 3000);
