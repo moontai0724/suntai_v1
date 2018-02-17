@@ -4,6 +4,12 @@ module.exports = {
     value: function () {
         return data_quiz;
     },
+    renew: function () {
+        return new Promise(function (resolve) {
+            quizdbget = false;
+            this.get().then(function (data) { resolve(data); });
+        });
+    },
     get: function () {
         return new Promise(function (resolve) {
             if (quizdbget == true) { resolve(false); } else {

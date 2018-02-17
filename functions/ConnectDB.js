@@ -131,6 +131,17 @@ module.exports = {
                             }
                         }
                         break;
+                    case DBref.indexOf('rooms') + 1:
+                        let rooms = [];
+                        for (let i = 0; i < data.feed.entry.length; i++) {
+                            rooms[i] = data.feed.entry[i].gsx$rooms.$t;
+                            if (i == data.feed.entry.length - 1) {
+                                rooms.splice(rooms.indexOf('base'), 1);
+                                console.log('rooms', rooms);
+                                resolve(rooms);
+                            }
+                        }
+                        break;
                 }
             });
         });
