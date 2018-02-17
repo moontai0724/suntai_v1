@@ -66,9 +66,12 @@ async function MessageHandler(event) {
 	console.log(event)
 
 	var SourceData = {
-		type: event.source.type,
+		type: undefined,
+		userId: undefined,
+		id: undefined,
 		Profile: {}
 	};
+	SourceData.type = event.source.type;
 	if (event.source.userId) { SourceData.userId = event.source.userId; }
 
 	switch (event.source.type) {
