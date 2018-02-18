@@ -571,20 +571,24 @@ async function MessageHandler(event) {
 							case 'quizans':
 								if (msgs[2]) {
 									if (msgs[2] > 0 && msgs[2] < 100000) {
-										QuizDB.searchData('sn', msgs[2]).then(function (data) {
-											switch (data.answer) {
-												case '1': case '2': case '3': case '4':
-													startReply(MsgFormat.Text('題目編號：' + data.sn +
-														'\n題目：' + data.question +
-														'\n選項：1. ' + data.option_1 +
-														'\n2. ' + data.option_2 +
-														'\n3. ' + data.option_3 +
-														'\n4. ' + data.option_4 +
-														'\n答案為：' + data.answer));
-													break;
-												default:
-													startReply(MsgFormat.Text('資料庫中可能沒有這一題＞＜"'));
-													break;
+										QuizDB.searchData('sn', '16800').then(function (data) {
+											if (data != undefined) {
+												switch (data.answer) {
+													case '1': case '2': case '3': case '4':
+														startReply(MsgFormat.Text('題目編號：' + data.sn +
+															'\n題目：' + data.question +
+															'\n選項：1. ' + data.option_1 +
+															'\n2. ' + data.option_2 +
+															'\n3. ' + data.option_3 +
+															'\n4. ' + data.option_4 +
+															'\n答案為：' + data.answer));
+														break;
+													default:
+														startReply(MsgFormat.Text('資料庫中可能沒有這一題的答案＞＜"'));
+														break;
+												}
+											} else {
+												startReply(MsgFormat.Text('資料庫中可能沒有這一題＞＜"'));
 											}
 										});
 									}
