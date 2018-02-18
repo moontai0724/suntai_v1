@@ -531,8 +531,6 @@ async function MessageHandler(event) {
 															default:
 																if (i > data.length - 2) {
 																	startReply(MsgFormat.Text('資料庫中可能沒有已經有答案的題目＞＜'));
-																} else {
-																	quiz_start();
 																}
 																break;
 														}
