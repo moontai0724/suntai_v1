@@ -37,45 +37,53 @@ module.exports = {
         });
     },
     searchIndex: function (type, value) {
-        switch (type) {
-            case 'sn':
-                return data_quiz.findIndex(function (element) {
-                    return element.sn == value;
-                })
-                break;
-            case 'bsn':
-                var all = [];
-                data_quiz.forEach(function (element, index) {
-                    if (element.bsn == value) {
-                        all[all.length] = index;
-                    }
-                })
-                return all;
-                break;
-            default:
-                return 'Error';
-                break;
-        }
+        return new Promise(function (resolve, reject) {
+            switch (type) {
+                case 'sn':
+                    resolve(data_quiz.findIndex(function (element) {
+                        return element.sn == value;
+                    }));
+                    break;
+                case 'bsn':
+                    let all = [];
+                    data_quiz.forEach(function (element, index) {
+                        if (element.bsn == value) {
+                            all[all.length] = index;
+                        }
+                        if (index == data_quiz.length - 1) {
+                            resolve(all);
+                        }
+                    });
+                    break;
+                default:
+                    reject('Error');
+                    break;
+            }
+        });
     },
     searchData: function (type, value) {
-        switch (type) {
-            case 'sn':
-                return data_quiz.find(function (element) {
-                    return element.sn == value;
-                })
-                break;
-            case 'bsn':
-                var all = [];
-                data_quiz.forEach(function (element, index) {
-                    if (element.bsn == value) {
-                        all[all.length] = element;
-                    }
-                })
-                return all;
-                break;
-            default:
-                return 'Error';
-                break;
-        }
+        return new Promise(function (resolve, reject) {
+            switch (type) {
+                case 'sn':
+                    resolve(data_quiz.find(function (element) {
+                        return element.sn == value;
+                    }));
+                    break;
+                case 'bsn':
+                    let all = [];
+                    data_quiz.forEach(function (element, index) {
+                        if (element.bsn == value) {
+                            all[all.length] = element;
+                        }
+                        if (index == data_quiz.length - 1) {
+                            resolve(all);
+                        }
+                    });
+                    break;
+                default:
+                    reject('Error');
+                    break;
+            }
+        });
     }
 };
