@@ -6,9 +6,8 @@ const UTC8Time = require('./UTC8Time');
 module.exports = {
     writeDB: function (sheet, range, range2, value, column) {
         return new Promise(function (resolve, reject) {
-            console.log('entered writeDB');
             var totalrange, value2 = [];
-            console.log('start');
+
             if (typeof (value) === 'string') {
                 value2[0] = [];
                 value2[0][0] = value;
@@ -23,13 +22,13 @@ module.exports = {
 
                 }
             }
-            console.log('ok');
+
             if (!column) {
                 totalrange = 'A' + range + ':A' + range2;
             } else {
                 totalrange = column + range + ':' + column + range2;
             }
-            console.log('ok2');
+
             $({
                 type: "POST",
                 url: "https://www.googleapis.com/oauth2/v4/token",
@@ -62,6 +61,12 @@ module.exports = {
                             reject(jqXHR);
                         }
                     });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(UTC8Time.getNowTime(), 'Responsed jqXHR: ', jqXHR);
+                    console.log(UTC8Time.getNowTime(), 'Responsed textStatus: ', textStatus);
+                    console.log(UTC8Time.getNowTime(), 'Responsed errorThrown: ', errorThrown);
+                    reject(jqXHR);
                 }
             });
         });
