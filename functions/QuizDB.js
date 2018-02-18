@@ -12,11 +12,11 @@ module.exports = {
     },
     get: function () {
         return new Promise(function (resolve) {
-            if (quizdbget == true) { resolve(false); } else {
+            if (quizdbget == true) { resolve(data_quiz); } else {
                 data_quiz = [];
                 $.get('https://spreadsheets.google.com/feeds/list/1bV8nZP0Iahgp1GoqTT7qNlgvQYPWmg2yT5Wcsta6lbo/2/public/values?alt=json', function (data) {
                     data = JSON.parse(data);
-                    for (var i = 0; i < data.feed.entry.length; i++) {
+                    for (let i = 0; i < data.feed.entry.length; i++) {
                         data_quiz[i] = {
                             "sn": data.feed.entry[i].gsx$quizsn.$t,
                             "question": data.feed.entry[i].gsx$quizquestion.$t,
