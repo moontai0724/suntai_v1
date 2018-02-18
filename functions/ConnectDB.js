@@ -6,7 +6,7 @@ const UTC8Time = require('./UTC8Time');
 module.exports = {
     writeDB: function (sheet, range, range2, value, column) {
         return new Promise(function (resolve, reject) {
-            let totalrange, value2 = [];
+            var totalrange, value2 = [];
 
             if (typeof (value) === 'string') {
                 value2[0] = [];
