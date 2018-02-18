@@ -143,7 +143,7 @@ async function MessageHandler(event) {
 											}
 											break;
 										case 'groupmemberids': case 'gmi':
-											let group_id = undefined;
+											var group_id = undefined;
 											if (msgs[3]) {
 												group_id = msg[3];
 											} else if (!msgs[3] && SourceData.type == 'group') {
@@ -163,7 +163,7 @@ async function MessageHandler(event) {
 											}
 											break;
 										case 'groupmemberprofile': case 'gmp':
-											let user_id = undefined, group_id = undefined;
+											var user_id = undefined, group_id = undefined;
 
 											if (msgs[3] && msgs[4]) {
 												user_id = msgs[3];
