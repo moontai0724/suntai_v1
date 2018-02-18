@@ -145,7 +145,7 @@ async function MessageHandler(event) {
 										case 'groupmemberids': case 'gmi':
 											var group_id = undefined;
 											if (msgs[3]) {
-												group_id = msg[3];
+												group_id = msgs[3];
 											} else if (!msgs[3] && SourceData.type == 'group') {
 												group_id = SourceData.id;
 											}
@@ -190,7 +190,7 @@ async function MessageHandler(event) {
 										case 'roommemberids': case 'rmi':
 											var room_id = undefined;
 											if (msgs[3]) {
-												room_id = msg[3];
+												room_id = msgs[3];
 											} else if (!msgs[3] && SourceData.type == 'room') {
 												room_id = SourceData.id;
 											}
@@ -321,8 +321,8 @@ async function MessageHandler(event) {
 											if (msg[3]) {
 												ConnectDB.readDB(DBref.indexOf('owners') + 1).then(function (data) {
 													owners = data;
-													if (owners.indexOf(msg[3]) > -1) {
-														owners.splice(owners.indexOf(msg[3]), 1);
+													if (owners.indexOf(msgs[3]) > -1) {
+														owners.splice(owners.indexOf(msgs[3]), 1);
 														ConnectDB.writeDB('owners', 3, owners.length + 3, owners).then(function () {
 															ConnectDB.readDB(DBref.indexOf('owners') + 1).then(function (data) {
 																owners = data;
@@ -389,8 +389,8 @@ async function MessageHandler(event) {
 									break;
 								case 'calltimer':
 									var id;
-									if (msg_list[2]) {
-										id = msg_list[2];
+									if (msgs[2]) {
+										id = msgs[2];
 									} else {
 										id = SourceData.id;
 									}
@@ -428,8 +428,8 @@ async function MessageHandler(event) {
 									QuizDB.renew().then(function (data) { startReply(MsgFormat.Text('已重新獲取題庫！')); });
 									break;
 								case 'send':
-									if (msg_list[2] && msg_list[3]) {
-										LineBotClient.pushMessage(msg_list[2], MsgFormat.Text(msg_list[3]));
+									if (msgs[2] && msgs[3]) {
+										LineBotClient.pushMessage(msgs[2], MsgFormat.Text(msgs[3]));
 										startReply(MsgFormat.Text('傳送完成。'));
 									} else {
 										startReply(MsgFormat.Text('參數錯誤。'));
@@ -606,9 +606,9 @@ async function MessageHandler(event) {
 			} else {
 				if (event.message.text == '87') {
 					startReply(MsgFormat.Text('你說誰 87，你全家都 87'));
-				} else if (msg.indexOf("新年快樂") > -1) {
+				} else if (event.message.text.indexOf("新年快樂") > -1) {
 					startReply(MsgFormat.Text("新年快樂ヾ(*´∀ ˋ*)ﾉ"));
-				} else if (msg.indexOf("狗年快樂") > -1) {
+				} else if (event.message.text.indexOf("狗年快樂") > -1) {
 					startReply(MsgFormat.Text("狗年快樂ヾ(*´∀ ˋ*)ﾉ 汪"));
 				}
 			}
