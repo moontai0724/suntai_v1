@@ -318,7 +318,7 @@ async function MessageHandler(event) {
 											}
 											break;
 										case 'remove':
-											if (msg[3]) {
+											if (msgs[3]) {
 												ConnectDB.readDB(DBref.indexOf('owners') + 1).then(function (data) {
 													owners = data;
 													if (owners.indexOf(msgs[3]) > -1) {
@@ -444,7 +444,7 @@ async function MessageHandler(event) {
 						}
 						break;
 					case '/st':
-						switch (msg[1]) {
+						switch (msgs[1]) {
 							case 'help':
 								startReply(MsgFormat.Text('可用指令如下：' +
 									'\n/st help' +
