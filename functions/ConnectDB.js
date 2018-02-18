@@ -12,7 +12,7 @@ module.exports = {
                 value2[0] = [];
                 value2[0][0] = value;
             } else if (typeof (value) === 'object') {
-                for (i = 0; i <= value.length; i++) {
+                for (let i = 0; i <= value.length; i++) {
                     value2[i] = [];
                     if (i == value.length) {
                         value2[i][0] = '';
