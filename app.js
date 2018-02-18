@@ -515,9 +515,7 @@ async function MessageHandler(event) {
 										QuizDB.get().then(function () {
 											QuizDB.searchData('bsn', msgs[2]).then(function (data) {
 												if (data.length != 0) {
-													quiz_start();
-													let count = 0;
-													function quiz_start() {
+													for (let i = 0; i < data.length; i++) {
 														let choose = GetRandomNumber.start(0, data.length - 1);
 														switch (data[choose].answer) {
 															case '1': case '2': case '3': case '4':
@@ -531,8 +529,7 @@ async function MessageHandler(event) {
 																	'\n獲取答案請打 /st quizans ' + data[choose].sn));
 																break;
 															default:
-																count++;
-																if (count > data.length) {
+																if (i > data.length - 2) {
 																	startReply(MsgFormat.Text('資料庫中可能沒有已經有答案的題目＞＜'));
 																} else {
 																	quiz_start();
