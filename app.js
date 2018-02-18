@@ -58,8 +58,8 @@ var owners, owners_notice;
 var msg_log = [], msg_log_UUID = [], msg_count = [], msg_countime_UUID = [];
 
 // 獲取資料庫中的資料
-// ConnectDB.readDB(DBref.indexOf('owners') + 1).then(function (data) { owners = data; });
-// ConnectDB.readDB(DBref.indexOf('owners_notice') + 1).then(function (data) { owners_notice = data; });
+ConnectDB.readDB(DBref.indexOf('owners') + 1).then(function (data) { owners = data; });
+ConnectDB.readDB(DBref.indexOf('owners_notice') + 1).then(function (data) { owners_notice = data; });
 
 // Message handler
 async function MessageHandler(event) {
@@ -630,41 +630,41 @@ async function MessageHandler(event) {
 		case 'unfollow':
 			break;
 		case 'join':
-			// ConnectDB.readDB(DBref.indexOf('groups') + 1).then(function (groups) {
-			// 	if (groups.indexOf(event.source.groupId) == -1) {
-			// 		ConnectDB.writeDB('groups', groups.length + 3, groups.length + 3, event.source.groupId).then(function () {
-			// 			ConnectDB.readDB(DBref.indexOf('groups') + 1).then(function (groups) {
-			// 				console.log(groups);
-			// 			});
-			// 		}, function (error) {
-			// 			console.log(error);
-			// 		});
-			// 	} else {
-			// 		console.log('沒有達成條件');
-			// 	}
-			// });
-			// for (let i = 0; i < owners_notice.length; i++) {
-			// 	LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太加入了群組: ' + event.source.groupId));
-			// }
+			ConnectDB.readDB(DBref.indexOf('groups') + 1).then(function (groups) {
+				if (groups.indexOf(event.source.groupId) == -1) {
+					ConnectDB.writeDB('groups', groups.length + 3, groups.length + 3, event.source.groupId).then(function () {
+						ConnectDB.readDB(DBref.indexOf('groups') + 1).then(function (groups) {
+							console.log(groups);
+						});
+					}, function (error) {
+						console.log(error);
+					});
+				} else {
+					console.log('沒有達成條件');
+				}
+			});
+			for (let i = 0; i < owners_notice.length; i++) {
+				LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太加入了群組: ' + event.source.groupId));
+			}
 			break;
 		case 'leave':
-			// ConnectDB.readDB(DBref.indexOf('groups') + 1).then(function (groups) {
-			// 	if (groups.indexOf(event.source.groupId) > -1) {
-			// 		groups.splice(groups.indexOf(event.source.groupId), 1);
-			// 		ConnectDB.writeDB('groups', 3, groups.length + 3, groups).then(function () {
-			// 			ConnectDB.readDB(DBref.indexOf('groups') + 1).then(function (groups) {
-			// 				console.log(groups);
-			// 			});
-			// 		}, function (error) {
-			// 			console.log(error);
-			// 		});
-			// 	} else {
-			// 		console.log('沒有達成條件');
-			// 	}
-			// });
-			// for (let i = 0; i < owners_notice.length; i++) {
-			// 	LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太離開了群組: ' + event.source.groupId));
-			// }
+			ConnectDB.readDB(DBref.indexOf('groups') + 1).then(function (groups) {
+				if (groups.indexOf(event.source.groupId) > -1) {
+					groups.splice(groups.indexOf(event.source.groupId), 1);
+					ConnectDB.writeDB('groups', 3, groups.length + 3, groups).then(function () {
+						ConnectDB.readDB(DBref.indexOf('groups') + 1).then(function (groups) {
+							console.log(groups);
+						});
+					}, function (error) {
+						console.log(error);
+					});
+				} else {
+					console.log('沒有達成條件');
+				}
+			});
+			for (let i = 0; i < owners_notice.length; i++) {
+				LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太離開了群組: ' + event.source.groupId));
+			}
 			break;
 	}
 
@@ -689,17 +689,17 @@ async function MessageHandler(event) {
 /* ================================================== Start Other Functions ================================================== */
 
 // 開機提醒
-// setTimeout(function () {
-// 	for (let i = 0; i < owners_notice.length; i++) {
-// 		LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太已啟動完成。'));
-// 		console.log('send: ' + owners_notice[i] + ';msg: ' + UTC8Time.getNowTime() + '\n日太已啟動完成。');
-// 	}
-// }, 3000);
+setTimeout(function () {
+	for (let i = 0; i < owners_notice.length; i++) {
+		LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太已啟動完成。'));
+		console.log('send: ' + owners_notice[i] + ';msg: ' + UTC8Time.getNowTime() + '\n日太已啟動完成。');
+	}
+}, 3000);
 
 // 報時功能
-// UTC8Time.getNowTimePromise().then(function (data) {
-// 	CallTimer.calltimer((((60 - data.time_min) * 60) - data.time_sec) * 1000 - data.time_ms);
-// });
+UTC8Time.getNowTimePromise().then(function (data) {
+	CallTimer.calltimer((((60 - data.time_min) * 60) - data.time_sec) * 1000 - data.time_ms);
+});
 
 // 地震報告
-// EarthquakeCheck.opendata();
+EarthquakeCheck.opendata();
