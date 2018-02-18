@@ -94,7 +94,7 @@ async function MessageHandler(event) {
 	switch (event.message.type) {
 		case 'text':
 			if (event.message.text.startsWith('/')) {
-				var msgs = event.source.text.replace(/[\n]/g, '').split(' '), authorize = false;
+				var msgs = event.message.text.replace(/[\n]/g, '').split(' '), authorize = false;
 				if (owners.indexOf(SourceData.userId) != -1) { authorize = true; }
 				switch (msgs[0]) {
 					case '/mt':
@@ -604,7 +604,7 @@ async function MessageHandler(event) {
 						break;
 				}
 			} else {
-				if (event.source.text == '87') {
+				if (event.message.text == '87') {
 					startReply(MsgFormat.Text('你說誰 87，你全家都 87'));
 				} else if (msg.indexOf("新年快樂") > -1) {
 					startReply(MsgFormat.Text("新年快樂ヾ(*´∀ ˋ*)ﾉ"));
