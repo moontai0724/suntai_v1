@@ -143,7 +143,7 @@ async function MessageHandler(event) {
 											}
 											break;
 										case 'groupmemberids': case 'gmi':
-											var group_id = undefined;
+											let group_id = undefined;
 											if (msgs[3]) {
 												group_id = msg[3];
 											} else if (!msgs[3] && SourceData.type == 'group') {
@@ -163,7 +163,7 @@ async function MessageHandler(event) {
 											}
 											break;
 										case 'groupmemberprofile': case 'gmp':
-											var user_id = undefined, group_id = undefined;
+											let user_id = undefined, group_id = undefined;
 
 											if (msgs[3] && msgs[4]) {
 												user_id = msgs[3];
@@ -188,7 +188,7 @@ async function MessageHandler(event) {
 											}
 											break;
 										case 'roommemberids': case 'rmi':
-											var room_id = undefined;
+											let room_id = undefined;
 											if (msgs[3]) {
 												room_id = msg[3];
 											} else if (!msgs[3] && SourceData.type == 'room') {
@@ -208,7 +208,7 @@ async function MessageHandler(event) {
 											}
 											break;
 										case 'roommemberprofile': case 'rmp':
-											var user_id = undefined, room_id = undefined;
+											let user_id = undefined, room_id = undefined;
 
 											if (msgs[3] && msgs[4]) {
 												user_id = msgs[3];
@@ -351,7 +351,7 @@ async function MessageHandler(event) {
 											});
 											break;
 										case 'notice':
-											var user_id;
+											let user_id;
 											if (msgs[3]) {
 												user_id = msgs[3];
 											} else {
@@ -388,7 +388,7 @@ async function MessageHandler(event) {
 									}
 									break;
 								case 'calltimer':
-									var id;
+									let id;
 									if (msg_list[2]) {
 										id = msg_list[2];
 									} else {
