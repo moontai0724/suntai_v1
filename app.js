@@ -163,18 +163,18 @@ async function MessageHandler(event) {
 											}
 											break;
 										case 'groupmemberprofile': case 'gmp':
-											let userId = undefined, groupId = undefined;
+											let user_id = undefined, group_id = undefined;
 
 											if (msgs[3] && msgs[4]) {
-												userId = msgs[3];
-												groupId = msgs[4];
+												user_id = msgs[3];
+												group_id = msgs[4];
 											} else if (msgs[3]) {
-												userId = msgs[3];
-												groupId = SourceData.id;
+												user_id = msgs[3];
+												group_id = SourceData.id;
 											}
 
-											if (userId != undefined && groupId != undefined) {
-												LineBotClient.getGroupMemberProfile(groupId, userId).then(function (profile) {
+											if (user_id != undefined && group_id != undefined) {
+												LineBotClient.getGroupMemberProfile(group_id, user_id).then(function (profile) {
 													console.log(profile);
 													startReply(MsgFormat.Text('Display Name: ' + profile.displayName +
 														'\nuserId: ' + profile.userId +
@@ -208,18 +208,18 @@ async function MessageHandler(event) {
 											}
 											break;
 										case 'roommemberprofile': case 'rmp':
-											let userId = undefined, roomId = undefined;
+											let user_id = undefined, room_id = undefined;
 
 											if (msgs[3] && msgs[4]) {
-												userId = msgs[3];
-												roomId = msgs[4];
+												user_id = msgs[3];
+												room_id = msgs[4];
 											} else if (msgs[3]) {
-												userId = msgs[3];
-												roomId = SourceData.id;
+												user_id = msgs[3];
+												room_id = SourceData.id;
 											}
 
-											if (userId != undefined && roomId != undefined) {
-												LineBotClient.getRoomMemberProfile(roomId, userId).then(function (profile) {
+											if (user_id != undefined && room_id != undefined) {
+												LineBotClient.getRoomMemberProfile(room_id, user_id).then(function (profile) {
 													console.log(profile);
 													startReply(MsgFormat.Text('Display Name: ' + profile.displayName +
 														'\nuserId: ' + profile.userId +
