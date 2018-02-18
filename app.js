@@ -38,16 +38,16 @@ app.listen(process.env.PORT || 8080, function () { console.log('App now running 
 
 /* ================================================== My Functions Start ================================================== */
 
-// const DBref = require('./functions/Variables').DBref; //ok
+const DBref = require('./functions/Variables').DBref; //ok
 
-// const UTC8Time = require('./functions/UTC8Time'); //ok.include: getNowTime(function), value
-// const MsgFormat = require('./functions/MsgFormat'); //ok.include: Text(function), Sticker(function), Image(function), Video(function), Audio(function), Location(function)
-// const QuizDB = require('./functions/QuizDB'); //ok.include: value(function), get(function), searchIndex(function), searchData(function)
-// const EarthquakeCheck = require('./functions/EarthquakeCheck'); //ok
-// const GetRandomNumber = require('./functions/GetRandomNumber'); //ok.include: start(function)
-// const UploadPicToImgurByURL = require('./functions/UploadPicToImgurByURL'); //ok.include: start(function)
-// const ConnectDB = require('./functions/ConnectDB'); //ok
-// const CallTimer = require('./functions/CallTimer'); //ok
+const UTC8Time = require('./functions/UTC8Time'); //ok.include: getNowTime(function), value
+const MsgFormat = require('./functions/MsgFormat'); //ok.include: Text(function), Sticker(function), Image(function), Video(function), Audio(function), Location(function)
+const QuizDB = require('./functions/QuizDB'); //ok.include: value(function), get(function), searchIndex(function), searchData(function)
+const EarthquakeCheck = require('./functions/EarthquakeCheck'); //ok
+const GetRandomNumber = require('./functions/GetRandomNumber'); //ok.include: start(function)
+const UploadPicToImgurByURL = require('./functions/UploadPicToImgurByURL'); //ok.include: start(function)
+const ConnectDB = require('./functions/ConnectDB'); //ok
+const CallTimer = require('./functions/CallTimer'); //ok
 
 /* ================================================== My Functions Over ================================================== */
 /* ================================================== Start My Program ================================================== */
