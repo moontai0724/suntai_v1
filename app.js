@@ -529,6 +529,7 @@ async function MessageHandler(event) {
 																	'\n4. ' + data[choose].option_4 +
 																	'\n\n題目來源討論區：https://forum.gamer.com.tw/A.php?bsn=' + data[choose].bsn +
 																	'\n獲取答案請打 /st quizans ' + data[choose].sn));
+																break;
 															default:
 																count++;
 																if (count > data.length) {
@@ -562,6 +563,7 @@ async function MessageHandler(event) {
 														'\n4. ' + data[choose].option_4 +
 														'\n\n題目來源討論區：https://forum.gamer.com.tw/A.php?bsn=' + data[choose].bsn +
 														'\n獲取答案請打 /st quizans ' + data[choose].sn));
+													break;
 												default:
 													quiz_start();
 													break;
