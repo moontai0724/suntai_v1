@@ -689,12 +689,12 @@ async function MessageHandler(event) {
 /* ================================================== Start Other Functions ================================================== */
 
 // 開機提醒
-setTimeout(function () {
-	for (let i = 0; i < owners_notice.length; i++) {
-		LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太已啟動完成。'));
-		console.log('send: ' + owners_notice[i] + ';msg: ' + UTC8Time.getNowTime() + '\n日太已啟動完成。');
-	}
-}, 3000);
+// setTimeout(function () {
+// 	for (let i = 0; i < owners_notice.length; i++) {
+// 		LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太已啟動完成。'));
+// 		console.log('send: ' + owners_notice[i] + ';msg: ' + UTC8Time.getNowTime() + '\n日太已啟動完成。');
+// 	}
+// }, 3000);
 
 // 報時功能
 // UTC8Time.getNowTimePromise().then(function (data) {
