@@ -58,8 +58,8 @@ var owners, owners_notice;
 var msg_log = [], msg_log_UUID = [], msg_count = [], msg_countime_UUID = [];
 
 // 獲取資料庫中的資料
-ConnectDB.readDB(DBref.indexOf('owners') + 1).then(function (data) { owners = data; });
-ConnectDB.readDB(DBref.indexOf('owners_notice') + 1).then(function (data) { owners_notice = data; });
+// ConnectDB.readDB(DBref.indexOf('owners') + 1).then(function (data) { owners = data; });
+// ConnectDB.readDB(DBref.indexOf('owners_notice') + 1).then(function (data) { owners_notice = data; });
 
 // Message handler
 async function MessageHandler(event) {
