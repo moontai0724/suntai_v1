@@ -475,24 +475,17 @@ async function MessageHandler(event) {
 								break;
 							case 'calltimer':
 								ConnectDB.readDB(DBref.indexOf('ontime_timer') + 1).then(function (ontime_timer_list) {
-									console.log('ontime_timer_list', ontime_timer_list);
 									if (ontime_timer_list.indexOf(SourceData.id) > -1) {
-										console.log('entered yes');
 										ontime_timer_list.splice(ontime_timer_list.indexOf(SourceData.id), 1);
 										ConnectDB.writeDB('ontime_timer', 3, ontime_timer_list.length + 3, ontime_timer_list).then(function () {
-											console.log('writed');
 											ConnectDB.readDB(DBref.indexOf('ontime_timer') + 1).then(function (ontime_timer_list) {
-												console.log('readed');
 												startReply(MsgFormat.Text('報時功能已經關閉。'));
 												console.log(SourceData.id + ' 的報時功能已經關閉。');
 											});
 										});
 									} else {
-										console.log('entered no');
 										ConnectDB.writeDB('ontime_timer', ontime_timer_list.length + 3, ontime_timer_list.length + 3, SourceData.id).then(function () {
-											console.log('writed');
 											ConnectDB.readDB(DBref.indexOf('ontime_timer') + 1).then(function (ontime_timer_list) {
-												console.log('readed');
 												startReply(MsgFormat.Text('報時功能已經開啟。'));
 												console.log(SourceData.id + ' 的報時功能已經開啟。');
 											});
@@ -558,7 +551,7 @@ async function MessageHandler(event) {
 									QuizDB.get().then(function (data) {
 										quiz_start();
 										function quiz_start() {
-											let choose = getRandomNumber(0, data.length - 1);
+											let choose = GetRandomNumber.start(0, data.length - 1);
 											switch (data[choose].answer) {
 												case '1': case '2': case '3': case '4':
 													startReply(MsgFormat.Text('題目編號：' + data[choose].sn +
