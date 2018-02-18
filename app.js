@@ -93,7 +93,7 @@ async function MessageHandler(event) {
 
 	switch (event.message.type) {
 		case 'text':
-			if (event.source.text.startsWith('/')) {
+			if (event.message.text.startsWith('/')) {
 				var msgs = event.source.text.replace(/[\n]/g, '').split(' '), authorize = false;
 				if (owners.indexOf(SourceData.userId) != -1) { authorize = true; }
 				switch (msgs[0]) {
