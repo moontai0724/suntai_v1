@@ -34,10 +34,10 @@ module.exports = {
                 url: "https://www.googleapis.com/oauth2/v4/token",
                 contentType: "application/x-www-form-urlencoded;",
                 data: 'refresh_token=***REMOVED***&' +
-                    'clientime_id=***REMOVED***&' +
-                    'clientime_secret=***REMOVED***&' +
-                    'redirectime_uri=urn:ietf:wg:oauth:2.0:oob&' +
-                    'grantime_type=refresh_token',
+                    'client_id=***REMOVED***&' +
+                    'client_secret=***REMOVED***&' +
+                    'redirect_uri=urn:ietf:wg:oauth:2.0:oob&' +
+                    'grant_type=refresh_token',
                 success: function (data) {
                     data = JSON.parse(data);
                     $({
