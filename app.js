@@ -519,6 +519,7 @@ async function MessageHandler(event) {
 														let choose = GetRandomNumber.start(0, data.length - 1);
 														switch (data[choose].answer) {
 															case '1': case '2': case '3': case '4':
+																i = data.length;
 																startReply(MsgFormat.Text('題目編號：' + data[choose].sn +
 																	'\n題目：' + data[choose].question +
 																	'\n選項：1. ' + data[choose].option_1 +
