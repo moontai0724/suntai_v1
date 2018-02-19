@@ -611,7 +611,7 @@ async function MessageHandler(event) {
 										break;
 									case 'ping':
 										if (msgs[2] || SourceData.id == 'C0170a911180661dae5d2ec25bdffceae') {
-											let pingport;
+											let pingport, pingattempts, replyMsg;
 
 											if (msgs[3]) {
 												if (65536 > Number(msgs[3]) && Number(msgs[3]) > 0) {
@@ -623,23 +623,30 @@ async function MessageHandler(event) {
 												pingport = 80;
 											}
 
+											if (msgs[4]) {
+												if (6 > Number(msgs[4]) && Number(msgs[4]) > 0) {
+													pingattempts = Number(msgs[3]);
+												} else {
+													pingattempts = 2;
+												}
+											} else {
+												pingport = 2;
+											}
+
 											if (!msgs[2] && SourceData.id == 'C0170a911180661dae5d2ec25bdffceae') {
 												msgs[2] = 'dokidokiweebclub.ddns.net';
 												pingport = 25565;
 											}
 
-											ping.ping({ address: msgs[2], port: pingport }, function (data) {
-												let pingstatus;
-												if (data[0].avg != NaN) {
-													pingstatus = '線上';
+											ping.ping({ address: msgs[2], port: pingport, attempts: pingattempts }, function (data) {
+												replyMsg = '目標位址：' + data[0].address + '\n連接埠：' + data[0].port + '\n嘗試次數：' + data[0].attempts;
+												if (data[0].avg) {
+													replyMsg += '\n狀態：線上' + '\n平均時間：' + data[0].avg;
 												} else {
-													pingstatus = '離線';
+													replyMsg += '\n狀態：離線';
 												}
 
-												startReply(MsgFormat.Text('目標位址：' + data[0].address +
-													'\n連接埠：' + data[0].port +
-													'\n狀態：' + pingstatus +
-													'\n平均時間：' + data[0].avg));
+												startReply(MsgFormat.Text(replyMsg));
 											});
 										} else {
 											startReply(MsgFormat.Text('參數錯誤。'));
