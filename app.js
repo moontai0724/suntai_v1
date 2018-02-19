@@ -469,7 +469,7 @@ async function MessageHandler(event) {
 											'\n　註：bsn 為巴哈姆特看板編號。' +
 											// '\n/st antiunsend || au [SpecificSort]' +
 											// '\n　註：最多指定 20 筆資料，若無指定預設五筆。' +
-											'\n/st ping <address> [port]'));
+											'\n/st ping <address> [attempt] [port]'));
 										break;
 									case 'time':
 										switch (msgs[2]) {
@@ -614,23 +614,23 @@ async function MessageHandler(event) {
 											let pingport, pingattempts, replyMsg;
 
 											if (msgs[3]) {
-												if (65536 > Number(msgs[3]) && Number(msgs[3]) > 0) {
-													pingport = Number(msgs[3]);
-												} else {
-													pingport = 80;
-												}
-											} else {
-												pingport = 80;
-											}
-
-											if (msgs[4]) {
-												if (6 > Number(msgs[4]) && Number(msgs[4]) > 0) {
+												if (6 > Number(msgs[3]) && Number(msgs[3]) > 0) {
 													pingattempts = Number(msgs[3]);
 												} else {
 													pingattempts = 2;
 												}
 											} else {
-												pingport = 2;
+												pingattempts = 2;
+											}
+
+											if (msgs[4]) {
+												if (65536 > Number(msgs[4]) && Number(msgs[4]) > 0) {
+													pingport = Number(msgs[4]);
+												} else {
+													pingport = 80;
+												}
+											} else {
+												pingport = 80;
 											}
 
 											if (!msgs[2] && SourceData.id == 'C0170a911180661dae5d2ec25bdffceae') {
