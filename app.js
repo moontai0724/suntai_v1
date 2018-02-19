@@ -698,9 +698,7 @@ setTimeout(function () {
 }, 3000);
 
 // 報時功能
-UTC8Time.getNowTimePromise().then(function (data) {
-	CallTimer.calltimer((((60 - data.time_min) * 60) - data.time_sec) * 1000 - data.time_ms, data.time_hr);
-});
+CallTimer.calltimer();
 
 // 地震報告
 EarthquakeCheck.opendata();

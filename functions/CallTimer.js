@@ -52,27 +52,29 @@ module.exports = {
 
     calltimertest: function (TargetId) {
         ConnectDB.readDB(DBref.indexOf('ontime_timer') + 1).then(function (ontime_timer_list) {
-            let original_pic, clocksort = GetRandomNumber.start(0, clocktext.length - 1);
-            for (let i = 0; i < 24; i++) {
-                let i2;
-                if (i < 10) { i2 = '0' + i; } else { i2 = i; }
-                if (clock == i2 && i < 12) {
-                    clock = i;
-                    original_pic = 'https://i.imgur.com/' + original_pic_src[clock] + '.jpg';
-                } else if (clock == i2 && i > 11) {
-                    clock = i;
-                    original_pic = 'https://i.imgur.com/' + original_pic_src[clock - 12] + '.jpg';
+            UTC8Time.getNowTimePromise().then(function (time) {
+                let this_pic_src, clock, clocksort = GetRandomNumber.start(0, clocktext.length - 1);
+                for (let i = 0; i < 24; i++) {
+                    let i2;
+                    if (i < 10) { i2 = '0' + i; } else { i2 = i; }
+                    if (time.time_hr == i2 && i < 12) {
+                        clock = i;
+                        this_pic_src = 'https://i.imgur.com/' + pic_src[clock] + '.jpg';
+                    } else if (time.time_hr == i2 && i > 11) {
+                        clock = i;
+                        this_pic_src = 'https://i.imgur.com/' + pic_src[clock - 12] + '.jpg';
+                    }
                 }
-            }
-            let Msg = [MsgFormat.Text('（測試訊息）\n' + clock + clocktext[clocksort] + '\n(' + UTC8Time.getNowTime() + ')\n'), MsgFormat.Image(original_pic, original_pic)];
-            if (TargetId) {
-                LineBotClient.pushMessage(TargetId, Msg);
-            } else {
-                for (let i = 0; i < ontime_timer_list.length; i++) {
-                    console.log(ontime_timer_list[i] + '（測試訊息）\n' + clock + clocktext[clocksort] + '\n(' + UTC8Time.getNowTime() + ')\n' + original_pic);
-                    LineBotClient.pushMessage(ontime_timer_list[i], Msg);
+                let Msg = [MsgFormat.Text('（測試訊息）\n' + clock + clocktext[clocksort] + '\n(' + UTC8Time.getNowTime() + ')\n'), MsgFormat.Image(this_pic_src, this_pic_src)];
+                if (TargetId) {
+                    LineBotClient.pushMessage(TargetId, Msg);
+                } else {
+                    for (let i = 0; i < ontime_timer_list.length; i++) {
+                        console.log(ontime_timer_list[i] + '（測試訊息）\n' + clock + clocktext[clocksort] + '\n(' + UTC8Time.getNowTime() + ')\n' + this_pic_src);
+                        LineBotClient.pushMessage(ontime_timer_list[i], Msg);
+                    }
                 }
-            }
+            });
         });
     }
 }
