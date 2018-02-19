@@ -71,23 +71,24 @@ async function MessageHandler(event) {
 		id: undefined,
 		Profile: {}
 	};
-	SourceData.type = event.source.type;
-	if (event.source.userId) { SourceData.userId = event.source.userId; }
-
-	switch (event.source.type) {
-		case 'user':
-			SourceData.id = event.source.userId;
-			SourceData.Profile = await LineBotClient.getProfile(event.source.userId); // displayName, userId, pictureUrl, statusMessage
-			break;
-		case 'group':
-			SourceData.id = event.source.groupId;
-			SourceData.Profile = await LineBotClient.getGroupMemberProfile(event.source.groupId, event.source.userId); // displayName, userId, pictureUrl
-			break;
-		case 'room':
-			SourceData.id = event.source.roomId;
-			SourceData.Profile = await LineBotClient.getRoomMemberProfile(event.source.roomId, event.source.userId); // displayName, userId, pictureUrl
-			break;
-	}
+	// SourceData.type = event.source.type;
+	// if (event.source.userId) {
+	// 	SourceData.userId = event.source.userId;
+	// 	switch (event.source.type) {
+	// 		case 'user':
+	// 			SourceData.id = event.source.userId;
+	// 			SourceData.Profile = await LineBotClient.getProfile(event.source.userId); // displayName, userId, pictureUrl, statusMessage
+	// 			break;
+	// 		case 'group':
+	// 			SourceData.id = event.source.groupId;
+	// 			SourceData.Profile = await LineBotClient.getGroupMemberProfile(event.source.groupId, event.source.userId); // displayName, userId, pictureUrl
+	// 			break;
+	// 		case 'room':
+	// 			SourceData.id = event.source.roomId;
+	// 			SourceData.Profile = await LineBotClient.getRoomMemberProfile(event.source.roomId, event.source.userId); // displayName, userId, pictureUrl
+	// 			break;
+	// 	}
+	// }
 
 	console.log(SourceData);
 
