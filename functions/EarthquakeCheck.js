@@ -1,3 +1,10 @@
+// Require Line Bot SDK
+const LineBotSDK = require('@line/bot-sdk');
+
+// Require config
+const Config = require('../config/config');
+const LineBotClient = new LineBotSDK.Client(Config);
+
 const DBref = require('./Variables').DBref;
 
 const najax = $ = require('najax');

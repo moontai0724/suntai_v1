@@ -1,5 +1,5 @@
 // Require Line Bot SDK
-const LineBotSDK = require('@line/bot-sdk')
+const LineBotSDK = require('@line/bot-sdk');
 
 // Require Node Module
 const Koa = require('koa');

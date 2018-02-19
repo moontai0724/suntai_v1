@@ -1,5 +1,5 @@
 // Require Line Bot SDK
-const LineBotSDK = require('@line/bot-sdk')
+const LineBotSDK = require('@line/bot-sdk');
 
 // Require config
 const Config = require('../config/config');
@@ -42,9 +42,7 @@ module.exports = {
                         LineBotClient.pushMessage(ontime_timer_list[i], MsgFormat.Image(this_pic_src, this_pic_src));
                     }
 
-                    UTC8Time.getNowTimePromise().then(function (time) {
-                        calltimer();
-                    });
+                    calltimer();
                 }, (((60 - time.time_min) * 60) - time.time_sec) * 1000 - time.time_ms);
             });
         });
