@@ -254,7 +254,7 @@ async function MessageHandler(event) {
 													break;
 											}
 											break;
-										case 'mulit':
+										case 'multi':
 											switch (msgs[2]) {
 												case 'group':
 													switch (msgs[3]) {
