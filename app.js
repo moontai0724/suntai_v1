@@ -71,26 +71,24 @@ async function MessageHandler(event) {
 		id: undefined,
 		Profile: {}
 	};
-	// SourceData.type = event.source.type;
-	// if (event.source.userId) {
-	// 	SourceData.userId = event.source.userId;
-	// 	switch (event.source.type) {
-	// 		case 'user':
-	// 			SourceData.id = event.source.userId;
-	// 			SourceData.Profile = await LineBotClient.getProfile(event.source.userId); // displayName, userId, pictureUrl, statusMessage
-	// 			break;
-	// 		case 'group':
-	// 			SourceData.id = event.source.groupId;
-	// 			SourceData.Profile = await LineBotClient.getGroupMemberProfile(event.source.groupId, event.source.userId); // displayName, userId, pictureUrl
-	// 			break;
-	// 		case 'room':
-	// 			SourceData.id = event.source.roomId;
-	// 			SourceData.Profile = await LineBotClient.getRoomMemberProfile(event.source.roomId, event.source.userId); // displayName, userId, pictureUrl
-	// 			break;
-	// 	}
-	// }
-
-	console.log(SourceData);
+	SourceData.type = event.source.type;
+	if (event.source.userId) {
+		SourceData.userId = event.source.userId;
+		switch (event.source.type) {
+			case 'user':
+				SourceData.id = event.source.userId;
+				SourceData.Profile = LineBotClient.getProfile(event.source.userId); // displayName, userId, pictureUrl, statusMessage
+				break;
+			case 'group':
+				SourceData.id = event.source.groupId;
+				SourceData.Profile = LineBotClient.getGroupMemberProfile(event.source.groupId, event.source.userId); // displayName, userId, pictureUrl
+				break;
+			case 'room':
+				SourceData.id = event.source.roomId;
+				SourceData.Profile = LineBotClient.getRoomMemberProfile(event.source.roomId, event.source.userId); // displayName, userId, pictureUrl
+				break;
+		}
+	}
 
 	switch (event.message.type) {
 		case 'text':
@@ -701,7 +699,7 @@ setTimeout(function () {
 
 // 報時功能
 UTC8Time.getNowTimePromise().then(function (data) {
-	CallTimer.calltimer((((60 - data.time_min) * 60) - data.time_sec) * 1000 - data.time_ms);
+	CallTimer.calltimer((((60 - data.time_min) * 60) - data.time_sec) * 1000 - data.time_ms, data.time_hr);
 });
 
 // 地震報告
