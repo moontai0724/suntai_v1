@@ -469,7 +469,7 @@ async function MessageHandler(event) {
 											'\n　註：bsn 為巴哈姆特看板編號。' +
 											// '\n/st antiunsend || au [SpecificSort]' +
 											// '\n　註：最多指定 20 筆資料，若無指定預設五筆。' +
-											'\n/st ping <address> [attempt] [port]' +
+											'\n/st ping <address> [port] [attempt]' +
 											'\n　註：attempt 預設 2，port 預設 80'));
 										break;
 									case 'time':
@@ -620,23 +620,23 @@ async function MessageHandler(event) {
 											let pingport, pingattempts, replyMsg;
 
 											if (msgs[3]) {
-												if (6 > Number(msgs[3]) && Number(msgs[3]) > 0) {
-													pingattempts = Number(msgs[3]);
-												} else {
-													pingattempts = 2;
-												}
-											} else {
-												pingattempts = 2;
-											}
-
-											if (msgs[4]) {
-												if (65536 > Number(msgs[4]) && Number(msgs[4]) > 0) {
-													pingport = Number(msgs[4]);
+												if (65536 > Number(msgs[3]) && Number(msgs[3]) > 0) {
+													pingport = Number(msgs[3]);
 												} else {
 													pingport = 80;
 												}
 											} else {
 												pingport = 80;
+											}
+
+											if (msgs[4]) {
+												if (6 > Number(msgs[4]) && Number(msgs[4]) > 0) {
+													pingattempts = Number(msgs[4]);
+												} else {
+													pingattempts = 2;
+												}
+											} else {
+												pingattempts = 2;
 											}
 
 											if (!msgs[2] && SourceData.id == 'C0170a911180661dae5d2ec25bdffceae') {
@@ -645,11 +645,11 @@ async function MessageHandler(event) {
 											}
 
 											ping.ping({ address: msgs[2], port: pingport, attempts: pingattempts }, function (data) {
-												replyMsg = '目標位址：' + data[0].address + '\n連接埠：' + data[0].port + '\n嘗試次數：' + data[0].attempts;
+												replyMsg = '目標位址： ' + data[0].address + '\n連接埠： ' + data[0].port + '\n嘗試次數： ' + data[0].attempts;
 												if (data[0].avg) {
-													replyMsg += '\n狀態：線上' + '\n平均時間：' + data[0].avg;
+													replyMsg += '\n狀態： 線上' + '\n平均時間： ' + data[0].avg;
 												} else {
-													replyMsg += '\n狀態：離線';
+													replyMsg += '\n狀態： 離線';
 												}
 
 												startReply(MsgFormat.Text(replyMsg));
