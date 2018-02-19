@@ -469,7 +469,8 @@ async function MessageHandler(event) {
 											'\n　註：bsn 為巴哈姆特看板編號。' +
 											// '\n/st antiunsend || au [SpecificSort]' +
 											// '\n　註：最多指定 20 筆資料，若無指定預設五筆。' +
-											'\n/st ping <address> [attempt] [port]'));
+											'\n/st ping <address> [attempt] [port]' +
+											'\n　註：attempt 預設 2，port 預設 80'));
 										break;
 									case 'time':
 										switch (msgs[2]) {
