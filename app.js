@@ -631,40 +631,85 @@ async function MessageHandler(event) {
 		case 'unfollow':
 			break;
 		case 'join':
-			ConnectDB.readDB(DBref.indexOf('groups') + 1).then(function (groups) {
-				if (groups.indexOf(event.source.groupId) == -1) {
-					ConnectDB.writeDB('groups', groups.length + 3, groups.length + 3, event.source.groupId).then(function () {
-						ConnectDB.readDB(DBref.indexOf('groups') + 1).then(function (groups) {
-							console.log(groups);
-						});
-					}, function (error) {
-						console.log(error);
+			switch (event.source.type) {
+				case 'group':
+					ConnectDB.readDB(DBref.indexOf('groups') + 1).then(function (groups) {
+						if (groups.indexOf(event.source.groupId) == -1) {
+							ConnectDB.writeDB('groups', groups.length + 3, groups.length + 3, event.source.groupId).then(function () {
+								ConnectDB.readDB(DBref.indexOf('groups') + 1).then(function (groups) {
+									console.log(groups);
+								});
+							}, function (error) {
+								console.log(error);
+							});
+						} else {
+							console.log('沒有達成條件');
+						}
 					});
-				} else {
-					console.log('沒有達成條件');
-				}
-			});
-			for (let i = 0; i < owners_notice.length; i++) {
-				LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太加入了群組: ' + event.source.groupId));
+					for (let i = 0; i < owners_notice.length; i++) {
+						LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太加入了群組: ' + event.source.groupId));
+					}
+					break;
+				case 'room':
+					ConnectDB.readDB(DBref.indexOf('rooms') + 1).then(function (rooms) {
+						if (rooms.indexOf(event.source.roomId) == -1) {
+							ConnectDB.writeDB('rooms', rooms.length + 3, rooms.length + 3, event.source.roomId).then(function () {
+								ConnectDB.readDB(DBref.indexOf('rooms') + 1).then(function (rooms) {
+									console.log(rooms);
+								});
+							}, function (error) {
+								console.log(error);
+							});
+						} else {
+							console.log('沒有達成條件');
+						}
+					});
+					for (let i = 0; i < owners_notice.length; i++) {
+						LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太加入了聊天室: ' + event.source.roomId));
+					}
+					break;
 			}
 			break;
 		case 'leave':
-			ConnectDB.readDB(DBref.indexOf('groups') + 1).then(function (groups) {
-				if (groups.indexOf(event.source.groupId) > -1) {
-					groups.splice(groups.indexOf(event.source.groupId), 1);
-					ConnectDB.writeDB('groups', 3, groups.length + 3, groups).then(function () {
-						ConnectDB.readDB(DBref.indexOf('groups') + 1).then(function (groups) {
-							console.log(groups);
-						});
-					}, function (error) {
-						console.log(error);
+			switch (event.source.type) {
+				case 'group':
+					ConnectDB.readDB(DBref.indexOf('groups') + 1).then(function (groups) {
+						if (groups.indexOf(event.source.groupId) > -1) {
+							groups.splice(groups.indexOf(event.source.groupId), 1);
+							ConnectDB.writeDB('groups', 3, groups.length + 3, groups).then(function () {
+								ConnectDB.readDB(DBref.indexOf('groups') + 1).then(function (groups) {
+									console.log(groups);
+								});
+							}, function (error) {
+								console.log(error);
+							});
+						} else {
+							console.log('沒有達成條件');
+						}
 					});
-				} else {
-					console.log('沒有達成條件');
-				}
-			});
-			for (let i = 0; i < owners_notice.length; i++) {
-				LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太離開了群組: ' + event.source.groupId));
+					for (let i = 0; i < owners_notice.length; i++) {
+						LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太離開了群組: ' + event.source.groupId));
+					}
+					break;
+				case 'room':
+					ConnectDB.readDB(DBref.indexOf('rooms') + 1).then(function (rooms) {
+						if (rooms.indexOf(event.source.roomId) > -1) {
+							rooms.splice(rooms.indexOf(event.source.roomId), 1);
+							ConnectDB.writeDB('rooms', 3, rooms.length + 3, rooms).then(function () {
+								ConnectDB.readDB(DBref.indexOf('rooms') + 1).then(function (rooms) {
+									console.log(rooms);
+								});
+							}, function (error) {
+								console.log(error);
+							});
+						} else {
+							console.log('沒有達成條件');
+						}
+					});
+					for (let i = 0; i < owners_notice.length; i++) {
+						LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太離開了聊天室: ' + event.source.roomId));
+					}
+					break;
 			}
 			break;
 	}
