@@ -9,6 +9,7 @@ const KoaBodyParser = require('koa-bodyparser');
 const najax = $ = require('najax');
 const parseString = require('xml2js').parseString;
 const sqlite = require('sqlite');
+const ping = require('ping-net');
 
 // Require config
 const Config = require('./config/config');
@@ -467,7 +468,8 @@ async function MessageHandler(event) {
 											'\n/st quizans <bsn>' +
 											'\n　註：bsn 為巴哈姆特看板編號。' +
 											// '\n/st antiunsend || au [SpecificSort]' +
-											'\n　註：最多指定 20 筆資料，若無指定預設五筆。'));
+											// '\n　註：最多指定 20 筆資料，若無指定預設五筆。' +
+											'\n/st ping <address> [port]'));
 										break;
 									case 'time':
 										switch (msgs[2]) {
@@ -553,7 +555,7 @@ async function MessageHandler(event) {
 													});
 												});
 											} else {
-												startReply(MsgFormat.Text("參數錯誤。"));
+												startReply(MsgFormat.Text('參數錯誤。'));
 											}
 										} else {
 											QuizDB.get().then(function (data) {
@@ -604,8 +606,43 @@ async function MessageHandler(event) {
 												});
 											}
 										} else {
-											startReply(MsgFormat.Text("參數錯誤。"));
+											startReply(MsgFormat.Text('參數錯誤。'));
+										}
+										break;
+									case 'ping':
+										if (msgs[2] || SourceData.id == 'C0170a911180661dae5d2ec25bdffceae') {
+											let pingport;
 
+											if (msgs[3]) {
+												if (65536 > Number(msgs[3]) && Number(msgs[3]) > 0) {
+													pingport = Number(msgs[3]);
+												} else {
+													pingport = 80;
+												}
+											} else {
+												pingport = 80;
+											}
+
+											if (!msgs[2] && SourceData.id == 'C0170a911180661dae5d2ec25bdffceae') {
+												msgs[2] = 'dokidokiweebclub.ddns.net';
+												pingport = 25565;
+											}
+
+											ping.ping({ address: msgs[2], port: pingport }, function (data) {
+												let pingstatus;
+												if (data[0].avg != NaN) {
+													pingstatus = '線上';
+												} else {
+													pingstatus = '離線';
+												}
+
+												startReply(MsgFormat.Text('目標位址：' + data[0].address +
+													'\n連接埠：' + data[0].port +
+													'\n狀態：' + pingstatus +
+													'\n平均時間：' + data[0].avg));
+											});
+										} else {
+											startReply(MsgFormat.Text('參數錯誤。'));
 										}
 										break;
 									default:
@@ -619,10 +656,10 @@ async function MessageHandler(event) {
 					} else {
 						if (event.message.text == '87') {
 							startReply(MsgFormat.Text('你說誰 87，你全家都 87'));
-						} else if (event.message.text.indexOf("新年快樂") > -1) {
-							startReply(MsgFormat.Text("新年快樂ヾ(*´∀ ˋ*)ﾉ"));
-						} else if (event.message.text.indexOf("狗年快樂") > -1) {
-							startReply(MsgFormat.Text("狗年快樂ヾ(*´∀ ˋ*)ﾉ 汪"));
+						} else if (event.message.text.indexOf('新年快樂') > -1) {
+							startReply(MsgFormat.Text('新年快樂ヾ(*´∀ ˋ*)ﾉ'));
+						} else if (event.message.text.indexOf('狗年快樂') > -1) {
+							startReply(MsgFormat.Text('狗年快樂ヾ(*´∀ ˋ*)ﾉ 汪'));
 						}
 					}
 					break;
