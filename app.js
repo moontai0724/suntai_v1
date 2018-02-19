@@ -268,7 +268,12 @@ async function MessageHandler(event) {
 															});
 															break;
 														case 'leave':
-															LineBotClient.leaveGroup(msgs[4]);
+															LineBotClient.leaveGroup(msgs[4]).then(function () {
+																startReply(MsgFormat.Text('日太離開了群組：' + msgs[4]));
+															}, function (data) {
+																console.log(data);
+																startReply(MsgFormat.Text('Process Failed: ' + data.statusCode + ' ' + data.statusMessage));
+															});
 															break;
 													}
 													break;
@@ -284,7 +289,12 @@ async function MessageHandler(event) {
 															});
 															break;
 														case 'leave':
-															LineBotClient.leaveRoom(msgs[4]);
+															LineBotClient.leaveRoom(msgs[4]).then(function () {
+																startReply(MsgFormat.Text('日太離開了聊天室：' + msgs[4]));
+															}, function (data) {
+																console.log(data);
+																startReply(MsgFormat.Text('Process Failed: ' + data.statusCode + ' ' + data.statusMessage));
+															});
 															break;
 													}
 													break;
