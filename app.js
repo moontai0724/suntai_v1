@@ -611,6 +611,11 @@ async function MessageHandler(event) {
 										break;
 									case 'ping':
 										if (msgs[2] || SourceData.id == 'C0170a911180661dae5d2ec25bdffceae') {
+											if (msgs[2]) {
+												msgs[2] = msgs[2].replace('http://', '').replace('https://', '');
+												msgs[2] = msgs[2].split('/')[0];
+											}
+
 											let pingport, pingattempts, replyMsg;
 
 											if (msgs[3]) {
