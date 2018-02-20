@@ -8,6 +8,16 @@ module.exports = {
         return new Promise(function (resolve, reject) {
             var range, value2 = [];
 
+            if (sheet == 'earthquakenotification') {
+                for (let x = 0; x < value.length; x++) {
+                    let temp = value[x].area[0];
+                    for (let y = 1; y < value[x].area.length; y++) {
+                        temp += ', ' + value[x].area[y];
+                    }
+                    value[x].area = temp;
+                }
+            }
+
             if (!column1 && !column2) {
                 range = 'A' + range1 + ':A' + range2;
                 if (typeof (value) === 'string') {
@@ -92,7 +102,7 @@ module.exports = {
                         for (let i = 0; i < data.feed.entry.length; i++) {
                             earthquake_notification_list[i] = {
                                 'id': data.feed.entry[i].gsx$earthquakenotification.$t,
-                                'area': data.feed.entry[i].gsx$area.$t
+                                'area': data.feed.entry[i].gsx$area.$t.split(', ')
                             }
                             if (i == data.feed.entry.length - 1) {
                                 earthquake_notification_list.splice(0, 1);
@@ -101,7 +111,7 @@ module.exports = {
                         }
                         break;
                     case DBref.indexOf('earthquakelastknowtime') + 1:
-                        console.log(data.feed.entry[1].gsx$earthquakelastknowtime.$t);
+                        console.log('earthquake_last_know_time: ', data.feed.entry[1].gsx$earthquakelastknowtime.$t);
                         resolve(data.feed.entry[1].gsx$earthquakelastknowtime.$t);
                         break;
                     default:
