@@ -34,20 +34,25 @@ module.exports = {
 
                     }
                 }
-                console.log(value2);
             } else if (column1 && column2) {
                 range = column1 + range1 + ':' + column2 + range2;
                 if (formattedname) {
-                    for (let x = 0; x < value.length; x++) {
+                    for (let x = 0; x <= value.length; x++) {
                         value2[x] = [];
                         for (let y = 0; y < formattedname.length; y++) {
-                            value2[x][y] = value[x][formattedname[y]];
+                            if (x == value.length) {
+                                value2[x][y] = '';
+                            } else {
+                                value2[x][y] = value[x][formattedname[y]];
+                            }
                         }
                     }
                 } else {
                     value2 = value;
                 }
             }
+
+            console.log(value2);
 
             $({
                 type: "POST",

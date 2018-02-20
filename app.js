@@ -513,6 +513,7 @@ async function MessageHandler(event) {
 									case 'earthquakenotification': case 'eqn':
 										if (msgs[2] == 'off') {
 											ConnectDB.readDB(DBref.indexOf('earthquakenotification') + 1).then(function (earthquake_notification_list) {
+												console.log(earthquake_notification_list);
 												if (earthquake_notification_list.find(function (element) { return element.id == SourceData.id; })) {
 													earthquake_notification_list.splice(earthquake_notification_list.findIndex(function (element) { return element.id == SourceData.id; }), 1);
 													ConnectDB.writeDB('earthquakenotification', 3, earthquake_notification_list.length + 3, earthquake_notification_list, 'A', 'B', ['id', 'area']).then(function () {
@@ -528,23 +529,26 @@ async function MessageHandler(event) {
 												if (earthquake_notification_list.findIndex(function (element) { return element.id == SourceData.id; }) > -1) {
 													if (earthquake_notification_list[earthquake_notification_list.findIndex(function (element) { return element.id == SourceData.id; })].area.findIndex(function (element) { return element == AllCity[Number(msgs[2]) - 1]; }) > -1) {
 														earthquake_notification_list[earthquake_notification_list.findIndex(function (element) { return element.id == SourceData.id; })].area.splice(earthquake_notification_list[earthquake_notification_list.findIndex(function (element) { return element.id == SourceData.id; })].area.findIndex(function (element) { return element == AllCity[Number(msgs[2]) - 1]; }), 1);
+														if (earthquake_notification_list[earthquake_notification_list.findIndex(function (element) { return element.id == SourceData.id; })].area.length == 0) {
+															earthquake_notification_list.splice(earthquake_notification_list.findIndex(function (element) { return element.id == SourceData.id; }), 1);
+														}
 														ConnectDB.writeDB('earthquakenotification', 3, earthquake_notification_list.length + 3, earthquake_notification_list, 'A', 'B', ['id', 'area']).then(function () {
-															startReply(MsgFormat.Text(Number(msgs[2]) + '. ' + AllCity[Number(msgs[2]) - 1] + '地區的地震通知已經關閉。'));
+															startReply(MsgFormat.Text(Number(msgs[2]) + '. ' + AllCity[Number(msgs[2]) - 1] + ' 地區的地震通知已經關閉。'));
 															console.log(SourceData.id + ' 的 ' + AllCity[Number(msgs[2]) - 1] + ' 地區的地震通知已經關閉。');
 														});
 													} else {
 														earthquake_notification_list[earthquake_notification_list.findIndex(function (element) { return element.id == SourceData.id; })].area[earthquake_notification_list[earthquake_notification_list.findIndex(function (element) { return element.id == SourceData.id; })].area.length] = AllCity[Number(msgs[2]) - 1];
 														ConnectDB.writeDB('earthquakenotification', 3, earthquake_notification_list.length + 3, earthquake_notification_list, 'A', 'B', ['id', 'area']).then(function () {
-															startReply(MsgFormat.Text(Number(msgs[2]) + '. ' + AllCity[Number(msgs[2]) - 1] + '地區的地震通知已經開啟。'));
+															startReply(MsgFormat.Text(Number(msgs[2]) + '. ' + AllCity[Number(msgs[2]) - 1] + ' 地區的地震通知已經開啟。'));
 															console.log(SourceData.id + ' 的 ' + AllCity[Number(msgs[2]) - 1] + ' 地區的地震通知已經開啟。');
 														});
 													}
 												} else {
-													ConnectDB.writeDB('earthquakenotification', earthquake_notification_list.length + 3, earthquake_notification_list.length + 3, {
+													ConnectDB.writeDB('earthquakenotification', earthquake_notification_list.length + 3, earthquake_notification_list.length + 4, [{
 														'id': SourceData.id,
-														'area': AllCity[Number(msgs[2]) - 1]
-													}, 'A', 'B', ['id', 'area']).then(function () {
-														startReply(MsgFormat.Text(AllCity[Number(msgs[2]) - 1] + ' 地區的地震通知已經開啟。'));
+														'area': [AllCity[Number(msgs[2]) - 1]]
+													}], 'A', 'B', ['id', 'area']).then(function () {
+														startReply(MsgFormat.Text(Number(msgs[2]) + '. ' + AllCity[Number(msgs[2]) - 1] + ' 地區的地震通知已經開啟。'));
 														console.log(SourceData.id + ' 的 ' + AllCity[Number(msgs[2]) - 1] + ' 地區的地震通知已經開啟。');
 													});
 												}
@@ -690,6 +694,12 @@ async function MessageHandler(event) {
 											startReply(MsgFormat.Text('參數錯誤。'));
 										}
 										break;
+									case 'get':
+										if (msgs[2] == "myid" && event.source.userId) {
+											startReply(MsgFormat.Text("您的個人 ID 為： " + event.source.userId));
+										} else if (msgs[2] == "myid") {
+											startReply(MsgFormat.Text("無法獲取您的 ID，請同意使用規約以獲取個人 ID。操作流程：\n**注意，請勿加入好友。**\n點選日太後，選擇「聊天」，隨意傳送訊息，並同意使用規約後，於一對一聊天中重新傳送指令。"));
+										}
 									default:
 										startReply(MsgFormat.Text('參數錯誤。'));
 										break;
