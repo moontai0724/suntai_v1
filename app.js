@@ -17,12 +17,7 @@ const app = new Koa();
 const router = new KoaRouter();
 const LineBotClient = new LineBotSDK.Client(Config);
 
-app.use(function (req, res) {
-	console.log('usereq', req);
-	console.log('useres', res);
-});
-
-// app.use(KoaBodyParser());
+app.use(KoaBodyParser());
 
 // Webhook
 router.post('/', ctx => {
@@ -41,11 +36,11 @@ router.post('/', ctx => {
 	}
 })
 
-// app.use(router.routes());
+app.use(router.routes());
 
 // Service Startup
 app.listen(process.env.PORT || 8080, function () { console.log('App now running on port: ', this.address().port); });
-/*
+
 // ================================================== My Functions Start ================================================== 
 
 const DBref = require('./functions/Variables').DBref; //ok
