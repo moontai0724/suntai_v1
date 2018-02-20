@@ -17,11 +17,23 @@ const app = new Koa();
 const router = new KoaRouter();
 const LineBotClient = new LineBotSDK.Client(Config);
 
-app.use(KoaBodyParser());
+app.use(function (req, res) {
+	console.log('usereq', req);
+	console.log('useres', res);
+});
+app.get('/', function (req, res) {
+	console.log('getreq', req);
+	console.log('getres', res);
+});
+
+// app.use(KoaBodyParser());
 
 // Webhook
 router.post('/', ctx => {
-	console.log(ctx)
+	console.log('ctx', ctx);
+	console.log('ctx.req', ctx.req);
+	console.log('ctx.res', ctx.res);
+	console.log('ctx.socket', ctx.socket);
 	const req = ctx.request;
 	if (LineBotSDK.validateSignature(req.rawBody, Config.channelSecret, req.headers['x-line-signature'])) {
 		ctx.status = 200;
@@ -33,12 +45,12 @@ router.post('/', ctx => {
 	}
 })
 
-app.use(router.routes());
+// app.use(router.routes());
 
 // Service Startup
 app.listen(process.env.PORT || 8080, function () { console.log('App now running on port: ', this.address().port); });
-
-/* ================================================== My Functions Start ================================================== */
+/*
+// ================================================== My Functions Start ================================================== 
 
 const DBref = require('./functions/Variables').DBref; //ok
 
@@ -51,8 +63,8 @@ const UploadPicToImgurByURL = require('./functions/UploadPicToImgurByURL'); //ok
 const ConnectDB = require('./functions/ConnectDB'); //ok
 const CallTimer = require('./functions/CallTimer'); //ok
 
-/* ================================================== My Functions Over ================================================== */
-/* ================================================== Start My Program ================================================== */
+// ================================================== My Functions Over ==================================================
+// ================================================== Start My Program ==================================================
 
 var owners, owners_notice;
 
@@ -105,7 +117,7 @@ async function MessageHandler(event) {
 									switch (msgs[1]) {
 										case 'help':
 											startReply(MsgFormat.Text('可用指令如下：' +
-												'\n*/st get myid' +
+												'\n* /st get myid' +
 												'\n/mt addfriend' +
 												'\n/mt calltimertest || ctt [groupId/userId]' +
 												'\n/mt get id || i (group/room)' +
@@ -796,8 +808,8 @@ async function MessageHandler(event) {
 	}
 }
 
-/* ================================================== My Program Over ================================================== */
-/* ================================================== Start Other Functions ================================================== */
+// ================================================== My Program Over ==================================================
+// ================================================== Start Other Functions ==================================================
 
 // 開機提醒
 setTimeout(function () {
@@ -812,3 +824,5 @@ CallTimer.calltimer();
 
 // 地震報告
 EarthquakeCheck.opendata();
+
+/* */

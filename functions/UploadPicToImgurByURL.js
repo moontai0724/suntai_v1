@@ -1,4 +1,6 @@
 const najax = $ = require('najax');
+const UTC8Time = require('./UTC8Time');
+
 module.exports = {
     start: function (imgurl, description) {
         return new Promise(function (resolvem, reject) {
@@ -30,17 +32,17 @@ module.exports = {
                             resolve(data.data.link);
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
-                            console.log(getNowTime(), 'Responsed jqXHR: ', jqXHR);
-                            console.log(getNowTime(), 'Responsed textStatus: ', textStatus);
-                            console.log(getNowTime(), 'Responsed errorThrown: ', errorThrown);
+                            console.log(UTC8Time.getNowTime(), 'Responsed jqXHR: ', jqXHR);
+                            console.log(UTC8Time.getNowTime(), 'Responsed textStatus: ', textStatus);
+                            console.log(UTC8Time.getNowTime(), 'Responsed errorThrown: ', errorThrown);
                             reject(jqXHR);
                         }
                     });
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(getNowTime(), 'Responsed jqXHR: ', jqXHR);
-                    console.log(getNowTime(), 'Responsed textStatus: ', textStatus);
-                    console.log(getNowTime(), 'Responsed errorThrown: ', errorThrown);
+                    console.log(UTC8Time.getNowTime(), 'Responsed jqXHR: ', jqXHR);
+                    console.log(UTC8Time.getNowTime(), 'Responsed textStatus: ', textStatus);
+                    console.log(UTC8Time.getNowTime(), 'Responsed errorThrown: ', errorThrown);
                     reject(jqXHR);
                 }
             });
