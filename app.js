@@ -816,4 +816,29 @@ CallTimer.calltimer();
 // 地震報告
 EarthquakeCheck.opendata();
 
+// Wake it up
+setInterval(function () {
+	$({
+		type: "POST",
+		url: "https://suntaidev.herokuapp.com",
+		data: JSON.stringify({
+			"replyToken": "1fdaadc9bb6e4d128f49cc26822cf47e",
+			"type": "message",
+			"timestamp": 1519110122951,
+			"source": {
+				"type": "user",
+				"userId": "U68ee43b020172695479ea772412cb267"
+			},
+			"message": {
+				"id": 7504706809054,
+				"type": "text",
+				"text": "Wake Up"
+			}
+		}),
+		complete: function (data) {
+			console.log('Wake up, Responsed data: ', data);
+		},
+	});
+}, 1200000);
+
 /* */
