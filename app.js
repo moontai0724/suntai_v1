@@ -21,10 +21,6 @@ app.use(function (req, res) {
 	console.log('usereq', req);
 	console.log('useres', res);
 });
-app.get('/', function (req, res) {
-	console.log('getreq', req);
-	console.log('getres', res);
-});
 
 // app.use(KoaBodyParser());
 
