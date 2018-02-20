@@ -7,9 +7,9 @@ module.exports = {
                 url: "https://api.imgur.com/oauth2/token",
                 contentType: "application/x-www-form-urlencoded;",
                 data: 'refresh_token=***REMOVED***&' +
-                    'clientime_id=***REMOVED***&' +
-                    'clientime_secret=***REMOVED***&' +
-                    'grantime_type=refresh_token',
+                    'client_id=***REMOVED***&' +
+                    'client_secret=***REMOVED***&' +
+                    'grant_type=refresh_token',
                 success: function (data) {
                     data = JSON.parse(data);
                     $({
@@ -36,6 +36,12 @@ module.exports = {
                             reject(jqXHR);
                         }
                     });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(getNowTime(), 'Responsed jqXHR: ', jqXHR);
+                    console.log(getNowTime(), 'Responsed textStatus: ', textStatus);
+                    console.log(getNowTime(), 'Responsed errorThrown: ', errorThrown);
+                    reject(jqXHR);
                 }
             });
         });

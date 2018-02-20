@@ -71,11 +71,11 @@ module.exports = {
                             console.log(allmsg);
 
                             ConnectDB.readDB(DBref.indexOf('earthquake_notification') + 1).then(function (earthquake_notification_list) {
-                                for (i = 0; i < earthquake_notification_list.length; i++) {
+                                for (let i = 0; i < earthquake_notification_list.length; i++) {
                                     LineBotClient.pushMessage(earthquake_notification_list[i], MsgFormat.Text(allmsg));
                                 }
                                 UploadPicToImgurByURL.start(reportimg, allmsg).then(function (pic_link) {
-                                    for (i = 0; i < earthquake_notification_list.length; i++) {
+                                    for (let i = 0; i < earthquake_notification_list.length; i++) {
                                         LineBotClient.pushMessage(earthquake_notification_list[i], MsgFormat.Image(pic_link, pic_link));
                                     }
                                 });
