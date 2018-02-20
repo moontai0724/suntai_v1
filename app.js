@@ -40,9 +40,9 @@ app.listen(process.env.PORT || 8080, function () { console.log('App now running 
 // ================================================== My Functions Start ================================================== 
 
 const DBref = require('./functions/Variables').DBref; //ok
-const Country = require('./Variables').Country;
-const AllCity = require('./Variables').AllCity;
-const AllCityList = require('./Variables').AllCityList;
+const Country = require('./functions/Variables').Country;
+const AllCity = require('./functions/Variables').AllCity;
+const AllCityList = require('./functions/Variables').AllCityList;
 
 const UTC8Time = require('./functions/UTC8Time'); //ok.include: getNowTime(function), value
 const MsgFormat = require('./functions/MsgFormat'); //ok.include: Text(function), Sticker(function), Image(function), Video(function), Audio(function), Location(function)
