@@ -21,10 +21,6 @@ app.use(KoaBodyParser());
 
 // Webhook
 router.post('/', ctx => {
-	console.log('ctx', ctx);
-	console.log('ctx.req', ctx.req);
-	console.log('ctx.res', ctx.res);
-	console.log('ctx.socket', ctx.socket);
 	const req = ctx.request;
 	if (LineBotSDK.validateSignature(req.rawBody, Config.channelSecret, req.headers['x-line-signature'])) {
 		ctx.status = 200;
