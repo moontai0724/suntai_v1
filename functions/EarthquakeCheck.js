@@ -6,6 +6,8 @@ const Config = require('../config/config');
 const LineBotClient = new LineBotSDK.Client(Config);
 
 const DBref = require('./Variables').DBref;
+const Country = require('./Variables').Country;
+const AllCity = require('./Variables').AllCity;
 
 const najax = $ = require('najax');
 const parseString = require('xml2js').parseString;
@@ -16,13 +18,14 @@ const UploadPicToImgurByURL = require('./UploadPicToImgurByURL');
 // API key: ***REMOVED***
 // https://alerts.ncdr.nat.gov.tw/***REMOVED***/
 
+// http://www.cwb.gov.tw/V7/earthquake/Data/quake/EC0219224753066.htm
+
 module.exports = {
     opendata: function () {
         setInterval(function () {
             $.get("http://opendata.cwb.gov.tw/govdownload?dataid=E-A0015-001R&authorizationkey=rdec-key-123-45678-011121314", function (data) {
                 parseString(data, function (err, result) {
-                    console.log(result);
-                    ConnectDB.readDB(DBref.indexOf('earthquake_last_know_time') + 1).then(function (earthquake_last_know_time) {
+                    ConnectDB.readDB(DBref.indexOf('earthquakelastknowtime') + 1).then(function (earthquake_last_know_time) {
                         let originTime = result.cwbopendata.dataset[0].earthquake[0].earthquakeInfo[0].originTime[0].replace('-', '/').replace('-', '/').replace('T', ' ').replace('+08:00', '');
                         if (originTime != earthquake_last_know_time) {
                             let msg = result.cwbopendata.dataset[0].earthquake[0].reportContent[0];
@@ -70,13 +73,13 @@ module.exports = {
                                 '\n查看網頁：' + weburl;
                             console.log(allmsg);
 
-                            ConnectDB.readDB(DBref.indexOf('earthquake_notification') + 1).then(function (earthquake_notification_list) {
+                            ConnectDB.readDB(DBref.indexOf('earthquakenotification') + 1).then(function (earthquake_notification_list) {
                                 for (let i = 0; i < earthquake_notification_list.length; i++) {
-                                    LineBotClient.pushMessage(earthquake_notification_list[i], MsgFormat.Text(allmsg));
+                                    LineBotClient.pushMessage(earthquake_notification_list[i].id, MsgFormat.Text(allmsg));
                                 }
                                 UploadPicToImgurByURL.start(reportimg, allmsg).then(function (pic_link) {
                                     for (let i = 0; i < earthquake_notification_list.length; i++) {
-                                        LineBotClient.pushMessage(earthquake_notification_list[i], MsgFormat.Image(pic_link, pic_link));
+                                        LineBotClient.pushMessage(earthquake_notification_list[i].id, MsgFormat.Image(pic_link, pic_link));
                                     }
                                 });
                             });

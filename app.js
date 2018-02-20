@@ -40,6 +40,9 @@ app.listen(process.env.PORT || 8080, function () { console.log('App now running 
 // ================================================== My Functions Start ================================================== 
 
 const DBref = require('./functions/Variables').DBref; //ok
+const Country = require('./Variables').Country;
+const AllCity = require('./Variables').AllCity;
+const AllCityList = require('./Variables').AllCityList;
 
 const UTC8Time = require('./functions/UTC8Time'); //ok.include: getNowTime(function), value
 const MsgFormat = require('./functions/MsgFormat'); //ok.include: Text(function), Sticker(function), Image(function), Video(function), Audio(function), Location(function)
@@ -60,7 +63,7 @@ var msg_log = [], msg_log_UUID = [], msg_count = [], msg_countime_UUID = [];
 
 // 獲取資料庫中的資料
 ConnectDB.readDB(DBref.indexOf('owners') + 1).then(function (data) { owners = data; });
-ConnectDB.readDB(DBref.indexOf('owners_notice') + 1).then(function (data) { owners_notice = data; });
+ConnectDB.readDB(DBref.indexOf('ownersnotice') + 1).then(function (data) { owners_notice = data; });
 
 // Message handler
 async function MessageHandler(event) {
@@ -370,12 +373,12 @@ async function MessageHandler(event) {
 														user_id = event.source.userId;
 													}
 
-													ConnectDB.readDB(DBref.indexOf('owners_notice') + 1).then(function (data) {
+													ConnectDB.readDB(DBref.indexOf('ownersnotice') + 1).then(function (data) {
 														owners_notice = data;
 														if (owners_notice.indexOf(user_id) > -1) {
 															owners_notice.splice(owners_notice.indexOf(user_id), 1);
 															ConnectDB.writeDB('owners_notice', 3, owners_notice.length + 3, owners_notice).then(function () {
-																ConnectDB.readDB(DBref.indexOf('owners_notice') + 1).then(function (data) {
+																ConnectDB.readDB(DBref.indexOf('ownersnotice') + 1).then(function (data) {
 																	owners_notice = data;
 																	console.log(owners_notice);
 																	startReply(MsgFormat.Text('已經為 ' + user_id + ' 關閉管理者通知。'));
@@ -384,7 +387,7 @@ async function MessageHandler(event) {
 															});
 														} else {
 															ConnectDB.writeDB('owners_notice', owners_notice.length + 3, owners_notice.length + 3, user_id).then(function () {
-																ConnectDB.readDB(DBref.indexOf('owners_notice') + 1).then(function (data) {
+																ConnectDB.readDB(DBref.indexOf('ownersnotice') + 1).then(function (data) {
 																	owners_notice = data;
 																	console.log(owners_notice);
 																	startReply(MsgFormat.Text('已經為 ' + user_id + ' 開啟管理者通知。'));
@@ -407,11 +410,11 @@ async function MessageHandler(event) {
 												id = SourceData.id;
 											}
 
-											ConnectDB.readDB(DBref.indexOf('ontime_timer') + 1).then(function (ontime_timer_list) {
+											ConnectDB.readDB(DBref.indexOf('ontimetimer') + 1).then(function (ontime_timer_list) {
 												if (ontime_timer_list.indexOf(id) > -1) {
 													ontime_timer_list.splice(ontime_timer_list.indexOf(id), 1);
 													ConnectDB.writeDB('ontime_timer', 3, ontime_timer_list.length + 3, ontime_timer_list).then(function () {
-														ConnectDB.readDB(DBref.indexOf('ontime_timer') + 1).then(function (ontime_timer_list) {
+														ConnectDB.readDB(DBref.indexOf('ontimetimer') + 1).then(function (ontime_timer_list) {
 															console.log(ontime_timer_list);
 															let reply = ontime_timer_list[0];
 															for (let i = 1; i < ontime_timer_list.length; i++) {
@@ -423,7 +426,7 @@ async function MessageHandler(event) {
 													});
 												} else {
 													ConnectDB.writeDB('ontime_timer', ontime_timer_list.length + 3, ontime_timer_list.length + 3, id).then(function () {
-														ConnectDB.readDB(DBref.indexOf('ontime_timer') + 1).then(function (ontime_timer_list) {
+														ConnectDB.readDB(DBref.indexOf('ontimetimer') + 1).then(function (ontime_timer_list) {
 															console.log(ontime_timer_list);
 															let reply = ontime_timer_list[0];
 															for (let i = 1; i < ontime_timer_list.length; i++) {
@@ -488,18 +491,18 @@ async function MessageHandler(event) {
 										}
 										break;
 									case 'calltimer':
-										ConnectDB.readDB(DBref.indexOf('ontime_timer') + 1).then(function (ontime_timer_list) {
+										ConnectDB.readDB(DBref.indexOf('ontimetimer') + 1).then(function (ontime_timer_list) {
 											if (ontime_timer_list.indexOf(SourceData.id) > -1) {
 												ontime_timer_list.splice(ontime_timer_list.indexOf(SourceData.id), 1);
 												ConnectDB.writeDB('ontime_timer', 3, ontime_timer_list.length + 3, ontime_timer_list).then(function () {
-													ConnectDB.readDB(DBref.indexOf('ontime_timer') + 1).then(function (ontime_timer_list) {
+													ConnectDB.readDB(DBref.indexOf('ontimetimer') + 1).then(function (ontime_timer_list) {
 														startReply(MsgFormat.Text('報時功能已經關閉。'));
 														console.log(SourceData.id + ' 的報時功能已經關閉。');
 													});
 												});
 											} else {
 												ConnectDB.writeDB('ontime_timer', ontime_timer_list.length + 3, ontime_timer_list.length + 3, SourceData.id).then(function () {
-													ConnectDB.readDB(DBref.indexOf('ontime_timer') + 1).then(function (ontime_timer_list) {
+													ConnectDB.readDB(DBref.indexOf('ontimetimer') + 1).then(function (ontime_timer_list) {
 														startReply(MsgFormat.Text('報時功能已經開啟。'));
 														console.log(SourceData.id + ' 的報時功能已經開啟。');
 													});
@@ -508,20 +511,36 @@ async function MessageHandler(event) {
 										});
 										break;
 									case 'earthquakenotification': case 'eqn':
-										ConnectDB.readDB(DBref.indexOf('earthquake_notification') + 1).then(function (earthquake_notification_list) {
-											if (earthquake_notification_list.indexOf(SourceData.id) > -1) {
-												earthquake_notification_list.splice(earthquake_notification_list.indexOf(SourceData.id), 1);
-												ConnectDB.writeDB('earthquake_notification', 3, earthquake_notification_list.length + 3, earthquake_notification_list).then(function () {
-													startReply(MsgFormat.Text('地震通知已經關閉。'));
-													console.log(SourceData.id + ' 的地震通知已經關閉。');
-												});
-											} else {
-												ConnectDB.writeDB('earthquake_notification', earthquake_notification_list.length + 3, earthquake_notification_list.length + 3, SourceData.id).then(function () {
-													startReply(MsgFormat.Text('地震通知已經開啟。'));
-													console.log(SourceData.id + ' 的地震通知已經開啟。');
-												});
-											}
-										});
+										if (msgs[2] == 'off') {
+											ConnectDB.readDB(DBref.indexOf('earthquakenotification') + 1).then(function (earthquake_notification_list) {
+												if (earthquake_notification_list.find(function (element) { return element.id == SourceData.id; })) {
+													ConnectDB.writeDB('earthquake_notification', 3, earthquake_notification_list.length + 3, earthquake_notification_list).then(function () {
+														startReply(MsgFormat.Text('地震通知已經關閉。'));
+														console.log(SourceData.id + ' 的地震通知已經關閉。');
+													});
+												} else {
+													startReply(MsgFormat.Text('並沒有啟用地震通知。'));
+												}
+											});
+										} else if (Number(msgs[2]) > 0 && Number(msgs[2]) < 23) {
+											startReply(MsgFormat.Text('您已選擇 ' + Number(msgs[2]) + '. ' + AllCity[Number(msgs[2]) - 1]));
+											ConnectDB.readDB(DBref.indexOf('earthquakenotification') + 1).then(function (earthquake_notification_list) {
+												if (earthquake_notification_list.indexOf(SourceData.id) > -1) {
+													earthquake_notification_list.splice(earthquake_notification_list.indexOf(SourceData.id), 1);
+													ConnectDB.writeDB('earthquake_notification', 3, earthquake_notification_list.length + 3, earthquake_notification_list).then(function () {
+														startReply(MsgFormat.Text('地震通知已經關閉。'));
+														console.log(SourceData.id + ' 的地震通知已經關閉。');
+													});
+												} else {
+													ConnectDB.writeDB('earthquake_notification', earthquake_notification_list.length + 3, earthquake_notification_list.length + 3, SourceData.id).then(function () {
+														startReply(MsgFormat.Text('地震通知已經開啟。'));
+														console.log(SourceData.id + ' 的地震通知已經開啟。');
+													});
+												}
+											});
+										} else {
+											startReply(MsgFormat.Text('請以數字選擇接收通知地區，當選擇的地區最大震度達三級即會通知。請使用指令：/st eqn <地區編號>\n' + AllCityList));
+										}
 										break;
 									case 'quiz':
 										if (msgs[2]) {
@@ -585,7 +604,7 @@ async function MessageHandler(event) {
 									case 'quizans':
 										if (msgs[2]) {
 											if (msgs[2] > 0 && msgs[2] < 100000) {
-												QuizDB.searchData('sn', '16800').then(function (data) {
+												QuizDB.searchData('sn', msgs[2]).then(function (data) {
 													if (data != undefined) {
 														switch (data.answer) {
 															case '1': case '2': case '3': case '4':

@@ -18,7 +18,7 @@ var pic_src = ['8GBnaP7', '5ooBJG8', 'KqoGm7g', 'BCRSPtv', '5dzYGZw', 'wpQycL0',
 module.exports = {
     clocktext: clocktext,
     calltimer: function calltimer() {
-        ConnectDB.readDB(DBref.indexOf('ontime_timer') + 1).then(function (ontime_timer_list) {
+        ConnectDB.readDB(DBref.indexOf('ontimetimer') + 1).then(function (ontime_timer_list) {
             UTC8Time.getNowTimePromise().then(function (time) {
                 setTimeout(function () {
                     let this_pic_src, clock, clocksort = GetRandomNumber.start(0, clocktext.length - 1);
@@ -49,7 +49,7 @@ module.exports = {
     },
 
     calltimertest: function (TargetId) {
-        ConnectDB.readDB(DBref.indexOf('ontime_timer') + 1).then(function (ontime_timer_list) {
+        ConnectDB.readDB(DBref.indexOf('ontimetimer') + 1).then(function (ontime_timer_list) {
             UTC8Time.getNowTimePromise().then(function (time) {
                 let this_pic_src, clock, clocksort = GetRandomNumber.start(0, clocktext.length - 1);
                 for (let i = 0; i < 24; i++) {
