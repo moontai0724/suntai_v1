@@ -21,6 +21,7 @@ app.use(KoaBodyParser());
 
 // Webhook
 router.post('/', ctx => {
+	console.log(ctx)
 	const req = ctx.request;
 	if (LineBotSDK.validateSignature(req.rawBody, Config.channelSecret, req.headers['x-line-signature'])) {
 		ctx.status = 200;
@@ -64,7 +65,7 @@ ConnectDB.readDB(DBref.indexOf('owners_notice') + 1).then(function (data) { owne
 
 // Message handler
 async function MessageHandler(event) {
-	console.log(event)
+	console.log(event);
 
 	var SourceData = {
 		type: undefined,
