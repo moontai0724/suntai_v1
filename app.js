@@ -511,9 +511,21 @@ async function MessageHandler(event) {
 										});
 										break;
 									case 'earthquakenotification': case 'eqn':
-										if (msgs[2] == 'off') {
+										if (msgs[2] == 'list') {
 											ConnectDB.readDB(DBref.indexOf('earthquakenotification') + 1).then(function (earthquake_notification_list) {
-												console.log(earthquake_notification_list);
+												if (earthquake_notification_list.find(function (element) { return element.id == SourceData.id; })) {
+													let eqn_area_list = earthquake_notification_list.find(function (element) { return element.id == SourceData.id; }).area;
+													let replyMsg = eqn_area_list[0];
+													for (let i = 1; i < eqn_area_list.length; i++) {
+														replyMsg += '、' + eqn_area_list.area[i];
+													}
+													startReply(MsgFormat.Text('啟用地區如下： ' + replyMsg), MsgFormat.Text('如需調整通知地區，請使用指令：/st eqn <地區編號>，使用 /st eqn 獲取地區編號列表。'));
+												} else {
+													startReply(MsgFormat.Text('並沒有啟用地震通知。'));
+												}
+											});
+										} else if (msgs[2] == 'off') {
+											ConnectDB.readDB(DBref.indexOf('earthquakenotification') + 1).then(function (earthquake_notification_list) {
 												if (earthquake_notification_list.find(function (element) { return element.id == SourceData.id; })) {
 													earthquake_notification_list.splice(earthquake_notification_list.findIndex(function (element) { return element.id == SourceData.id; }), 1);
 													ConnectDB.writeDB('earthquakenotification', 3, earthquake_notification_list.length + 3, earthquake_notification_list, 'A', 'B', ['id', 'area']).then(function () {
