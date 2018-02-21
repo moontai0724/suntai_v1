@@ -3,7 +3,7 @@ const UTC8Time = require('./UTC8Time');
 
 module.exports = {
     start: function (imgurl, description) {
-        return new Promise(function (resolvem, reject) {
+        return new Promise(function (resolve, reject) {
             $({
                 type: "POST",
                 url: "https://api.imgur.com/oauth2/token",
