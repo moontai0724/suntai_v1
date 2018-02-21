@@ -556,9 +556,25 @@ async function MessageHandler(event) {
 													startReply(MsgFormat.Text('並沒有啟用地震通知。'));
 												}
 											});
-										} else if (Number(msgs[2]) > 0 && Number(msgs[2]) < 23) {
+										} else if (Number(msgs[2]) >= 0 && Number(msgs[2]) < 23) {
 											ConnectDB.readDB(DBref.indexOf('earthquakenotification') + 1).then(function (earthquake_notification_list) {
-												if (earthquake_notification_list.findIndex(function (element) { return element.id == SourceData.id; }) > -1) {
+												if (Number(msgs[2]) == 0) {
+													if (earthquake_notification_list.findIndex(function (element) { return element.id == SourceData.id; }) > -1) {
+														earthquake_notification_list.splice(earthquake_notification_list.findIndex(function (element) { return element.id == SourceData.id; }), 1);
+														ConnectDB.writeDB('earthquakenotification', 3, earthquake_notification_list.length + 3, earthquake_notification_list, 'A', 'B', ['id', 'area']).then(function () {
+															startReply(MsgFormat.Text('所有 地區的地震通知已經關閉。'));
+															console.log(SourceData.id + ' 的 所有 地區的地震通知已經關閉。');
+														});
+													} else {
+														ConnectDB.writeDB('earthquakenotification', earthquake_notification_list.length + 3, earthquake_notification_list.length + 4, [{
+															'id': SourceData.id,
+															'area': ['全']
+														}], 'A', 'B', ['id', 'area']).then(function () {
+															startReply(MsgFormat.Text('所有 地區的地震通知已經開啟。'));
+															console.log(SourceData.id + ' 的 所有 地區的地震通知已經開啟。');
+														})
+													}
+												} else if (earthquake_notification_list.findIndex(function (element) { return element.id == SourceData.id; }) > -1) {
 													if (earthquake_notification_list[earthquake_notification_list.findIndex(function (element) { return element.id == SourceData.id; })].area.findIndex(function (element) { return element == AllCity[Number(msgs[2]) - 1]; }) > -1) {
 														earthquake_notification_list[earthquake_notification_list.findIndex(function (element) { return element.id == SourceData.id; })].area.splice(earthquake_notification_list[earthquake_notification_list.findIndex(function (element) { return element.id == SourceData.id; })].area.findIndex(function (element) { return element == AllCity[Number(msgs[2]) - 1]; }), 1);
 														if (earthquake_notification_list[earthquake_notification_list.findIndex(function (element) { return element.id == SourceData.id; })].area.length == 0) {

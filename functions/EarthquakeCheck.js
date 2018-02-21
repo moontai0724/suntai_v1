@@ -61,9 +61,9 @@ module.exports = {
                                 }
                             }
 
-                            let url = originTime.split('/')[1] + originTime.split('/')[2].split(' ')[0] + originTime.split(' ')[1].split(':')[0] + originTime.split(' ')[1].split(':')[1] + String(magnitude).replace('.', '') + String(result.cwbopendata.dataset[0].earthquake[0].earthquakeNo).replace('107', '');
+                            let url = originTime.split('/')[1] + originTime.split('/')[2].split(' ')[0] + originTime.split(' ')[1].split(':')[0] + originTime.split(' ')[1].split(':')[1] + String(magnitude).replace('.', '').substring(0, 2) + String(result.cwbopendata.dataset[0].earthquake[0].earthquakeNo).replace('107', '');
 
-                            ConnectDB.writeDB('earthquake_last_know_time', 3, 3, originTime);
+                            ConnectDB.writeDB('earthquakelastknowtime', 3, 3, originTime);
                             earthquake_last_know_time = originTime;
 
                             let allmsg = '【地震報告】\n' + msg +
@@ -72,7 +72,7 @@ module.exports = {
                                 '\n深度： ' + depth + ' 公里' +
                                 '\n經緯度： ' + latitude + ', ' + longitude +
                                 '\n相對位置： ' + location +
-                                '\n查看網頁（中央氣象局）： https://www.cwb.gov.tw/V7/earthquake/Data/quake/' + url +
+                                '\n查看網頁（中央氣象局）： https://www.cwb.gov.tw/V7/earthquake/Data/quake/EC' + url + '.htm' +
                                 '\n查看網頁（地震測報中心）： ' + weburl;
                             console.log(allmsg);
 
@@ -81,17 +81,29 @@ module.exports = {
                                 for (let x = 0; x < earthquake_notification_list.length; x++) {
                                     for (let y = 0; y < shakingArea.length; y++) {
                                         if (earthquake_notification_list[x].area.indexOf(shakingArea[y].areaName) > -1 && Number(shakingArea[y].areaIntensity) >= 3) {
-                                            NoticeList[NoticeList.length] = earthquake_notification_list[x].id;
+                                            let NoticeArea = '\n設定之通知地區震度：';
+                                            for (let i = 0; i < shakingArea.length; i++) {
+                                                if (earthquake_notification_list[x].area.indexOf(shakingArea[i].areaName) > -1) {
+                                                    NoticeArea += '\n' + shakingArea[i].areaName + ' 地區最大震度 ' + shakingArea[i].areaIntensity + ' 級';
+                                                }
+                                            }
+                                            if (NoticeArea == '\n設定之通知地區震度：') {
+                                                NoticeArea = '';
+                                            }
+                                            NoticeList[NoticeList.length] = {
+                                                id: earthquake_notification_list[x].id,
+                                                area: NoticeArea
+                                            };
                                             y = shakingArea.length;
                                         }
                                     }
                                 }
                                 for (let i = 0; i < NoticeList.length; i++) {
-                                    LineBotClient.pushMessage(NoticeList[i], MsgFormat.Text(allmsg));
+                                    LineBotClient.pushMessage(NoticeList[i].id, MsgFormat.Text(allmsg + NoticeList[i].area));
                                 }
                                 UploadPicToImgurByURL.start(reportimg, allmsg).then(function (pic_link) {
                                     for (let i = 0; i < NoticeList.length; i++) {
-                                        LineBotClient.pushMessage(NoticeList[i], MsgFormat.Image(pic_link, pic_link));
+                                        LineBotClient.pushMessage(NoticeList[i].id, MsgFormat.Image(pic_link, pic_link));
                                     }
                                 });
                             });
