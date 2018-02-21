@@ -35,7 +35,7 @@ router.post('/', ctx => {
 app.use(router.routes());
 
 // Service Startup
-app.listen(process.env.PORT || 8080, function () { console.log('App now running on port: ', this.address().port); });
+var server = app.listen(process.env.PORT || 8080, function () { console.log('App now running on port: ', this.address().port); });
 
 // ================================================== My Functions Start ================================================== 
 
@@ -108,6 +108,7 @@ async function MessageHandler(event) {
 										case 'help':
 											startReply(MsgFormat.Text('可用指令如下：' +
 												'\n* /st get myid' +
+												'\n/mt shutdown [sec]' +
 												'\n/mt addfriend' +
 												'\n/mt calltimertest || ctt [groupId/userId]' +
 												'\n/mt get id || i (group/room)' +
@@ -127,6 +128,25 @@ async function MessageHandler(event) {
 												'\n/mt calltimer <groupId/userId>' +
 												'\n/mt renewquizdb' +
 												'\n/mt send <groupId> <msg>'));
+											break;
+										case 'shutdown':
+											if (msgs[2]) {
+												setTimeout(function () {
+													server.close(function () {
+														for (let i = 0; i < owners_notice.length; i++) {
+															LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太已關機。'));
+															console.log('send: ' + owners_notice[i] + ';msg: ' + UTC8Time.getNowTime() + '\n日太已關機。');
+														}
+													});
+												}, msgs[2] * 1000);
+											} else {
+												server.close(function () {
+													for (let i = 0; i < owners_notice.length; i++) {
+														LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太已關機。'));
+														console.log('send: ' + owners_notice[i] + ';msg: ' + UTC8Time.getNowTime() + '\n日太已關機。');
+													}
+												});
+											}
 											break;
 										case 'addfriend':
 											startReply(MsgFormat.Text('http://line.me/ti/p/~@web9850f'));
