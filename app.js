@@ -519,7 +519,7 @@ async function MessageHandler(event) {
 													for (let i = 1; i < eqn_area_list.length; i++) {
 														replyMsg += '、' + eqn_area_list[i];
 													}
-													startReply(MsgFormat.Text('啟用地區如下： ' + replyMsg), MsgFormat.Text('如需調整通知地區，請使用指令：/st eqn <地區編號>，使用 /st eqn 獲取地區編號列表。'));
+													startReply(MsgFormat.Text('啟用地區如下： ' + replyMsg), MsgFormat.Text('如需調整通知地區，請使用指令：/st eqn <地區編號>，使用 /st eqn 獲取地區編號列表。選擇的地區若沒有選擇過將會新增，若已經有選擇過將會移除。'));
 												} else {
 													startReply(MsgFormat.Text('並沒有啟用地震通知。'));
 												}
