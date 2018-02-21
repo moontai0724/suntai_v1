@@ -517,7 +517,7 @@ async function MessageHandler(event) {
 													let eqn_area_list = earthquake_notification_list.find(function (element) { return element.id == SourceData.id; }).area;
 													let replyMsg = eqn_area_list[0];
 													for (let i = 1; i < eqn_area_list.length; i++) {
-														replyMsg += '、' + eqn_area_list.area[i];
+														replyMsg += '、' + eqn_area_list[i];
 													}
 													startReply(MsgFormat.Text('啟用地區如下： ' + replyMsg), MsgFormat.Text('如需調整通知地區，請使用指令：/st eqn <地區編號>，使用 /st eqn 獲取地區編號列表。'));
 												} else {
