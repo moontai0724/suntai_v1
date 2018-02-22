@@ -87,7 +87,7 @@ module.exports = {
                                                     NoticeArea += '\n' + shakingArea[i].areaName + ' 地區最大震度 ' + shakingArea[i].areaIntensity + ' 級';
                                                 }
                                             }
-                                            if (NoticeArea == '\n設定之通知地區震度：') {
+                                            if (NoticeArea == '\n設定之通知地區震度：' || earthquake_notification_list[x].area.length == 22) {
                                                 NoticeArea = '';
                                             }
                                             NoticeList[NoticeList.length] = {

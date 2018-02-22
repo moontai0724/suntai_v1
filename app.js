@@ -568,7 +568,7 @@ async function MessageHandler(event) {
 													} else {
 														ConnectDB.writeDB('earthquakenotification', earthquake_notification_list.length + 3, earthquake_notification_list.length + 4, [{
 															'id': SourceData.id,
-															'area': ['全']
+															'area': AllCity
 														}], 'A', 'B', ['id', 'area']).then(function () {
 															startReply(MsgFormat.Text('所有 地區的地震通知已經開啟。'));
 															console.log(SourceData.id + ' 的 所有 地區的地震通知已經開啟。');
