@@ -602,7 +602,7 @@ async function MessageHandler(event) {
 												}
 											});
 										} else {
-											startReply(MsgFormat.Text('請以數字選擇接收通知地區，當選擇的地區最大震度達三級即會通知。請使用指令：/st eqn <地區編號>\n' + AllCityList));
+											startReply(MsgFormat.Text('請以數字選擇接收通知地區，當選擇的地區最大震度二級即會通知。請使用指令：/st eqn <地區編號>\n' + AllCityList));
 										}
 										break;
 									case 'quiz':

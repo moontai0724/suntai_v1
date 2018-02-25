@@ -52,7 +52,6 @@ function getCityWeather(city) {
                 '\n　氣溫：' + data.minTamperature[i] + ' 至 ' + data.maxTamperature[i] +
                 '\n　天氣 ' + data.weatherDescription[i] + '\n　氣溫 ' + data.tamperatureDestription[i];
         }
-        console.log(weatherMsg)
     });
 }
 
@@ -95,7 +94,7 @@ function getAllWeather() {
                                 data.records.location[i].weatherElement[4].time[1].parameter.parameterName + '°C',
                                 data.records.location[i].weatherElement[4].time[2].parameter.parameterName + '°C'
                             ],
-                        }
+                        };
                     }
                     resolve(weather);
                 },

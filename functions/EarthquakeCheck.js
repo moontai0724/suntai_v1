@@ -80,7 +80,7 @@ module.exports = {
                                 let NoticeList = [];
                                 for (let x = 0; x < earthquake_notification_list.length; x++) {
                                     for (let y = 0; y < shakingArea.length; y++) {
-                                        if (earthquake_notification_list[x].area.indexOf(shakingArea[y].areaName) > -1 && Number(shakingArea[y].areaIntensity) >= 3) {
+                                        if (earthquake_notification_list[x].area.indexOf(shakingArea[y].areaName) > -1 && Number(shakingArea[y].areaIntensity) >= 2) {
                                             let NoticeArea = '\n設定之通知地區震度：';
                                             for (let i = 0; i < shakingArea.length; i++) {
                                                 if (earthquake_notification_list[x].area.indexOf(shakingArea[i].areaName) > -1) {
@@ -101,6 +101,7 @@ module.exports = {
                                 for (let i = 0; i < NoticeList.length; i++) {
                                     LineBotClient.pushMessage(NoticeList[i].id, MsgFormat.Text(allmsg + NoticeList[i].area));
                                 }
+                                console.log('reportimg: ' + reportimg);
                                 UploadPicToImgurByURL.start(reportimg, allmsg).then(function (pic_link) {
                                     for (let i = 0; i < NoticeList.length; i++) {
                                         LineBotClient.pushMessage(NoticeList[i].id, MsgFormat.Image(pic_link, pic_link));
