@@ -6,6 +6,7 @@ const Koa = require('koa');
 const KoaRouter = require('koa-router');
 const KoaBodyParser = require('koa-bodyparser');
 
+const ngrok = require('ngrok');
 const najax = $ = require('najax');
 const parseString = require('xml2js').parseString;
 const sqlite = require('sqlite');
@@ -35,7 +36,7 @@ router.post('/', ctx => {
 app.use(router.routes());
 
 // Service Startup
-var server = app.listen(process.env.PORT || 8080, function () { console.log('App now running on port: ', this.address().port); });
+const server = app.listen(8080, function () { console.log('App now running on port: ', this.address().port); });
 
 // ================================================== My Functions Start ================================================== 
 
@@ -56,7 +57,7 @@ const CallTimer = require('./functions/CallTimer'); //ok
 // ================================================== My Functions Over ==================================================
 // ================================================== Start My Program ==================================================
 
-var owners, owners_notice;
+var owners, owners_notice, nowurl;
 
 // 不會寫入資料庫的變數
 var msg_log = [], msg_log_UUID = [], msg_count = [], msg_countime_UUID = [];
@@ -67,7 +68,7 @@ ConnectDB.readDB(DBref.indexOf('ownersnotice') + 1).then(function (data) { owner
 
 // Message handler
 async function MessageHandler(event) {
-	console.log(event);
+	console.log(JSON.stringify(event));
 
 	var SourceData = {
 		type: undefined,
@@ -75,6 +76,7 @@ async function MessageHandler(event) {
 		id: undefined,
 		Profile: {}
 	};
+
 	SourceData.type = event.source.type;
 	if (event.source.userId) {
 		SourceData.userId = event.source.userId;
@@ -748,6 +750,7 @@ async function MessageHandler(event) {
 										} else if (msgs[2] == "myid") {
 											startReply(MsgFormat.Text("無法獲取您的 ID，請同意使用規約以獲取個人 ID。操作流程：\n**注意，請勿加入好友。**\n點選日太後，選擇「聊天」，隨意傳送訊息，並同意使用規約後，於一對一聊天中重新傳送指令。"));
 										}
+										break;
 									default:
 										startReply(MsgFormat.Text('參數錯誤。'));
 										break;
@@ -759,10 +762,6 @@ async function MessageHandler(event) {
 					} else {
 						if (event.message.text == '87') {
 							startReply(MsgFormat.Text('你說誰 87，你全家都 87'));
-						} else if (event.message.text.indexOf('新年快樂') > -1) {
-							startReply(MsgFormat.Text('新年快樂ヾ(*´∀ ˋ*)ﾉ'));
-						} else if (event.message.text.indexOf('狗年快樂') > -1) {
-							startReply(MsgFormat.Text('狗年快樂ヾ(*´∀ ˋ*)ﾉ 汪'));
 						}
 					}
 					break;
@@ -878,7 +877,7 @@ async function MessageHandler(event) {
 		if (replyMsg_4) { replyMsg[3] = replyMsg_4; }
 		if (replyMsg_5) { replyMsg[4] = replyMsg_5; }
 		LineBotClient.replyMessage(event.replyToken, replyMsg).then(function () {
-			console.log('Source Msg: ' + event.message.text + ';Replyed: ' + replyMsg);
+			console.log(UTC8Time.getNowTime(), 'Source Msg: ' + event.message.text + ';Replyed: ' + replyMsg);
 		}).catch(function (error) {
 			console.log(error);
 		});
@@ -890,10 +889,13 @@ async function MessageHandler(event) {
 
 // 開機提醒
 setTimeout(function () {
-	for (let i = 0; i < owners_notice.length; i++) {
-		LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太已啟動完成。'));
-		console.log('send: ' + owners_notice[i] + ';msg: ' + UTC8Time.getNowTime() + '\n日太已啟動完成。');
-	}
+	ngrok.connect(8080, function (err, url) {
+		nowurl = url;
+		for (let i = 0; i < owners_notice.length; i++) {
+			LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太已啟動完成。\nNow running at: ' + url));
+			console.log('send: ' + owners_notice[i] + ';msg: ' + UTC8Time.getNowTime() + '\n日太已啟動完成。\nNow running at: ' + url);
+		}
+	});
 }, 3000);
 
 // 報時功能
@@ -901,30 +903,5 @@ CallTimer.calltimer();
 
 // 地震報告
 EarthquakeCheck.opendata();
-
-// Wake it up
-setInterval(function () {
-	$({
-		type: "POST",
-		url: "https://suntaidev.herokuapp.com",
-		data: JSON.stringify({
-			"replyToken": "1fdaadc9bb6e4d128f49cc26822cf47e",
-			"type": "message",
-			"timestamp": 1519110122951,
-			"source": {
-				"type": "user",
-				"userId": "U68ee43b020172695479ea772412cb267"
-			},
-			"message": {
-				"id": 7504706809054,
-				"type": "text",
-				"text": "Wake Up"
-			}
-		}),
-		complete: function (data) {
-			console.log('Wake up, Responsed data: ', data);
-		},
-	});
-}, 1200000);
 
 /* */
