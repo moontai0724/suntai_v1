@@ -131,7 +131,7 @@ async function MessageHandler(event) {
 												'\n/mt renewquizdb' +
 												'\n/mt send <groupId> <msg>'));
 											break;
-										case 'shutdown':
+										case 'restart':
 											if (msgs[2]) {
 												setTimeout(function () {
 													server.close(function () {
@@ -139,6 +139,7 @@ async function MessageHandler(event) {
 															LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太已關機。'));
 															console.log('send: ' + owners_notice[i] + ';msg: ' + UTC8Time.getNowTime() + '\n日太已關機。');
 														}
+														process.exit();
 													});
 												}, msgs[2] * 1000);
 											} else {
@@ -147,6 +148,7 @@ async function MessageHandler(event) {
 														LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太已關機。'));
 														console.log('send: ' + owners_notice[i] + ';msg: ' + UTC8Time.getNowTime() + '\n日太已關機。');
 													}
+													process.exit();
 												});
 											}
 											break;
@@ -892,11 +894,19 @@ setTimeout(function () {
 	ngrok.connect(8080, function (err, url) {
 		nowurl = url;
 		for (let i = 0; i < owners_notice.length; i++) {
-			LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太已啟動完成。\nNow running at: ' + url));
-			console.log('send: ' + owners_notice[i] + ';msg: ' + UTC8Time.getNowTime() + '\n日太已啟動完成。\nNow running at: ' + url);
+			LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太已啟動完成。\n請更改網址：https://developers.line.me/console/channel/1558579961/basic/\nNow running at: ' + url));
+			console.log('send: ' + owners_notice[i] + ';msg: ' + UTC8Time.getNowTime() + '\n日太已啟動完成。\n請更改網址：https://developers.line.me/console/channel/1558579961/basic/\nNow running at: ' + url);
 		}
 	});
 }, 3000);
+
+// 自動重開 28800000ms
+setTimeout(function () {
+	server.close(function () {
+		console.log('send: ' + owners_notice[i] + ';msg: ' + UTC8Time.getNowTime() + '\n日太已自動關機。');
+		process.exit();
+	});
+}, 28800000);
 
 // 報時功能
 CallTimer.calltimer();

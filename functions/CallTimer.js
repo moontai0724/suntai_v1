@@ -43,7 +43,7 @@ module.exports = {
                     }
 
                     calltimer();
-                }, (((60 - time.time_min) * 60) - time.time_sec) * 1000 - time.time_ms);
+                }, (((60 - time.time_min) * 60) - time.time_sec) * 1000 - time.time_ms + 5000);
             });
         });
     },

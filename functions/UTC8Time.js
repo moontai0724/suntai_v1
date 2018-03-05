@@ -9,6 +9,62 @@ module.exports = {
         } else {
             var time = new Date();
         }
+        time_ms = time.getMilliseconds();
+        time_sec = time.getSeconds();
+        time_min = time.getMinutes();
+        time_hr = time.getHours();
+        time_day = time.getDate();
+        time_month = time.getMonth() + 1; // 獲取到的時間是從0開始，因此+1
+        time_year = time.getFullYear();
+        // 時間格式化
+        if (time_ms < 10) { time_ms = '00' + time_ms; }
+        else if (time_ms < 100) { time_ms = '0' + time_ms; }
+        if (time_sec < 10) { time_sec = '0' + time_sec; }
+        if (time_min < 10) { time_min = '0' + time_min; }
+        if (time_hr < 10) { time_hr = '0' + time_hr; }
+        if (time_day < 10) { time_day = '0' + time_day; }
+        if (time_month < 10) { time_month = '0' + time_month; }
+        return time_year + '/' + time_month + '/' + time_day + ' ' + time_hr + ':' + time_min + ':' + time_sec + ':' + time_ms;
+    },
+    getNowTimePromise: function (tms) {
+        return new Promise(function (resolve) {
+            if (tms) {
+                var time = new Date(tms);
+            } else {
+                var time = new Date();
+            }
+            time_ms = time.getMilliseconds();
+            time_sec = time.getSeconds();
+            time_min = time.getMinutes();
+            time_hr = time.getHours();
+            time_day = time.getDate();
+            time_month = time.getMonth() + 1; // 獲取到的時間是從0開始，因此+1
+            time_year = time.getFullYear();
+            // 時間格式化
+            if (time_ms < 10) { time_ms = '00' + time_ms; }
+            else if (time_ms < 100) { time_ms = '0' + time_ms; }
+            if (time_sec < 10) { time_sec = '0' + time_sec; }
+            if (time_min < 10) { time_min = '0' + time_min; }
+            if (time_hr < 10) { time_hr = '0' + time_hr; }
+            if (time_day < 10) { time_day = '0' + time_day; }
+            if (time_month < 10) { time_month = '0' + time_month; }
+            resolve({
+                "time_year": time_year,
+                "time_month": time_month,
+                "time_day": time_day,
+                "time_hr": time_hr,
+                "time_min": time_min,
+                "time_sec": time_sec,
+                "time_ms": time_ms
+            });
+        });
+    },
+    getNowTimeByUTC: function (tms) {
+        if (tms) {
+            var time = new Date(tms);
+        } else {
+            var time = new Date();
+        }
         time_ms = time.getUTCMilliseconds();
         time_sec = time.getUTCSeconds();
         time_min = time.getUTCMinutes();
@@ -49,7 +105,7 @@ module.exports = {
         if (time_month < 10) { time_month = '0' + time_month; }
         return time_year + '/' + time_month + '/' + time_day + ' ' + time_hr + ':' + time_min + ':' + time_sec + ':' + time_ms;
     },
-    getNowTimePromise: function (tms) {
+    getNowTimeByUTCPromise: function (tms) {
         return new Promise(function (resolve) {
             if (tms) {
                 var time = new Date(tms);
