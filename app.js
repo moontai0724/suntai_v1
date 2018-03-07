@@ -57,10 +57,7 @@ const CallTimer = require('./functions/CallTimer'); //ok
 // ================================================== My Functions Over ==================================================
 // ================================================== Start My Program ==================================================
 
-var owners, owners_notice, nowurl;
-
-// 不會寫入資料庫的變數
-var msg_log = [], msg_log_UUID = [], msg_count = [], msg_countime_UUID = [];
+var owners, owners_notice, last_commit_time = undefined;
 
 // 獲取資料庫中的資料
 ConnectDB.readDB(DBref.indexOf('owners') + 1).then(function (data) { owners = data; });
@@ -892,10 +889,21 @@ async function MessageHandler(event) {
 // 開機提醒
 setTimeout(function () {
 	ngrok.connect(8080, function (err, url) {
-		nowurl = url;
+		$({
+			type: 'GET',
+			url: 'https://bitbucket.org/moontai0724/suntaidev-new/rss?token=647ffb534a2e39dac086cfe6ceaa286e',
+			success: function (data) {
+				parseString(data, function (err, result) {
+					last_commit_time = result.rss.channel[0].item[0].pubDate[0];
+				});
+			}
+		});
 		for (let i = 0; i < owners_notice.length; i++) {
-			LineBotClient.pushMessage(owners_notice[i], MsgFormat.Text(UTC8Time.getNowTime() + '\n日太已啟動完成。\n請更改網址：https://developers.line.me/console/channel/1558579961/basic/\nNow running at: ' + url));
-			console.log('send: ' + owners_notice[i] + ';msg: ' + UTC8Time.getNowTime() + '\n日太已啟動完成。\n請更改網址：https://developers.line.me/console/channel/1558579961/basic/\nNow running at: ' + url);
+			LineBotClient.pushMessage(owners_notice[i], [MsgFormat.Text(UTC8Time.getNowTime() + '\n日太已啟動完成。' +
+				'\n請更改網址：https://developers.line.me/console/channel/1558579961/basic/' +
+				'\nNow running at: ' + url), MsgFormat.Text(url.split('://')[1].split('.')[0])]);
+			console.log(UTC8Time.getNowTime() + 'send: ' + owners_notice[i] + ';msg: ' + '日太已啟動完成。\n請更改網址：https://developers.line.me/console/channel/1558579961/basic/\nNow running at: ' + url, url.split('://')[1].split('.')[0]);
+
 		}
 	});
 }, 3000);
@@ -903,10 +911,28 @@ setTimeout(function () {
 // 自動重開 28800000ms
 setTimeout(function () {
 	server.close(function () {
-		console.log('send: ' + owners_notice[i] + ';msg: ' + UTC8Time.getNowTime() + '\n日太已自動關機。');
+		console.log(UTC8Time.getNowTime() + ' 日太已自動關機。');
 		process.exit();
 	});
 }, 28800000);
+
+// 確認是否有新 code
+// setInterval(function () {
+// 	$({
+// 		type: 'GET',
+// 		url: 'https://bitbucket.org/moontai0724/suntaidev-new/rss?token=647ffb534a2e39dac086cfe6ceaa286e',
+// 		success: function (data) {
+// 			parseString(data, function (err, result) {
+// 				if (result.rss.channel[0].item[0].pubDate[0] != last_commit_time) {
+// 					server.close(function () {
+// 						console.log(UTC8Time.getNowTime() + ' 偵測到有新編譯，日太已自動關機。');
+// 						process.exit();
+// 					});
+// 				}
+// 			});
+// 		}
+// 	});
+// }, 60000);
 
 // 報時功能
 CallTimer.calltimer();

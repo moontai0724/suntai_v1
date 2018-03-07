@@ -112,7 +112,7 @@ module.exports = {
                     });
                 });
             });
-        }, 60000);
+        });
     },
     alert: function () {
         $.get("https://alerts.ncdr.nat.gov.tw/RssAtomFeed.ashx?AlertType=6", function (data) {
