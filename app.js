@@ -925,7 +925,6 @@ setInterval(function () {
 		success: function (data) {
 			parseString(data, function (err, result) {
 				if (result.rss.channel[0].item[0].pubDate[0] != last_commit_time) {
-					console.log('last_commit_time: ', last_commit_time);
 					console.log('received: ', result.rss.channel[0].item[0].pubDate[0]);
 					server.close(function () {
 						console.log(UTC8Time.getNowTime() + ' 偵測到有新編譯，日太已自動關機。');
