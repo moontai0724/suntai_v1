@@ -934,7 +934,7 @@ setInterval(function () {
 			});
 		}
 	});
-}, 60000);
+}, 5000);
 
 // 報時功能
 CallTimer.calltimer();
