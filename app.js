@@ -917,22 +917,22 @@ setTimeout(function () {
 }, 28800000);
 
 // 確認是否有新 code
-// setInterval(function () {
-// 	$({
-// 		type: 'GET',
-// 		url: 'https://bitbucket.org/moontai0724/suntaidev-new/rss?token=647ffb534a2e39dac086cfe6ceaa286e',
-// 		success: function (data) {
-// 			parseString(data, function (err, result) {
-// 				if (result.rss.channel[0].item[0].pubDate[0] != last_commit_time) {
-// 					server.close(function () {
-// 						console.log(UTC8Time.getNowTime() + ' 偵測到有新編譯，日太已自動關機。');
-// 						process.exit();
-// 					});
-// 				}
-// 			});
-// 		}
-// 	});
-// }, 60000);
+setInterval(function () {
+	$({
+		type: 'GET',
+		url: 'https://bitbucket.org/moontai0724/suntaidev-new/rss?token=647ffb534a2e39dac086cfe6ceaa286e',
+		success: function (data) {
+			parseString(data, function (err, result) {
+				if (result.rss.channel[0].item[0].pubDate[0] != last_commit_time) {
+					server.close(function () {
+						console.log(UTC8Time.getNowTime() + ' 偵測到有新編譯，日太已自動關機。');
+						process.exit();
+					});
+				}
+			});
+		}
+	});
+}, 60000);
 
 // 報時功能
 CallTimer.calltimer();
