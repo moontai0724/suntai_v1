@@ -773,11 +773,10 @@ async function MessageHandler(event) {
 												}
 												let SpecificStartTime = new Date(StartTime);
 												let SpecificOverTime = new Date(OverTime);
-												Chatlog.searchHistory(Number(msgs[2]), SpecificStartTime.getTime(), SpecificOverTime.getTime());
+												startReply(MsgFormat.Text(Chatlog.searchHistory(Number(msgs[2]), SpecificStartTime.getTime(), SpecificOverTime.getTime())));
 											} else {
-												Chatlog.searchHistory(Number(msgs[2]));
+												startReply(MsgFormat.Text(Chatlog.searchHistory(Number(msgs[2]))));
 											}
-											startReply(MsgFormat.Text("您的個人 ID 為： " + event.source.userId));
 										} else {
 											startReply(MsgFormat.Text(Chatlog.searchHistory()));
 										}
