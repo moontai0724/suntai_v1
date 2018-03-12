@@ -3,6 +3,10 @@ module.exports = {
     value: {
         time_ms, time_sec, time_min, time_hr, time_day, time_month, time_year
     },
+    getNowTimestamp: function () {
+        var time = new Date();
+        return time.getTime();
+    },
     getNowTime: function (tms) {
         if (tms) {
             var time = new Date(tms);

@@ -1,3 +1,4 @@
+// npm install @line/bot-sdk koa koa-bodyparser koa-router najax ngrok ping-net sqlite xml2js
 // Require Line Bot SDK
 const LineBotSDK = require('@line/bot-sdk');
 
@@ -36,28 +37,29 @@ router.post('/', ctx => {
 app.use(router.routes());
 
 // Service Startup
-const server = app.listen(8080, function () { console.log('App now running on port: ', this.address().port); });
+const server = app.listen(8080);
 
 // ================================================== My Functions Start ================================================== 
 
-const DBref = require('./functions/Variables').DBref; //ok
+const DBref = require('./functions/Variables').DBref;
 const Country = require('./functions/Variables').Country;
 const AllCity = require('./functions/Variables').AllCity;
 const AllCityList = require('./functions/Variables').AllCityList;
 
-const UTC8Time = require('./functions/UTC8Time'); //ok.include: getNowTime(function), value
-const MsgFormat = require('./functions/MsgFormat'); //ok.include: Text(function), Sticker(function), Image(function), Video(function), Audio(function), Location(function)
-const QuizDB = require('./functions/QuizDB'); //ok.include: value(function), get(function), searchIndex(function), searchData(function)
-const EarthquakeCheck = require('./functions/EarthquakeCheck'); //ok
-const GetRandomNumber = require('./functions/GetRandomNumber'); //ok.include: start(function)
-const UploadPicToImgurByURL = require('./functions/UploadPicToImgurByURL'); //ok.include: start(function)
-const ConnectDB = require('./functions/ConnectDB'); //ok
-const CallTimer = require('./functions/CallTimer'); //ok
+const UTC8Time = require('./functions/UTC8Time'); //include: getNowTime(function), value
+const MsgFormat = require('./functions/MsgFormat'); //include: Text(function), Sticker(function), Image(function), Video(function), Audio(function), Location(function)
+const QuizDB = require('./functions/QuizDB'); //include: value(function), get(function), searchIndex(function), searchData(function)
+const EarthquakeCheck = require('./functions/EarthquakeCheck');
+const GetRandomNumber = require('./functions/GetRandomNumber');
+const UploadPicToImgurByURL = require('./functions/UploadPicToImgurByURL');
+const ConnectDB = require('./functions/ConnectDB');
+const CallTimer = require('./functions/CallTimer');
+const Chatlog = require('./functions/Chatlog');
 
 // ================================================== My Functions Over ==================================================
 // ================================================== Start My Program ==================================================
 
-var owners, owners_notice, last_commit_time = undefined;
+var owners, owners_notice;
 
 // 獲取資料庫中的資料
 ConnectDB.readDB(DBref.indexOf('owners') + 1).then(function (data) { owners = data; });
@@ -68,13 +70,11 @@ async function MessageHandler(event) {
 	console.log(JSON.stringify(event));
 
 	var SourceData = {
-		type: undefined,
 		userId: undefined,
 		id: undefined,
 		Profile: {}
 	};
 
-	SourceData.type = event.source.type;
 	if (event.source.userId) {
 		SourceData.userId = event.source.userId;
 		switch (event.source.type) {
@@ -95,6 +95,7 @@ async function MessageHandler(event) {
 
 	switch (event.type) {
 		case 'message':
+			Chatlog.log(event);
 			switch (event.message.type) {
 				case 'text':
 					if (event.message.text.startsWith('/')) {
@@ -172,7 +173,7 @@ async function MessageHandler(event) {
 													var group_id = undefined;
 													if (msgs[3]) {
 														group_id = msgs[3];
-													} else if (!msgs[3] && SourceData.type == 'group') {
+													} else if (!msgs[3] && event.source.type == 'group') {
 														group_id = SourceData.id;
 													}
 
@@ -217,7 +218,7 @@ async function MessageHandler(event) {
 													var room_id = undefined;
 													if (msgs[3]) {
 														room_id = msgs[3];
-													} else if (!msgs[3] && SourceData.type == 'room') {
+													} else if (!msgs[3] && event.source.type == 'room') {
 														room_id = SourceData.id;
 													}
 
@@ -491,8 +492,9 @@ async function MessageHandler(event) {
 											'\n/st quiz [bsn]' +
 											'\n/st quizans <bsn>' +
 											'\n　註：bsn 為巴哈姆特看板編號。' +
-											// '\n/st antiunsend || au [SpecificSort]' +
-											// '\n　註：最多指定 20 筆資料，若無指定預設五筆。' +
+											'\n/st antiunsend || au [SpecificCount] [<startTime> <overTime>]' +
+											'\n　時間格式：YYYY-MM-DD-HH-MM' +
+											'\n　註：最多指定 100 筆資料，若無指定預設 10 筆。' +
 											'\n/st ping <address> [port] [attempt]' +
 											'\n　註：attempt 預設 2，port 預設 80'));
 										break;
@@ -750,6 +752,36 @@ async function MessageHandler(event) {
 											startReply(MsgFormat.Text("無法獲取您的 ID，請同意使用規約以獲取個人 ID。操作流程：\n**注意，請勿加入好友。**\n點選日太後，選擇「聊天」，隨意傳送訊息，並同意使用規約後，於一對一聊天中重新傳送指令。"));
 										}
 										break;
+									case 'antiunsend': case 'au':
+										if (msgs[2]) {
+											if (msgs[3] && msgs[4]) {
+												let StartTime = msgs[3].split('-');
+												for (let i = 0; i < StartTime.length; i++) {
+													if (!StartTime[i]) {
+														StartTime[i] = 0;
+													} else {
+														StartTime[i] = Number(StartTime[i]);
+													}
+												}
+												let OverTime = msgs[4].split('-');
+												for (let i = 0; i < OverTime.length; i++) {
+													if (!OverTime[i]) {
+														OverTime[i] = 0;
+													} else {
+														OverTime[i] = Number(OverTime[i]);
+													}
+												}
+												let SpecificStartTime = new Date(StartTime);
+												let SpecificOverTime = new Date(OverTime);
+												Chatlog.searchHistory(Number(msgs[2]), SpecificStartTime.getTime(), SpecificOverTime.getTime());
+											} else {
+												Chatlog.searchHistory(Number(msgs[2]));
+											}
+											startReply(MsgFormat.Text("您的個人 ID 為： " + event.source.userId));
+										} else {
+											startReply(MsgFormat.Text(Chatlog.searchHistory()));
+										}
+										break;
 									default:
 										startReply(MsgFormat.Text('參數錯誤。'));
 										break;
@@ -888,17 +920,11 @@ async function MessageHandler(event) {
 
 // 開機提醒
 setTimeout(function () {
-	ngrok.connect(8080, function (err, url) {
-		$({
-			type: 'GET',
-			url: 'https://bitbucket.org/moontai0724/suntaidev-new/rss?token=647ffb534a2e39dac086cfe6ceaa286e',
-			success: function (data) {
-				parseString(data, function (err, result) {
-					last_commit_time = result.rss.channel[0].item[0].pubDate[0];
-					console.log('set last_commit_time: ', last_commit_time);
-				});
-			}
-		});
+	ngrok.connect({
+		proto: 'http',
+		addr: 8080,
+		authtoken: '7brGQG2WUnfNBDvvWzeaZ_3BDHnBkrKQVk6xi3NsxGn'
+	}, function (err, url) {
 		for (let i = 0; i < owners_notice.length; i++) {
 			LineBotClient.pushMessage(owners_notice[i], [MsgFormat.Text(UTC8Time.getNowTime() + '\n日太已啟動完成。' +
 				'\n請更改網址：https://developers.line.me/console/channel/1558579961/basic/' +
@@ -910,36 +936,22 @@ setTimeout(function () {
 }, 3000);
 
 // 自動重開 28800000ms
-setTimeout(function () {
-	server.close(function () {
-		console.log(UTC8Time.getNowTime() + ' 日太已自動關機。');
-		process.exit();
-	});
-}, 28800000);
-
-// 確認是否有新 code
-setInterval(function () {
-	$({
-		type: 'GET',
-		url: 'https://bitbucket.org/moontai0724/suntaidev-new/rss?token=647ffb534a2e39dac086cfe6ceaa286e',
-		success: function (data) {
-			parseString(data, function (err, result) {
-				if (result.rss.channel[0].item[0].pubDate[0] != last_commit_time) {
-					console.log('received: ', result.rss.channel[0].item[0].pubDate[0]);
-					server.close(function () {
-						console.log(UTC8Time.getNowTime() + ' 偵測到有新編譯，日太已自動關機。');
-						process.exit();
-					});
-				}
-			});
-		}
-	});
-}, 10000);
+// setTimeout(function () {
+// 	server.close(function () {
+// 		console.log(UTC8Time.getNowTime() + ' 日太已自動關機。');
+// 		process.exit();
+// 	});
+// }, 28800000);
 
 // 報時功能
 CallTimer.calltimer();
 
 // 地震報告
 EarthquakeCheck.opendata();
+
+// 定時清除下載的資料
+// setInterval(function () {
+// 	Chatlog.deleteOutdatedFiles();
+// }, 86400000);
 
 /* */
