@@ -187,11 +187,11 @@ module.exports = {
                     if (data.length != 0) {
                         let replyMsg = '';
                         UTC8Time.getNowTimePromise(data[0].timestamp).then(function (time) {
-                            replyMsg = time.time_hr() + ':' + time.time_min() + ' ' + data[0].displayName + '-> ' + data[0].message;
+                            replyMsg = time.time_hr + ':' + time.time_min + ' ' + data[0].displayName + '-> ' + data[0].message;
                         });
                         for (let i = 1; i < data.length; i++) {
                             UTC8Time.getNowTimePromise(data[i].timestamp).then(function (time) {
-                                replyMsg = time.time_hr() + ':' + time.time_min() + ' ' + data[i].displayName + '-> ' + data[i].message + '\n' + replyMsg;
+                                replyMsg = time.time_hr + ':' + time.time_min + ' ' + data[i].displayName + '-> ' + data[i].message + '\n' + replyMsg;
                             });
                         }
                         console.log(replyMsg);
@@ -205,11 +205,11 @@ module.exports = {
                     if (data.length != 0) {
                         let replyMsg = '';
                         UTC8Time.getNowTimePromise(data[0].timestamp).then(function (time) {
-                            replyMsg = time.time_hr() + ':' + time.time_min() + ' ' + data[0].displayName + '-> ' + data[0].message;
+                            replyMsg = time.time_hr + ':' + time.time_min + ' ' + data[0].displayName + '-> ' + data[0].message;
                         });
                         for (let i = 1; i < data.length; i++) {
                             UTC8Time.getNowTimePromise(data[i].timestamp).then(function (time) {
-                                replyMsg = time.time_hr() + ':' + time.time_min() + ' ' + data[i].displayName + '-> ' + data[i].message + '\n' + replyMsg;
+                                replyMsg = time.time_hr + ':' + time.time_min + ' ' + data[i].displayName + '-> ' + data[i].message + '\n' + replyMsg;
                             });
                         }
                         console.log(replyMsg);
