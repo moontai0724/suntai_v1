@@ -89,8 +89,12 @@ module.exports = {
                 case 'group': case 'room':
                     db_Ids.all('SELECT * FROM sqlite_master').then(function (data) {
                         if (data.findIndex(function (element) { return element.name == SourceData.id; }) > -1) {
-                            console.log('INSERT INTO ' + SourceData.id + ' VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
-                            db_Ids.run('INSERT INTO ' + SourceData.id + ' VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
+                            db_Ids.all('SELECT userId FROM ' + SourceData.id).then(function (lists) {
+                                if (lists.findIndex(function (element) { return element.id == event.source.userId; }) == -1) {
+                                    console.log('INSERT INTO ' + SourceData.id + ' VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
+                                    db_Ids.run('INSERT INTO ' + SourceData.id + ' VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
+                                }
+                            });
                         } else {
                             console.log('CREATE TABLE ' + SourceData.id + ' (id TEXT, displayName TEXT)');
                             db_Ids.run('CREATE TABLE ' + SourceData.id + ' (id TEXT, displayName TEXT)').then(function () {
