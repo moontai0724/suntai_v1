@@ -20,17 +20,19 @@ const GetRandomNumber = require('./GetRandomNumber'); //ok.include: start(functi
 const UploadPicToImgurByURL = require('./UploadPicToImgurByURL'); //ok.include: start(function)
 const ConnectDB = require('./ConnectDB'); //ok
 
+var db_GroupChatlog, db_Ids;
+start();
+async function start() {
+    [db_GroupChatlog, db_Ids] = await Promise.all([
+        sqlite.open('../database/GroupChatlog.sqlite', { Promise }),
+        sqlite.open('../database/Ids.sqlite', { Promise })
+    ]);
+}
+
 // ================================================== My Functions Over ==================================================
 
 module.exports = {
     log: async function (event) {
-        console.log(JSON.stringify(event));
-
-        const [db_GroupChatlog, db_Ids] = await Promise.all([
-            sqlite.open('../database/GroupChatlog.sqlite', { Promise }),
-            sqlite.open('../database/Ids.sqlite', { Promise })
-        ]);
-
         var SourceData = {
             userId: 'UNKNOWN',
             id: undefined,
