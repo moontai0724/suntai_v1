@@ -184,7 +184,7 @@ module.exports = {
         if (startTime && overTime) {
             db_GroupChatlog.all('SELECT * FROM ' + SourceData.id + ' WHERE timestamp BETWEEN ' + startTime + ' AND ' + overTime + ' ORDER BY timestamp DESC LIMIT ' + count).then(function (data) {
                 if (data.length != 0) {
-                    let replyMsg = data[0].displayName + ': ' + data[i].message;
+                    let replyMsg = data[0].displayName + ': ' + data[0].message;
                     for (let i = 1; i < data.length; i++) {
                         let time = new Date(data[i].timestamp);
                         replyMsg += '\n' + time.getHours() + ':' + time.getMinutes() + ' ' + data[i].displayName + '-> ' + data[i].message;
@@ -197,7 +197,7 @@ module.exports = {
         } else {
             db_GroupChatlog.all('SELECT * FROM ' + SourceData.id + ' ORDER BY timestamp DESC LIMIT ' + count).then(function (data) {
                 if (data.length != 0) {
-                    let replyMsg = data[0].displayName + ': ' + data[i].message;
+                    let replyMsg = data[0].displayName + ': ' + data[0].message;
                     for (let i = 1; i < data.length; i++) {
                         let time = new Date(data[i].timestamp);
                         replyMsg += '\n' + time.getHours() + ':' + time.getMinutes() + ' ' + data[i].displayName + '-> ' + data[i].message;
