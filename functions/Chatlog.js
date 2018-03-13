@@ -20,8 +20,8 @@ const GetRandomNumber = require('./GetRandomNumber'); //ok.include: start(functi
 const UploadPicToImgurByURL = require('./UploadPicToImgurByURL'); //ok.include: start(function)
 const ConnectDB = require('./ConnectDB');
 
-fs.readdir('./ChatlogFiles', function (err, files) { if (err) { fs.mkdir('../ChatlogFiles', function () { console.log('Spawned ChatlogFiles dir.'); }); } });
-fs.readdir('./database', function (err, files) { if (err) { fs.mkdir('../database', function () { console.log('Spawned database dir.'); }); } });
+fs.readdir('./ChatlogFiles', function (err, files) { if (err) { fs.mkdir('./ChatlogFiles', function () { console.log('Spawned ChatlogFiles dir.'); }); } });
+fs.readdir('./database', function (err, files) { if (err) { fs.mkdir('./database', function () { console.log('Spawned database dir.'); }); } });
 var db_GroupChatlog, db_Ids;
 start();
 async function start() {
