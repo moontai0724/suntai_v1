@@ -773,12 +773,18 @@ async function MessageHandler(event) {
 												}
 												let SpecificStartTime = new Date(StartTime);
 												let SpecificOverTime = new Date(OverTime);
-												startReply(MsgFormat.Text(Chatlog.searchHistory(SourceData, Number(msgs[2]), SpecificStartTime.getTime(), SpecificOverTime.getTime())));
+												Chatlog.searchHistory(SourceData, Number(msgs[2]), SpecificStartTime.getTime(), SpecificOverTime.getTime()).then(function (data) {
+													startReply(MsgFormat.Text(data));
+												});
 											} else {
-												startReply(MsgFormat.Text(Chatlog.searchHistory(SourceData, Number(msgs[2]))));
+												Chatlog.searchHistory(SourceData, Number(msgs[2])).then(function (data) {
+													startReply(MsgFormat.Text(data));
+												});
 											}
 										} else {
-											startReply(MsgFormat.Text(Chatlog.searchHistory(SourceData)));
+											Chatlog.searchHistory(SourceData).then(function (data) {
+												startReply(MsgFormat.Text(data));
+											});
 										}
 										break;
 									default:
