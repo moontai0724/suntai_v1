@@ -6,6 +6,10 @@ const parseString = require('xml2js').parseString;
 const sqlite = require('sqlite');
 const fs = require('fs');
 
+// Require config
+const Config = require('../config/config');
+const LineBotClient = new LineBotSDK.Client(Config);
+
 // ================================================== My Functions Start ================================================== 
 
 const DBref = require('./Variables').DBref;
