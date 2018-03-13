@@ -192,10 +192,12 @@ module.exports = {
                         for (let i = 1; i < data.length; i++) {
                             UTC8Time.getNowTimePromise(data[i].timestamp).then(function (time) {
                                 replyMsg = time.time_hr + ':' + time.time_min + ' ' + data[i].displayName + '-> ' + data[i].message + '\n' + replyMsg;
+                                if (i == data.length - 1) {
+                                    console.log(replyMsg);
+                                    resolve(replyMsg);
+                                }
                             });
                         }
-                        console.log(replyMsg);
-                        resolve(replyMsg);
                     } else {
                         resolve('沒有任何紀錄。');
                     }
@@ -210,10 +212,12 @@ module.exports = {
                         for (let i = 1; i < data.length; i++) {
                             UTC8Time.getNowTimePromise(data[i].timestamp).then(function (time) {
                                 replyMsg = time.time_hr + ':' + time.time_min + ' ' + data[i].displayName + '-> ' + data[i].message + '\n' + replyMsg;
+                                if (i == data.length - 1) {
+                                    console.log(replyMsg);
+                                    resolve(replyMsg);
+                                }
                             });
                         }
-                        console.log(replyMsg);
-                        resolve(replyMsg);
                     } else {
                         resolve('沒有任何紀錄。');
                     }
