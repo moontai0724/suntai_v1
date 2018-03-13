@@ -918,21 +918,21 @@ async function MessageHandler(event) {
 // ================================================== Start Other Functions ==================================================
 
 // 開機提醒
-setTimeout(function () {
-	ngrok.connect({
-		proto: 'http',
-		addr: 8080,
-		authtoken: '7brGQG2WUnfNBDvvWzeaZ_3BDHnBkrKQVk6xi3NsxGn'
-	}, function (err, url) {
-		console.log(err, url);
-		for (let i = 0; i < owners_notice.length; i++) {
-			LineBotClient.pushMessage(owners_notice[i], [MsgFormat.Text(UTC8Time.getNowTime() + '\n日太已啟動完成。' +
-				'\n請更改網址：https://developers.line.me/console/channel/1558579961/basic/' +
-				'\nNow running at: ' + url), MsgFormat.Text(url.split('://')[1].split('.')[0])]);
-			console.log(UTC8Time.getNowTime() + 'send: ' + owners_notice[i] + ';msg: ' + '日太已啟動完成。\n請更改網址：https://developers.line.me/console/channel/1558579961/basic/\nNow running at: ' + url, url.split('://')[1].split('.')[0]);
-		}
-	});
-}, 3000);
+// setTimeout(function () {
+// 	ngrok.connect({
+// 		proto: 'http',
+// 		addr: 8080,
+// 		authtoken: '7brGQG2WUnfNBDvvWzeaZ_3BDHnBkrKQVk6xi3NsxGn'
+// 	}, function (err, url) {
+// 		console.log(err, url);
+// 		for (let i = 0; i < owners_notice.length; i++) {
+// 			LineBotClient.pushMessage(owners_notice[i], [MsgFormat.Text(UTC8Time.getNowTime() + '\n日太已啟動完成。' +
+// 				'\n請更改網址：https://developers.line.me/console/channel/1558579961/basic/' +
+// 				'\nNow running at: ' + url), MsgFormat.Text(url.split('://')[1].split('.')[0])]);
+// 			console.log(UTC8Time.getNowTime() + 'send: ' + owners_notice[i] + ';msg: ' + '日太已啟動完成。\n請更改網址：https://developers.line.me/console/channel/1558579961/basic/\nNow running at: ' + url, url.split('://')[1].split('.')[0]);
+// 		}
+// 	});
+// }, 3000);
 
 // 自動重開 28800000ms
 // setTimeout(function () {

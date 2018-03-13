@@ -6,10 +6,6 @@ const parseString = require('xml2js').parseString;
 const sqlite = require('sqlite');
 const fs = require('fs');
 
-// Require config
-const Config = require('../config/config');
-const LineBotClient = new LineBotSDK.Client(Config);
-
 // ================================================== My Functions Start ================================================== 
 
 const DBref = require('./Variables').DBref; //ok
@@ -19,13 +15,13 @@ const MsgFormat = require('./MsgFormat'); //ok.include: Text(function), Sticker(
 const GetRandomNumber = require('./GetRandomNumber'); //ok.include: start(function)
 const UploadPicToImgurByURL = require('./UploadPicToImgurByURL'); //ok.include: start(function)
 const ConnectDB = require('./ConnectDB'); //ok
-
+const path = require('path');
 var db_GroupChatlog, db_Ids;
 start();
 async function start() {
     [db_GroupChatlog, db_Ids] = await Promise.all([
-        sqlite.open('../database/GroupChatlog.sqlite', { Promise }),
-        sqlite.open('../database/Ids.sqlite', { Promise })
+        sqlite.open(path.resolve(__dirname, '../database/GroupChatlog.sqlite'), { Promise }),
+        sqlite.open(path.resolve(__dirname, '../database/Ids.sqlite'), { Promise })
     ]);
 }
 
