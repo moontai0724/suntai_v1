@@ -194,6 +194,7 @@ module.exports = {
                                 replyMsg = time.time_hr() + ':' + time.time_min() + ' ' + data[i].displayName + '-> ' + data[i].message + '\n' + replyMsg;
                             });
                         }
+                        console.log(replyMsg);
                         resolve(replyMsg);
                     } else {
                         resolve('沒有任何紀錄。');
@@ -211,6 +212,7 @@ module.exports = {
                                 replyMsg = time.time_hr() + ':' + time.time_min() + ' ' + data[i].displayName + '-> ' + data[i].message + '\n' + replyMsg;
                             });
                         }
+                        console.log(replyMsg);
                         resolve(replyMsg);
                     } else {
                         resolve('沒有任何紀錄。');
