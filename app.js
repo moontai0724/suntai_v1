@@ -70,7 +70,7 @@ async function MessageHandler(event) {
 	console.log(JSON.stringify(event));
 
 	var SourceData = {
-		userId: undefined,
+		userId: 'UNKNOWN',
 		id: undefined,
 		Profile: {}
 	};
@@ -492,7 +492,7 @@ async function MessageHandler(event) {
 											'\n/st quiz [bsn]' +
 											'\n/st quizans <bsn>' +
 											'\n　註：bsn 為巴哈姆特看板編號。' +
-											'\n/st antiunsend || au [SpecificCount] [<startTime> <overTime>]' +
+											'\n/st history || h [SpecificCount] [<startTime> <overTime>]' +
 											'\n　時間格式：YYYY-MM-DD-HH-MM' +
 											'\n　註：最多指定 100 筆資料，若無指定預設 10 筆。' +
 											'\n/st ping <address> [port] [attempt]' +
@@ -752,7 +752,7 @@ async function MessageHandler(event) {
 											startReply(MsgFormat.Text("無法獲取您的 ID，請同意使用規約以獲取個人 ID。操作流程：\n**注意，請勿加入好友。**\n點選日太後，選擇「聊天」，隨意傳送訊息，並同意使用規約後，於一對一聊天中重新傳送指令。"));
 										}
 										break;
-									case 'antiunsend': case 'au':
+									case 'history': case 'h':
 										if (msgs[2]) {
 											if (msgs[3] && msgs[4]) {
 												let StartTime = msgs[3].split('-');
@@ -773,12 +773,12 @@ async function MessageHandler(event) {
 												}
 												let SpecificStartTime = new Date(StartTime);
 												let SpecificOverTime = new Date(OverTime);
-												startReply(MsgFormat.Text(Chatlog.searchHistory(Number(msgs[2]), SpecificStartTime.getTime(), SpecificOverTime.getTime())));
+												startReply(MsgFormat.Text(Chatlog.searchHistory(SourceData, Number(msgs[2]), SpecificStartTime.getTime(), SpecificOverTime.getTime())));
 											} else {
-												startReply(MsgFormat.Text(Chatlog.searchHistory(Number(msgs[2]))));
+												startReply(MsgFormat.Text(Chatlog.searchHistory(SourceData, Number(msgs[2]))));
 											}
 										} else {
-											startReply(MsgFormat.Text(Chatlog.searchHistory()));
+											startReply(MsgFormat.Text(Chatlog.searchHistory(SourceData)));
 										}
 										break;
 									default:
