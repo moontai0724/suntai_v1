@@ -8,20 +8,22 @@ const fs = require('fs');
 
 // ================================================== My Functions Start ================================================== 
 
-const DBref = require('./Variables').DBref; //ok
+const DBref = require('./Variables').DBref;
 
 const UTC8Time = require('./UTC8Time'); //ok.include: getNowTime(function), value
 const MsgFormat = require('./MsgFormat'); //ok.include: Text(function), Sticker(function), Image(function), Video(function), Audio(function), Location(function)
 const GetRandomNumber = require('./GetRandomNumber'); //ok.include: start(function)
 const UploadPicToImgurByURL = require('./UploadPicToImgurByURL'); //ok.include: start(function)
-const ConnectDB = require('./ConnectDB'); //ok
-const path = require('path');
+const ConnectDB = require('./ConnectDB');
+
+fs.readdir('../ChatlogFiles', function (err, files) { if (err) { fs.mkdir('../ChatlogFiles'); } });
+fs.readdir('../database', function (err, files) { if (err) { fs.mkdir('../database'); } });
 var db_GroupChatlog, db_Ids;
 start();
 async function start() {
     [db_GroupChatlog, db_Ids] = await Promise.all([
-        sqlite.open(path.resolve(__dirname, '../database/GroupChatlog.sqlite'), { Promise }),
-        sqlite.open(path.resolve(__dirname, '../database/Ids.sqlite'), { Promise })
+        sqlite.open('./database/GroupChatlog.sqlite', { Promise }),
+        sqlite.open('./database/Ids.sqlite', { Promise })
     ]);
 }
 
@@ -62,8 +64,15 @@ module.exports = {
 
             switch (event.source.type) {
                 case 'user':
-                    db_Ids.all('SELECT id FROM userIds').then(function (data) {
-                        if (data.findIndex(function (element) { return element.id == event.source.userId; }) == -1) {
+                    db_Ids.all('SELECT * FROM sqlite_master').then(function (lists) {
+                        if (lists.findIndex(function (element) { return element.name == 'id'; }) > -1) {
+                            db_Ids.all('SELECT id FROM userIds').then(function (data) {
+                                if (data.findIndex(function (element) { return element.id == event.source.userId; }) == -1) {
+                                    db_Ids.run('INSERT INTO userIds VALUES (' + event.source.userId + ' ' + SourceData.Profile.displayName + ')');
+                                }
+                            });
+                        } else {
+                            db_Ids.run('CREATE TABLE id (id TEXT, displayName TEXT)');
                             db_Ids.run('INSERT INTO userIds VALUES (' + event.source.userId + ' ' + SourceData.Profile.displayName + ')');
                         }
                     });
