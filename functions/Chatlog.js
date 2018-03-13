@@ -70,7 +70,7 @@ module.exports = {
             switch (event.source.type) {
                 case 'user':
                     db_Ids.all('SELECT * FROM sqlite_master').then(function (lists) {
-                        if (lists.findIndex(function (element) { return element.name == 'id'; }) > -1) {
+                        if (lists.findIndex(function (element) { return element.name == 'userIds'; }) > -1) {
                             db_Ids.all('SELECT id FROM userIds').then(function (data) {
                                 if (data.findIndex(function (element) { return element.id == event.source.userId; }) == -1) {
                                     console.log('INSERT INTO userIds VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
@@ -78,8 +78,8 @@ module.exports = {
                                 }
                             });
                         } else {
-                            console.log('CREATE TABLE id (id TEXT, displayName TEXT)');
-                            db_Ids.run('CREATE TABLE id (id TEXT, displayName TEXT)').then(function () {
+                            console.log('CREATE TABLE userIds (id TEXT, displayName TEXT)');
+                            db_Ids.run('CREATE TABLE userIds (id TEXT, displayName TEXT)').then(function () {
                                 console.log('INSERT INTO userIds VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
                                 db_Ids.run('INSERT INTO userIds VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
                             });
@@ -89,7 +89,7 @@ module.exports = {
                 case 'group': case 'room':
                     db_Ids.all('SELECT * FROM sqlite_master').then(function (data) {
                         if (data.findIndex(function (element) { return element.name == SourceData.id; }) > -1) {
-                            db_Ids.all('SELECT userId FROM ' + SourceData.id).then(function (lists) {
+                            db_Ids.all('SELECT id FROM ' + SourceData.id).then(function (lists) {
                                 if (lists.findIndex(function (element) { return element.id == event.source.userId; }) == -1) {
                                     console.log('INSERT INTO ' + SourceData.id + ' VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
                                     db_Ids.run('INSERT INTO ' + SourceData.id + ' VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
