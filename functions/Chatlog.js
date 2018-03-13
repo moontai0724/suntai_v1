@@ -72,22 +72,22 @@ module.exports = {
                         if (lists.findIndex(function (element) { return element.name == 'id'; }) > -1) {
                             db_Ids.all('SELECT id FROM userIds').then(function (data) {
                                 if (data.findIndex(function (element) { return element.id == event.source.userId; }) == -1) {
-                                    db_Ids.run('INSERT INTO userIds VALUES ("' + event.source.userId + '" "' + SourceData.Profile.displayName + '")');
+                                    db_Ids.run('INSERT INTO userIds VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
                                 }
                             });
                         } else {
                             db_Ids.run('CREATE TABLE id (id TEXT, displayName TEXT)');
-                            db_Ids.run('INSERT INTO userIds VALUES ("' + event.source.userId + '" "' + SourceData.Profile.displayName + '")');
+                            db_Ids.run('INSERT INTO userIds VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
                         }
                     });
                     break;
                 case 'group': case 'room':
                     db_Ids.all('SELECT * FROM sqlite_master').then(function (data) {
                         if (data.findIndex(function (element) { return element.name == SourceData.id; }) > -1) {
-                            db_Ids.run('INSERT INTO ' + SourceData.id + ' VALUES ("' + event.source.userId + '" "' + SourceData.Profile.displayName + '")');
+                            db_Ids.run('INSERT INTO ' + SourceData.id + ' VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
                         } else {
                             db_Ids.run('CREATE TABLE ' + SourceData.id + ' (id TEXT, displayName TEXT)');
-                            db_Ids.run('INSERT INTO ' + SourceData.id + ' VALUES ("' + event.source.userId + '" "' + SourceData.Profile.displayName + '")');
+                            db_Ids.run('INSERT INTO ' + SourceData.id + ' VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
                         }
                     });
                     break;
@@ -145,10 +145,10 @@ module.exports = {
 
         db_GroupChatlog.all('SELECT * FROM sqlite_master').then(function (data) {
             if (data.findIndex(function (element) { return element.name == SourceData.id; }) > -1) {
-                db_GroupChatlog.run('INSERT INTO ' + SourceData.id + ' VALUES ("' + SourceData.userId + '" "' + SourceData.Profile.displayName + '" "' + event.message.type + '" "' + event.timestamp + '" "' + SaveData + '")');
+                db_GroupChatlog.run('INSERT INTO ' + SourceData.id + ' VALUES ("' + SourceData.userId + '", "' + SourceData.Profile.displayName + '", "' + event.message.type + '", ' + event.timestamp + ', "' + SaveData + '")');
             } else {
                 db_GroupChatlog.run('CREATE TABLE ' + SourceData.id + ' (id TEXT, displayName TEXT, messageType TEXT, timestamp INTEGER, message TEXT)');
-                db_GroupChatlog.run('INSERT INTO ' + SourceData.id + ' VALUES ("' + SourceData.userId + '" "' + SourceData.Profile.displayName + '" "' + event.message.type + '" "' + event.timestamp + '" "' + SaveData + '")');
+                db_GroupChatlog.run('INSERT INTO ' + SourceData.id + ' VALUES ("' + SourceData.userId + '", "' + SourceData.Profile.displayName + '", "' + event.message.type + '", ' + event.timestamp + ', "' + SaveData + '")');
             }
         });
     },
