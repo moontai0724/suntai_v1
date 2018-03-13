@@ -182,9 +182,14 @@ module.exports = {
     searchHistory: function (SourceData, count, settings, changelog) {
         return new Promise(function (resolve) {
             if (count > 50) { count = 50; } else if (count < 1) { count = 1; }
+            if (settings.StartMonth > 12) { settings.StartMonth = 12; } else if (settings.StartMonth < 1) { settings.StartMonth = 1; }
+            if (settings.StartDay > 31) { settings.StartDay = 30; } else if (settings.StartDay < 0) { settings.StartDay = 0; }
+            if (settings.StartHour > 24) { settings.StartHour = 24; } else if (settings.StartHour < 0) { settings.StartHour = 0; }
+            if (settings.StartMinute > 60) { settings.StartMinute = 60; } else if (settings.StartMinute < 0) { settings.StartMinute = 0; }
+            if (settings.StartSecond > 60) { settings.StartSecond = 60; } else if (settings.StartSecond < 0) { settings.StartSecond = 0; }
             if (changelog.start == true || changelog.over == true) {
-                let startDate = new Date(settings.StartYear, settings.StartMonth, settings.StartDay, settings.StartHour, settings.StartMinute, settings.StartSecond);
-                let overDate = new Date(settings.OverYear, settings.OverMonth, settings.OverDay, settings.OverHour, settings.OverMinute, settings.OverSecond);
+                let startDate = new Date(settings.StartYear, settings.StartMonth - 1, settings.StartDay, settings.StartHour, settings.StartMinute, settings.StartSecond);
+                let overDate = new Date(settings.OverYear, settings.OverMonth - 1, settings.OverDay, settings.OverHour, settings.OverMinute, settings.OverSecond);
                 let startTime = startDate.getTime();
                 let overTime = overDate.getTime();
                 console.log(startTime, overTime);
