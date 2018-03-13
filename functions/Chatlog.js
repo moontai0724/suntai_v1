@@ -180,7 +180,7 @@ module.exports = {
         });
     },
     searchHistory: function (SourceData, count, startTime, overTime) {
-        return new Promise(function () {
+        return new Promise(function (resolve) {
             if (!count) { count = 10; } else if (count > 100) { count = 100; } else if (count < 1) { count = 1; }
             if (startTime && overTime) {
                 db_GroupChatlog.all('SELECT * FROM ' + SourceData.id + ' WHERE timestamp BETWEEN ' + startTime + ' AND ' + overTime + ' ORDER BY timestamp DESC LIMIT ' + count).then(function (data) {
