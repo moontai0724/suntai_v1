@@ -185,13 +185,15 @@ module.exports = {
             if (startTime && overTime) {
                 db_GroupChatlog.all('SELECT * FROM ' + SourceData.id + ' WHERE timestamp BETWEEN ' + startTime + ' AND ' + overTime + ' ORDER BY timestamp DESC LIMIT ' + count).then(function (data) {
                     if (data.length != 0) {
-                        let timetemp = new Date(data[0].timestamp);
-                        let replyMsg = timetemp.getHours() + ':' + timetemp.getMinutes() + ' ' + data[0].displayName + '-> ' + data[0].message;
+                        let replyMsg = '';
+                        UTC8Time.getNowTimePromise(data[0].timestamp).then(function (time) {
+                            replyMsg = time.time_hr() + ':' + time.time_min() + ' ' + data[0].displayName + '-> ' + data[0].message;
+                        });
                         for (let i = 1; i < data.length; i++) {
-                            let time = new Date(data[i].timestamp);
-                            replyMsg = time.getHours() + ':' + time.getMinutes() + ' ' + data[i].displayName + '-> ' + data[i].message + '\n' + replyMsg;
+                            UTC8Time.getNowTimePromise(data[i].timestamp).then(function (time) {
+                                replyMsg = time.time_hr() + ':' + time.time_min() + ' ' + data[i].displayName + '-> ' + data[i].message + '\n' + replyMsg;
+                            });
                         }
-                        console.log('replymsg', replyMsg);
                         resolve(replyMsg);
                     } else {
                         resolve('沒有任何紀錄。');
@@ -200,13 +202,15 @@ module.exports = {
             } else {
                 db_GroupChatlog.all('SELECT * FROM ' + SourceData.id + ' ORDER BY timestamp DESC LIMIT ' + count).then(function (data) {
                     if (data.length != 0) {
-                        let timetemp = new Date(data[0].timestamp);
-                        let replyMsg = timetemp.getHours() + ':' + timetemp.getMinutes() + ' ' + data[0].displayName + '-> ' + data[0].message;
+                        let replyMsg = '';
+                        UTC8Time.getNowTimePromise(data[0].timestamp).then(function (time) {
+                            replyMsg = time.time_hr() + ':' + time.time_min() + ' ' + data[0].displayName + '-> ' + data[0].message;
+                        });
                         for (let i = 1; i < data.length; i++) {
-                            let time = new Date(data[i].timestamp);
-                            replyMsg = time.getHours() + ':' + time.getMinutes() + ' ' + data[i].displayName + '-> ' + data[i].message + '\n' + replyMsg;
+                            UTC8Time.getNowTimePromise(data[i].timestamp).then(function (time) {
+                                replyMsg = time.time_hr() + ':' + time.time_min() + ' ' + data[i].displayName + '-> ' + data[i].message + '\n' + replyMsg;
+                            });
                         }
-                        console.log('replymsg', replyMsg);
                         resolve(replyMsg);
                     } else {
                         resolve('沒有任何紀錄。');
