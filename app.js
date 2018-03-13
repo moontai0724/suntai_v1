@@ -1,3 +1,5 @@
+import { isNullOrUndefined } from 'util';
+
 // npm install @line/bot-sdk koa koa-bodyparser koa-router najax ngrok ping-net sqlite xml2js
 // Require Line Bot SDK
 const LineBotSDK = require('@line/bot-sdk');
@@ -492,9 +494,9 @@ async function MessageHandler(event) {
 											'\n/st quiz [bsn]' +
 											'\n/st quizans <bsn>' +
 											'\n　註：bsn 為巴哈姆特看板編號。' +
-											'\n/st history || h [SpecificCount] [<startTime> <overTime>]' +
-											'\n　時間格式：YYYY-MM-DD-HH-MM' +
-											'\n　註：最多指定 100 筆資料，若無指定預設 10 筆。' +
+											'\n/st history || h [SpecificCount] [Parameters]' +
+											'\n　獲取更多協助請打 /st h help' +
+											'\n　註：最多指定 50 筆資料，若無指定預設 5 筆。' +
 											'\n/st ping <address> [port] [attempt]' +
 											'\n　註：attempt 預設 2，port 預設 80'));
 										break;
@@ -753,36 +755,117 @@ async function MessageHandler(event) {
 										}
 										break;
 									case 'history': case 'h':
-										if (msgs[2]) {
-											if (msgs[3] && msgs[4]) {
-												let StartTime = msgs[3].split('-');
-												for (let i = 0; i < StartTime.length; i++) {
-													if (!StartTime[i]) {
-														StartTime[i] = 0;
+										let settings = {
+											'StartYear': 2018,
+											'StartMonth': 1,
+											'StartDay': 1,
+											'StartHour': 0,
+											'StartMinute': 0,
+											'StartSecond': 0,
+											'OverYear': 2018,
+											'OverMonth': 1,
+											'OverDay': 1,
+											'OverHour': 0,
+											'OverMinute': 0,
+											'OverSecond': 0,
+											'Year': 0,
+											'Month': 0,
+											'Day': 0,
+											'Hour': 0,
+											'Minute': 0,
+											'Second': 0,
+										};
+										let changelog = {
+											'start': false,
+											'over': false,
+											'specific': false
+										};
+										let allCommand = ['-StartYear', '-StartMonth', '-StartDay', '-StartHour', '-StartMinute', '-StartSecond', '-OverYear', '-OverMonth', '-OverDay', '-OverHour', '-OverMinute', '-OverSecond', '-Year', '-Month', '-Day', '-Hour', '-Minute', '-Second'];
+										if (msgs[2] == 'help') {
+											startReply(MsgFormat.Text('可用的參數如下：' +
+												'\n-StartYear：指定查詢開始的年份' +
+												'\n-StartMonth：指定查詢開始的月份' +
+												'\n-StartDay：指定查詢開始的日期' +
+												'\n-StartHour：指定查詢開始的小時' +
+												'\n-StartMinute：指定查詢開始的分鐘' +
+												'\n-StartSecond：指定查詢開始的秒鐘' +
+												'\n\n-OverYear：指定查詢結束的年份' +
+												'\n-OverMonth：指定查詢結束的月份' +
+												'\n-OverDay：指定查詢結束的日期' +
+												'\n-OverHour：指定查詢結束的小時' +
+												'\n-OverMinute：指定查詢結束的分鐘' +
+												'\n-OverSecond：指定查詢結束的秒鐘' +
+												'\n\n-Year：指定查詢一段年份內的紀錄' +
+												'\n-Month：指定查詢一段月份內的紀錄' +
+												'\n-Day：指定查詢一段日期內的紀錄' +
+												'\n-Hour：指定查詢一段小時內的紀錄' +
+												'\n-Minute：指定查詢一段分鐘內的紀錄' +
+												'\n-Second：指定查詢一段秒鐘內的紀錄' +
+												'\n\n　→預設開始時間 2018/1/1 00:00:00；結束時間 2018/1/1 00:00:00；一段時間：0/0/0 0:0:0' +
+												'\n　→指定一段時間的查詢不能與開始結束時間一起使用，如果都有填入將以 開始／結束 為主。' +
+												'\n　→範例１查詢五小時內的 10 條紀錄：/st h 10 -Hour 5' +
+												'\n　→範例２查詢 2017/1/1 00:00:00 ~ 2018/1/1 00:00:00 的 10 條紀錄：/st h 10 -StartYear 2017 -OverYear 2018' +
+												'\n　→範例３查詢 2018/01/20 15:39 ~ 2019/01/01 20:40 的 10 條紀錄：/st h 10 -StartYear 2018 -StartMonth 01 -StartDay 20 -StartHour 15 -StartMinute 39 -OverYear 2019 -OverHour 20 -OverMinute 40'));
+										} else if (msgs[2]) {
+											// if (msgs[3] && msgs[4]) {
+											// 	let StartTime = msgs[3].split('-');
+											// 	for (let i = 0; i < StartTime.length; i++) {
+											// 		if (!StartTime[i]) {
+											// 			StartTime[i] = 0;
+											// 		} else {
+											// 			StartTime[i] = Number(StartTime[i]);
+											// 		}
+											// 	}
+											// 	let OverTime = msgs[4].split('-');
+											// 	for (let i = 0; i < OverTime.length; i++) {
+											// 		if (!OverTime[i]) {
+											// 			OverTime[i] = 0;
+											// 		} else {
+											// 			OverTime[i] = Number(OverTime[i]);
+											// 		}
+											// 	}
+											// 	let SpecificStartTime = new Date(StartTime);
+											// 	let SpecificOverTime = new Date(OverTime);
+											// 	Chatlog.searchHistory(SourceData, Number(msgs[2]), SpecificStartTime.getTime(), SpecificOverTime.getTime()).then(function (data) {
+											// 		startReply(MsgFormat.Text(data));
+											// 	});
+											// } else {
+											// 	Chatlog.searchHistory(SourceData, Number(msgs[2])).then(function (data) {
+											// 		startReply(MsgFormat.Text(data));
+											// 	});
+											// }
+											for (let i = 3; i < msgs.length; i = i + 2) {
+												if (msgs[i] && msgs[i + 1]) {
+													if (allCommand.indexOf(msgs[i]) > -1) {
+														settings[msgs[i]] = Number(msgs[i + 1]);
+														if (allCommand.indexOf(msgs[i]) > -1 && allCommand.indexOf(msgs[i]) < 6) {
+															changelog.start = true;
+														} else if (allCommand.indexOf(msgs[i]) > 5 && allCommand.indexOf(msgs[i]) < 12) {
+															changelog.over = true;
+														} else if (allCommand.indexOf(msgs[i]) > 11 && allCommand.indexOf(msgs[i]) < 18) {
+															changelog.specific = true;
+														}
 													} else {
-														StartTime[i] = Number(StartTime[i]);
+														startReply(MsgFormat.Text('所賦予的參數有錯誤。'));
+														break;
 													}
-												}
-												let OverTime = msgs[4].split('-');
-												for (let i = 0; i < OverTime.length; i++) {
-													if (!OverTime[i]) {
-														OverTime[i] = 0;
-													} else {
-														OverTime[i] = Number(OverTime[i]);
+													if (i >= msgs.length - 2) {
+														Chatlog.searchHistory(SourceData, Number(msgs[2]), settings, changelog).then(function (data) {
+															startReply(MsgFormat.Text(data));
+														});
 													}
+												} else {
+													startReply(MsgFormat.Text('所賦予的參數有錯誤。'));
+													break;
 												}
-												let SpecificStartTime = new Date(StartTime);
-												let SpecificOverTime = new Date(OverTime);
-												Chatlog.searchHistory(SourceData, Number(msgs[2]), SpecificStartTime.getTime(), SpecificOverTime.getTime()).then(function (data) {
-													startReply(MsgFormat.Text(data));
-												});
-											} else {
-												Chatlog.searchHistory(SourceData, Number(msgs[2])).then(function (data) {
+											}
+											if (msgs.length < 4) {
+												Chatlog.searchHistory(SourceData, Number(msgs[2]), settings, changelog).then(function (data) {
 													startReply(MsgFormat.Text(data));
 												});
 											}
 										} else {
-											Chatlog.searchHistory(SourceData).then(function (data) {
+											Chatlog.searchHistory(SourceData, 5, settings, changelog).then(function (data) {
 												startReply(MsgFormat.Text(data));
 											});
 										}

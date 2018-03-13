@@ -113,19 +113,19 @@ module.exports = {
                 SaveData = event.message.text;
                 break;
             case 'image':
-                SaveData = '[圖片] id: ' + event.message.id;
+                SaveData = '[圖片] id: ' + event.message.id + ', timestamp: ' + event.timestamp;
                 SaveFile();
                 break;
             case 'video':
-                SaveData = '[影片] id: ' + event.message.id;
+                SaveData = '[影片] id: ' + event.message.id + ', timestamp: ' + event.timestamp;
                 SaveFile();
                 break;
             case 'audio':
-                SaveData = '[音訊] id: ' + event.message.id;
+                SaveData = '[音訊] id: ' + event.message.id + ', timestamp: ' + event.timestamp;
                 SaveFile('m4a');
                 break;
             case 'file':
-                SaveData = '[檔案] FileName: ' + event.message.fileName + ', id: ' + event.message.id;
+                SaveData = '[檔案] FileName: ' + event.message.fileName + ', id: ' + event.message.id + ', timestamp: ' + event.timestamp;
                 SaveFile();
                 break;
             case 'location':
@@ -151,7 +151,7 @@ module.exports = {
                 });
                 res.on('end', function () {
                     file.end();
-                    console.log(event.message.id + '.' + event.timestamp + '.' + extension + ' Saved.');
+                    console.log(event.message.id + ', ' + event.timestamp + '.' + extension + ' Saved.');
                 });
             });
         }
@@ -179,11 +179,38 @@ module.exports = {
             }
         });
     },
-    searchHistory: function (SourceData, count, startTime, overTime) {
+    searchHistory: function (SourceData, count, settings, changelog) {
         return new Promise(function (resolve) {
-            if (!count) { count = 10; } else if (count > 100) { count = 100; } else if (count < 1) { count = 1; }
-            if (startTime && overTime) {
+            if (count > 50) { count = 50; } else if (count < 1) { count = 1; }
+            if (changelog.start == true || changelog.over == true) {
+                let startDate = new Date(settings.StartYear, settings.StartMonth, settings.StartDay, settings.StartHour, settings.StartMinute, settings.StartSecond);
+                let overDate = new Date(settings.OverYear, settings.OverMonth, settings.OverDay, settings.OverHour, settings.OverMinute, settings.OverSecond);
+                let startTime = startDate.getTime();
+                let overTime = overDate.getTime();
                 db_GroupChatlog.all('SELECT * FROM ' + SourceData.id + ' WHERE timestamp BETWEEN ' + startTime + ' AND ' + overTime + ' ORDER BY timestamp DESC LIMIT ' + count).then(function (data) {
+                    if (data.length != 0) {
+                        let replyMsg = '';
+                        UTC8Time.getNowTimePromise(data[0].timestamp).then(function (time) {
+                            replyMsg = time.time_hr + ':' + time.time_min + ' ' + data[0].displayName + '-> ' + data[0].message;
+                        });
+                        for (let i = 1; i < data.length; i++) {
+                            UTC8Time.getNowTimePromise(data[i].timestamp).then(function (time) {
+                                replyMsg = time.time_hr + ':' + time.time_min + ' ' + data[i].displayName + '-> ' + data[i].message + '\n' + replyMsg;
+                                if (i == data.length - 1) {
+                                    console.log(replyMsg);
+                                    resolve(replyMsg);
+                                }
+                            });
+                        }
+                    } else {
+                        resolve('沒有任何紀錄。');
+                    }
+                });
+            } else if (changelog.specific == true) {
+                let overDate = new Date();
+                let overTime = overDate.getTime();
+                let SpecificTime = settings.Year * 1000 * 60 * 60 * 24 * 265 + settings.Month * 1000 * 60 * 60 * 24 * 30 + settings.Day * 1000 * 60 * 60 * 24 + settings.Hour * 1000 * 60 * 60 + settings.Minute * 1000 * 60 + settings.Second * 1000;
+                db_GroupChatlog.all('SELECT * FROM ' + SourceData.id + ' WHERE timestamp BETWEEN ' + (overTime - SpecificTime) + ' AND ' + overTime + ' ORDER BY timestamp DESC LIMIT ' + count).then(function (data) {
                     if (data.length != 0) {
                         let replyMsg = '';
                         UTC8Time.getNowTimePromise(data[0].timestamp).then(function (time) {
