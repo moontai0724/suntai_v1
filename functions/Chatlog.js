@@ -187,6 +187,7 @@ module.exports = {
                 let overDate = new Date(settings.OverYear, settings.OverMonth, settings.OverDay, settings.OverHour, settings.OverMinute, settings.OverSecond);
                 let startTime = startDate.getTime();
                 let overTime = overDate.getTime();
+                console.log(startTime, overTime);
                 db_GroupChatlog.all('SELECT * FROM ' + SourceData.id + ' WHERE timestamp BETWEEN ' + startTime + ' AND ' + overTime + ' ORDER BY timestamp DESC LIMIT ' + count).then(function (data) {
                     if (data.length != 0) {
                         let replyMsg = '';
