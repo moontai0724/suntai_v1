@@ -1,5 +1,3 @@
-import { isNullOrUndefined } from 'util';
-
 // npm install @line/bot-sdk koa koa-bodyparser koa-router najax ngrok ping-net sqlite xml2js
 // Require Line Bot SDK
 const LineBotSDK = require('@line/bot-sdk');
