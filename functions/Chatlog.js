@@ -145,9 +145,12 @@ module.exports = {
 
         db_GroupChatlog.all('SELECT * FROM sqlite_master').then(function (data) {
             if (data.findIndex(function (element) { return element.name == SourceData.id; }) > -1) {
+                console.log('INSERT INTO ' + SourceData.id + ' VALUES ("' + SourceData.userId + '", "' + SourceData.Profile.displayName + '", "' + event.message.type + '", ' + event.timestamp + ', "' + SaveData + '")');
                 db_GroupChatlog.run('INSERT INTO ' + SourceData.id + ' VALUES ("' + SourceData.userId + '", "' + SourceData.Profile.displayName + '", "' + event.message.type + '", ' + event.timestamp + ', "' + SaveData + '")');
             } else {
+                console.log('CREATE TABLE ' + SourceData.id + ' (id TEXT, displayName TEXT, messageType TEXT, timestamp INTEGER, message TEXT)');
                 db_GroupChatlog.run('CREATE TABLE ' + SourceData.id + ' (id TEXT, displayName TEXT, messageType TEXT, timestamp INTEGER, message TEXT)');
+                console.log('INSERT INTO ' + SourceData.id + ' VALUES ("' + SourceData.userId + '", "' + SourceData.Profile.displayName + '", "' + event.message.type + '", ' + event.timestamp + ', "' + SaveData + '")');
                 db_GroupChatlog.run('INSERT INTO ' + SourceData.id + ' VALUES ("' + SourceData.userId + '", "' + SourceData.Profile.displayName + '", "' + event.message.type + '", ' + event.timestamp + ', "' + SaveData + '")');
             }
         });
