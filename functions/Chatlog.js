@@ -54,6 +54,7 @@ module.exports = {
         }
 
         if (event.source.userId) {
+            SourceData.userId = event.source.userId;
             switch (event.source.type) {
                 case 'user':
                     SourceData.Profile = await LineBotClient.getProfile(event.source.userId); // displayName, userId, pictureUrl, statusMessage
@@ -72,22 +73,30 @@ module.exports = {
                         if (lists.findIndex(function (element) { return element.name == 'id'; }) > -1) {
                             db_Ids.all('SELECT id FROM userIds').then(function (data) {
                                 if (data.findIndex(function (element) { return element.id == event.source.userId; }) == -1) {
+                                    console.log('INSERT INTO userIds VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
                                     db_Ids.run('INSERT INTO userIds VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
                                 }
                             });
                         } else {
-                            db_Ids.run('CREATE TABLE id (id TEXT, displayName TEXT)');
-                            db_Ids.run('INSERT INTO userIds VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
+                            console.log('CREATE TABLE id (id TEXT, displayName TEXT)');
+                            db_Ids.run('CREATE TABLE id (id TEXT, displayName TEXT)').then(function () {
+                                console.log('INSERT INTO userIds VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
+                                db_Ids.run('INSERT INTO userIds VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
+                            });
                         }
                     });
                     break;
                 case 'group': case 'room':
                     db_Ids.all('SELECT * FROM sqlite_master').then(function (data) {
                         if (data.findIndex(function (element) { return element.name == SourceData.id; }) > -1) {
+                            console.log('INSERT INTO ' + SourceData.id + ' VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
                             db_Ids.run('INSERT INTO ' + SourceData.id + ' VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
                         } else {
-                            db_Ids.run('CREATE TABLE ' + SourceData.id + ' (id TEXT, displayName TEXT)');
-                            db_Ids.run('INSERT INTO ' + SourceData.id + ' VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
+                            console.log('CREATE TABLE ' + SourceData.id + ' (id TEXT, displayName TEXT)');
+                            db_Ids.run('CREATE TABLE ' + SourceData.id + ' (id TEXT, displayName TEXT)').then(function () {
+                                console.log('INSERT INTO ' + SourceData.id + ' VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
+                                db_Ids.run('INSERT INTO ' + SourceData.id + ' VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
+                            });
                         }
                     });
                     break;
@@ -149,9 +158,10 @@ module.exports = {
                 db_GroupChatlog.run('INSERT INTO ' + SourceData.id + ' VALUES ("' + SourceData.userId + '", "' + SourceData.Profile.displayName + '", "' + event.message.type + '", ' + event.timestamp + ', "' + SaveData + '")');
             } else {
                 console.log('CREATE TABLE ' + SourceData.id + ' (id TEXT, displayName TEXT, messageType TEXT, timestamp INTEGER, message TEXT)');
-                db_GroupChatlog.run('CREATE TABLE ' + SourceData.id + ' (id TEXT, displayName TEXT, messageType TEXT, timestamp INTEGER, message TEXT)');
-                console.log('INSERT INTO ' + SourceData.id + ' VALUES ("' + SourceData.userId + '", "' + SourceData.Profile.displayName + '", "' + event.message.type + '", ' + event.timestamp + ', "' + SaveData + '")');
-                db_GroupChatlog.run('INSERT INTO ' + SourceData.id + ' VALUES ("' + SourceData.userId + '", "' + SourceData.Profile.displayName + '", "' + event.message.type + '", ' + event.timestamp + ', "' + SaveData + '")');
+                db_GroupChatlog.run('CREATE TABLE ' + SourceData.id + ' (id TEXT, displayName TEXT, messageType TEXT, timestamp INTEGER, message TEXT)').then(function () {
+                    console.log('INSERT INTO ' + SourceData.id + ' VALUES ("' + SourceData.userId + '", "' + SourceData.Profile.displayName + '", "' + event.message.type + '", ' + event.timestamp + ', "' + SaveData + '")');
+                    db_GroupChatlog.run('INSERT INTO ' + SourceData.id + ' VALUES ("' + SourceData.userId + '", "' + SourceData.Profile.displayName + '", "' + event.message.type + '", ' + event.timestamp + ', "' + SaveData + '")');
+                });
             }
         });
     },
@@ -196,4 +206,3 @@ module.exports = {
         }
     }
 }
-/* */
