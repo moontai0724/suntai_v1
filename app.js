@@ -835,8 +835,8 @@ async function MessageHandler(event) {
 											for (let i = 3; i < msgs.length; i = i + 2) {
 												if (msgs[i] && msgs[i + 1]) {
 													if (allCommand.indexOf(msgs[i]) > -1) {
-														console.log('settings[' + msgs[i] + ']' + Number(msgs[i + 1]));
-														settings[msgs[i]] = Number(msgs[i + 1]);
+														console.log('settings[' + msgs[i].replace('-', '') + ']' + Number(msgs[i + 1]));
+														settings[msgs[i].replace('-', '')] = Number(msgs[i + 1]);
 														if (allCommand.indexOf(msgs[i]) > -1 && allCommand.indexOf(msgs[i]) < 6) {
 															changelog.start = true;
 														} else if (allCommand.indexOf(msgs[i]) > 5 && allCommand.indexOf(msgs[i]) < 12) {
