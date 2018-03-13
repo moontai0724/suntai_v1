@@ -16,8 +16,8 @@ const GetRandomNumber = require('./GetRandomNumber'); //ok.include: start(functi
 const UploadPicToImgurByURL = require('./UploadPicToImgurByURL'); //ok.include: start(function)
 const ConnectDB = require('./ConnectDB');
 
-fs.readdir('../ChatlogFiles', function (err, files) { if (err) { fs.mkdir('../ChatlogFiles'); } });
-fs.readdir('../database', function (err, files) { if (err) { fs.mkdir('../database'); } });
+fs.readdir('./ChatlogFiles', function (err, files) { if (err) { fs.mkdir('../ChatlogFiles', function () { console.log('Spawned ChatlogFiles dir.'); }); } });
+fs.readdir('./database', function (err, files) { if (err) { fs.mkdir('../database', function () { console.log('Spawned database dir.'); }); } });
 var db_GroupChatlog, db_Ids;
 start();
 async function start() {
@@ -128,7 +128,7 @@ module.exports = {
         function SaveFile(extension) {
             LineBotClient.getMessageContent(event.message.id).then(function (res) {
                 if (!extension) { extension = res.headers['content-type'].split('/')[1] }
-                var file = fs.createWriteStream('../ChatlogFiles/' + event.timestamp + '.' + extension);
+                var file = fs.createWriteStream('./ChatlogFiles/' + event.timestamp + '.' + extension);
                 res.on('data', function (chunk) {
                     file.write(chunk);
                 });
@@ -150,10 +150,10 @@ module.exports = {
     },
     deleteOutdatedFiles: function (specific_timestamp) {
         if (!specific_timestamp) { specific_timestamp = UTC8Time.getNowTimestamp - 604800000 - 604800000 - 604800000 - 604800000; }
-        fs.readdir('../ChatlogFiles', function (err, files) {
+        fs.readdir('./ChatlogFiles', function (err, files) {
             for (let i = 0; i < files.length; i++) {
                 if (Number(files[i].split('.')[0]) < specific_timestamp) {
-                    fs.unlink('../ChatlogFiles/' + files[i]);
+                    fs.unlink('./ChatlogFiles/' + files[i]);
                 }
             }
         });
