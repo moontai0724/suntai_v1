@@ -216,7 +216,7 @@ module.exports = {
                 let overDate = new Date();
                 let overTime = overDate.getTime();
                 let SpecificTime = settings.Year * 1000 * 60 * 60 * 24 * 265 + settings.Month * 1000 * 60 * 60 * 24 * 30 + settings.Day * 1000 * 60 * 60 * 24 + settings.Hour * 1000 * 60 * 60 + settings.Minute * 1000 * 60 + settings.Second * 1000;
-                console.log(SpecificTime);
+                console.log(overTime, SpecificTime, overTime - SpecificTime);
                 db_GroupChatlog.all('SELECT * FROM ' + SourceData.id + ' WHERE timestamp BETWEEN ' + (overTime - SpecificTime) + ' AND ' + overTime + ' ORDER BY timestamp DESC LIMIT ' + count).then(function (data) {
                     if (data.length != 0) {
                         let replyMsg = '';
