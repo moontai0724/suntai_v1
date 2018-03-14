@@ -492,6 +492,7 @@ async function MessageHandler(event) {
 											'\n/st quiz [bsn]' +
 											'\n/st quizans <bsn>' +
 											'\n　註：bsn 為巴哈姆特看板編號。' +
+											// '\n/st (history || h) (getfile || gf) <FileId>' +
 											'\n/st history || h [SpecificCount] [Parameters]' +
 											'\n　獲取更多協助請打 /st h help' +
 											'\n　註：最多指定 50 筆資料，若無指定預設 5 筆。' +
@@ -804,34 +805,10 @@ async function MessageHandler(event) {
 												'\n　→範例１查詢五小時內的 10 條紀錄：/st h 10 -Hour 5' +
 												'\n　→範例２查詢 2017/1/1 00:00:00 ~ 2018/1/1 00:00:00 的 10 條紀錄：/st h 10 -StartYear 2017 -OverYear 2018' +
 												'\n　→範例３查詢 2018/01/20 15:39 ~ 2019/01/01 20:40 的 10 條紀錄：/st h 10 -StartYear 2018 -StartMonth 01 -StartDay 20 -StartHour 15 -StartMinute 39 -OverYear 2019 -OverHour 20 -OverMinute 40'));
+											// } else if (msgs[2] == 'getfile' || msgs[2] == 'gf') {
+											// 	Chatlog.getFile(event, SourceData, Number(msgs[3])).then(function (Fileinfo) {
+											// 	});
 										} else if (msgs[2]) {
-											// if (msgs[3] && msgs[4]) {
-											// 	let StartTime = msgs[3].split('-');
-											// 	for (let i = 0; i < StartTime.length; i++) {
-											// 		if (!StartTime[i]) {
-											// 			StartTime[i] = 0;
-											// 		} else {
-											// 			StartTime[i] = Number(StartTime[i]);
-											// 		}
-											// 	}
-											// 	let OverTime = msgs[4].split('-');
-											// 	for (let i = 0; i < OverTime.length; i++) {
-											// 		if (!OverTime[i]) {
-											// 			OverTime[i] = 0;
-											// 		} else {
-											// 			OverTime[i] = Number(OverTime[i]);
-											// 		}
-											// 	}
-											// 	let SpecificStartTime = new Date(StartTime);
-											// 	let SpecificOverTime = new Date(OverTime);
-											// 	Chatlog.searchHistory(SourceData, Number(msgs[2]), SpecificStartTime.getTime(), SpecificOverTime.getTime()).then(function (data) {
-											// 		startReply(MsgFormat.Text(data));
-											// 	});
-											// } else {
-											// 	Chatlog.searchHistory(SourceData, Number(msgs[2])).then(function (data) {
-											// 		startReply(MsgFormat.Text(data));
-											// 	});
-											// }
 											for (let i = 3; i < msgs.length; i = i + 2) {
 												if (msgs[i] && msgs[i + 1]) {
 													if (allCommand.indexOf(msgs[i]) > -1) {
@@ -1005,21 +982,24 @@ async function MessageHandler(event) {
 // ================================================== Start Other Functions ==================================================
 
 // 開機提醒
-// setTimeout(function () {
-// 	ngrok.connect({
-// 		proto: 'http',
-// 		addr: 8080,
-// 		authtoken: '7brGQG2WUnfNBDvvWzeaZ_3BDHnBkrKQVk6xi3NsxGn'
-// 	}, function (err, url) {
-// 		console.log(err, url);
-// 		for (let i = 0; i < owners_notice.length; i++) {
-// 			LineBotClient.pushMessage(owners_notice[i], [MsgFormat.Text(UTC8Time.getNowTime() + '\n日太已啟動完成。' +
-// 				'\n請更改網址：https://developers.line.me/console/channel/1558579961/basic/' +
-// 				'\nNow running at: ' + url), MsgFormat.Text(url.split('://')[1].split('.')[0])]);
-// 			console.log(UTC8Time.getNowTime() + 'send: ' + owners_notice[i] + ';msg: ' + '日太已啟動完成。\n請更改網址：https://developers.line.me/console/channel/1558579961/basic/\nNow running at: ' + url, url.split('://')[1].split('.')[0]);
-// 		}
-// 	});
-// }, 3000);
+setTimeout(function () {
+	// ngrok.connect({
+	// 	proto: 'http',
+	// 	addr: 8080,
+	// 	authtoken: '7brGQG2WUnfNBDvvWzeaZ_3BDHnBkrKQVk6xi3NsxGn'
+	// }, function (err, url) {
+	// 	console.log(err, url);
+	// 	for (let i = 0; i < owners_notice.length; i++) {
+	// 		LineBotClient.pushMessage(owners_notice[i], [MsgFormat.Text(UTC8Time.getNowTime() + '\n日太已啟動完成。' +
+	// 			'\n請更改網址：https://developers.line.me/console/channel/1558579961/basic/' +
+	// 			'\nNow running at: ' + url), MsgFormat.Text(url.split('://')[1].split('.')[0])]);
+	// 		console.log(UTC8Time.getNowTime() + 'send: ' + owners_notice[i] + ';msg: ' + '日太已啟動完成。\n請更改網址：https://developers.line.me/console/channel/1558579961/basic/\nNow running at: ' + url, url.split('://')[1].split('.')[0]);
+	// 	}
+	// });
+	for (let i = 0; i < owners_notice.length; i++) {
+		LineBotClient.pushMessage(owners_notice[i], [MsgFormat.Text(UTC8Time.getNowTime() + '\n日太已啟動完成。')]);
+	}
+}, 3000);
 
 // 自動重開 28800000ms
 // setTimeout(function () {

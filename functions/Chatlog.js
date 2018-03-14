@@ -113,31 +113,31 @@ module.exports = {
                 SaveData = event.message.text;
                 break;
             case 'image':
-                SaveData = '[圖片] id: ' + event.message.id + ', timestamp: ' + event.timestamp;
+                SaveData = '[圖片] id: ' + event.message.id;
                 SaveFile();
                 break;
             case 'video':
-                SaveData = '[影片] id: ' + event.message.id + ', timestamp: ' + event.timestamp;
+                SaveData = '[影片] id: ' + event.message.id;
                 SaveFile();
                 break;
             case 'audio':
-                SaveData = '[音訊] id: ' + event.message.id + ', timestamp: ' + event.timestamp;
+                SaveData = '[音訊] id: ' + event.message.id;
                 SaveFile('m4a');
                 break;
             case 'file':
-                SaveData = '[檔案] FileName: ' + event.message.fileName + ', id: ' + event.message.id + ', timestamp: ' + event.timestamp;
+                SaveData = '[檔案] FileName: ' + event.message.fileName + ', id: ' + event.message.id;
                 SaveFile();
                 break;
             case 'location':
-                SaveData = '[位置] id: ' + event.message.id +
-                    ', title: ' + event.message.title +
+                SaveData = '[位置]' +
+                    ' title: ' + event.message.title +
                     ', Address: ' + event.message.address +
                     ', latitude: ' + event.message.latitude +
                     ', longitude: ' + event.message.longitude;
                 break;
             case 'sticker':
-                SaveData = '[貼圖] id: ' + event.message.id +
-                    ', packageId: ' + event.message.packageId +
+                SaveData = '[貼圖]' +
+                    ' packageId: ' + event.message.packageId +
                     ', stickerId: ' + event.message.stickerId;
                 break;
         }
@@ -192,7 +192,6 @@ module.exports = {
                 let overDate = new Date(settings.OverYear, settings.OverMonth - 1, settings.OverDay, settings.OverHour, settings.OverMinute, settings.OverSecond);
                 let startTime = startDate.getTime();
                 let overTime = overDate.getTime();
-                console.log(startTime, overTime);
                 db_GroupChatlog.all('SELECT * FROM ' + SourceData.id + ' WHERE timestamp BETWEEN ' + startTime + ' AND ' + overTime + ' ORDER BY timestamp DESC LIMIT ' + count).then(function (data) {
                     if (data.length != 0) {
                         let replyMsg = '';
@@ -203,7 +202,6 @@ module.exports = {
                             UTC8Time.getNowTimePromise(data[i].timestamp).then(function (time) {
                                 replyMsg = time.time_hr + ':' + time.time_min + ' ' + data[i].displayName + '-> ' + data[i].message + '\n' + replyMsg;
                                 if (i == data.length - 1) {
-                                    console.log(replyMsg);
                                     resolve(replyMsg);
                                 }
                             });
@@ -216,7 +214,6 @@ module.exports = {
                 let overDate = new Date();
                 let overTime = overDate.getTime();
                 let SpecificTime = settings.Year * 1000 * 60 * 60 * 24 * 265 + settings.Month * 1000 * 60 * 60 * 24 * 30 + settings.Day * 1000 * 60 * 60 * 24 + settings.Hour * 1000 * 60 * 60 + settings.Minute * 1000 * 60 + settings.Second * 1000;
-                console.log(overTime, SpecificTime, overTime - SpecificTime);
                 db_GroupChatlog.all('SELECT * FROM ' + SourceData.id + ' WHERE timestamp BETWEEN ' + (overTime - SpecificTime) + ' AND ' + overTime + ' ORDER BY timestamp DESC LIMIT ' + count).then(function (data) {
                     if (data.length != 0) {
                         let replyMsg = '';
@@ -227,7 +224,6 @@ module.exports = {
                             UTC8Time.getNowTimePromise(data[i].timestamp).then(function (time) {
                                 replyMsg = time.time_hr + ':' + time.time_min + ' ' + data[i].displayName + '-> ' + data[i].message + '\n' + replyMsg;
                                 if (i == data.length - 1) {
-                                    console.log(replyMsg);
                                     resolve(replyMsg);
                                 }
                             });
@@ -247,7 +243,6 @@ module.exports = {
                             UTC8Time.getNowTimePromise(data[i].timestamp).then(function (time) {
                                 replyMsg = time.time_hr + ':' + time.time_min + ' ' + data[i].displayName + '-> ' + data[i].message + '\n' + replyMsg;
                                 if (i == data.length - 1) {
-                                    console.log(replyMsg);
                                     resolve(replyMsg);
                                 }
                             });
@@ -258,5 +253,33 @@ module.exports = {
                 });
             }
         })
+    },
+    getFile: function (event, SourceData, FileId) {
+        let Fileinfo = {
+            id: undefined,
+            type: undefined,
+            ImgContentUrl: undefined,
+            VideoContentUrl: undefined,
+            AudioContentUrl: undefined,
+            FileContentUrl: undefined,
+            Filename: undefined
+        };
+        db_GroupChatlog.get('SELECT * FROM ' + SourceData.id + ' WHERE message LIKE "%id: ' + FileId + '"').then(function (data) {
+            Fileinfo.type = data.messageType;
+            Fileinfo.id = data.timestamp;
+            if (data.messageType == 'file') {
+                Fileinfo.Filename = data.message.split(',')[0].split('Filename: ')[1];
+            }
+            switch (Fileinfo.type) {
+                case 'image':
+                    break;
+                case 'video':
+                    break;
+                case 'audio':
+                    break;
+                case 'file':
+                    break;
+            }
+        });
     }
 }
