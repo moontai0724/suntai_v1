@@ -82,7 +82,12 @@ async function MessageHandler(event) {
 	var SourceData = {
 		userId: 'UNKNOWN',
 		id: undefined,
-		Profile: { displayName, userId, pictureUrl, statusMessage }
+		Profile: {
+			displayName: undefined,
+			userId: undefined,
+			pictureUrl: undefined,
+			statusMessage: undefined
+		}
 	};
 
 	if (event.source.userId) SourceData.userId = event.source.userId;
