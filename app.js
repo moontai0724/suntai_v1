@@ -79,7 +79,7 @@ setTimeout(async function OpenDB() {
 // Message handler
 async function MessageHandler(event) {
 	console.log(JSON.stringify(event));
-	if (!owners) break;
+	// if (!owners) break;
 
 	var SourceData = {
 		userId: 'UNKNOWN',
