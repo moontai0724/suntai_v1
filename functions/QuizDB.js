@@ -5,34 +5,37 @@ module.exports = {
         return data_quiz;
     },
     renew: function () {
-        return new Promise(function (resolve) {
+        return new Promise(resolve => {
             quizdbget = false;
-            this.get().then(function (data) { resolve(data); });
+            data_quiz = [];
+            this.get().then(data => resolve(data));
         });
     },
     get: function () {
         return new Promise(function (resolve) {
-            if (quizdbget == true) { resolve(data_quiz); } else {
-                data_quiz = [];
-                $.get('https://spreadsheets.google.com/feeds/list/1bV8nZP0Iahgp1GoqTT7qNlgvQYPWmg2yT5Wcsta6lbo/2/public/values?alt=json', function (data) {
-                    data = JSON.parse(data);
-                    for (let i = 0; i < data.feed.entry.length; i++) {
-                        data_quiz[i] = {
-                            "sn": data.feed.entry[i].gsx$quizsn.$t,
-                            "question": data.feed.entry[i].gsx$quizquestion.$t,
-                            "option_1": data.feed.entry[i].gsx$quizoption1.$t,
-                            "option_2": data.feed.entry[i].gsx$quizoption2.$t,
-                            "option_3": data.feed.entry[i].gsx$quizoption3.$t,
-                            "option_4": data.feed.entry[i].gsx$quizoption4.$t,
-                            "answer": data.feed.entry[i].gsx$quizanswer.$t,
-                            "bsn": data.feed.entry[i].gsx$boardsn.$t
-                        };
-                        if (i == data.feed.entry.length - 1) {
-                            quizdbget = true;
-                            resolve(data_quiz);
+            if (quizdbget == true) resolve(data_quiz); else {
+                for (let x = 2; x < 10; x++) {
+                    $.get('https://spreadsheets.google.com/feeds/list/1bV8nZP0Iahgp1GoqTT7qNlgvQYPWmg2yT5Wcsta6lbo/' + x + '/public/values?alt=json', function (data) {
+                        data = JSON.parse(data);
+                        let nowlength = data_quiz.length;
+                        for (let y = 0; y < data.feed.entry.length; y++) {
+                            data_quiz[y + nowlength] = {
+                                "sn": data.feed.entry[y].gsx$quizsn.$t,
+                                "question": data.feed.entry[y].gsx$quizquestion.$t,
+                                "option_1": data.feed.entry[y].gsx$quizoption1.$t,
+                                "option_2": data.feed.entry[y].gsx$quizoption2.$t,
+                                "option_3": data.feed.entry[y].gsx$quizoption3.$t,
+                                "option_4": data.feed.entry[y].gsx$quizoption4.$t,
+                                "answer": data.feed.entry[y].gsx$quizanswer.$t,
+                                "bsn": data.feed.entry[y].gsx$boardsn.$t
+                            };
+                            if (x == 9 && y == data.feed.entry.length - 1) {
+                                quizdbget = true;
+                                resolve(data_quiz);
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         });
     },

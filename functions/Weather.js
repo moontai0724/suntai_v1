@@ -9,19 +9,14 @@ const sqlite = require('sqlite');
 const Config = require('../config/config');
 // ================================================== My Functions Start ==================================================
 
-const DBref = require('./Variables').DBref; //ok
 const Country = require('./Variables').Country;
 const AllCity = require('./Variables').AllCity;
 const AllCityList = require('./Variables').AllCityList;
 
 const UTC8Time = require('./UTC8Time'); //ok.include: getNowTime(function), value
 const MsgFormat = require('./MsgFormat'); //ok.include: Text(function), Sticker(function), Image(function), Video(function), Audio(function), Location(function)
-const QuizDB = require('./QuizDB'); //ok.include: value(function), get(function), searchIndex(function), searchData(function)
-const EarthquakeCheck = require('./EarthquakeCheck'); //ok
 const GetRandomNumber = require('./GetRandomNumber'); //ok.include: start(function)
 const UploadPicToImgurByURL = require('./UploadPicToImgurByURL'); //ok.include: start(function)
-const ConnectDB = require('./ConnectDB'); //ok
-const CallTimer = require('./CallTimer'); //ok
 
 // ================================================== My Functions Over ==================================================
 

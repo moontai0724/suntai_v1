@@ -5,15 +5,19 @@ const LineBotSDK = require('@line/bot-sdk');
 const Config = require('../config/config');
 const LineBotClient = new LineBotSDK.Client(Config);
 
-const DBref = require('./Variables').DBref;
 const Country = require('./Variables').Country;
 const AllCity = require('./Variables').AllCity;
 
+const sqlite = require('sqlite');
 const najax = $ = require('najax');
 const parseString = require('xml2js').parseString;
 const MsgFormat = require('./MsgFormat');
-const ConnectDB = require('./ConnectDB');
 const UploadPicToImgurByURL = require('./UploadPicToImgurByURL');
+
+var db_settings;
+setTimeout(async function () {
+    db_settings = await sqlite.open('./database/settings.sqlite', { Promise });
+});
 
 // API key: ***REMOVED***
 // https://alerts.ncdr.nat.gov.tw/***REMOVED***/
@@ -23,11 +27,11 @@ const UploadPicToImgurByURL = require('./UploadPicToImgurByURL');
 module.exports = {
     opendata: function () {
         setInterval(function () {
-            $.get("http://opendata.cwb.gov.tw/govdownload?dataid=E-A0015-001R&authorizationkey=rdec-key-123-45678-011121314", function (data) {
-                parseString(data, function (err, result) {
-                    ConnectDB.readDB(DBref.indexOf('earthquakelastknowtime') + 1).then(function (earthquake_last_know_time) {
-                        let originTime = result.cwbopendata.dataset[0].earthquake[0].earthquakeInfo[0].originTime[0].replace('-', '/').replace('-', '/').replace('T', ' ').replace('+08:00', '');
-                        if (originTime != earthquake_last_know_time) {
+            $.get("http://opendata.cwb.gov.tw/govdownload?dataid=E-A0015-001R&authorizationkey=rdec-key-123-45678-011121314", data => {
+                parseString(data, (err, result) => {
+                    db_settings.get('SELECT text FROM Variables WHERE name="EarthquakeLastKnowTime"').then(earthquake_last_know_time => {
+                        let originTime = result.cwbopendata.dataset[0].earthquake[0].earthquakeInfo[0].originTime[0].replace(/\-/g, '/').replace('T', ' ').replace('+08:00', '');
+                        if (originTime != earthquake_last_know_time.text) {
                             let msg = result.cwbopendata.dataset[0].earthquake[0].reportContent[0];
 
                             let depth = result.cwbopendata.dataset[0].earthquake[0].earthquakeInfo[0].depth[0]._;
@@ -63,8 +67,7 @@ module.exports = {
 
                             let url = originTime.split('/')[1] + originTime.split('/')[2].split(' ')[0] + originTime.split(' ')[1].split(':')[0] + originTime.split(' ')[1].split(':')[1] + String(magnitude).replace('.', '').substring(0, 2) + String(result.cwbopendata.dataset[0].earthquake[0].earthquakeNo).replace('107', '');
 
-                            ConnectDB.writeDB('earthquakelastknowtime', 3, 3, originTime);
-                            earthquake_last_know_time = originTime;
+                            db_settings.run('UPDATE Variables SET text="' + originTime + '" WHERE name="EarthquakeLastKnowTime"');
 
                             let allmsg = '【地震報告】\n' + msg +
                                 '\n\n時間： ' + originTime +
@@ -76,11 +79,11 @@ module.exports = {
                                 '\n查看網頁（地震測報中心）： ' + weburl;
                             console.log(allmsg);
 
-                            ConnectDB.readDB(DBref.indexOf('earthquakenotification') + 1).then(function (earthquake_notification_list) {
+                            db_settings.all('SELECT * FROM EarthquakeNotification').then(earthquake_notification_list => {
                                 let NoticeList = [];
                                 for (let x = 0; x < earthquake_notification_list.length; x++) {
                                     for (let y = 0; y < shakingArea.length; y++) {
-                                        if (earthquake_notification_list[x].area.indexOf(shakingArea[y].areaName) > -1 && Number(shakingArea[y].areaIntensity) >= 2) {
+                                        if (earthquake_notification_list[x].area.indexOf(shakingArea[y].areaName) > -1 && Number(shakingArea[y].areaIntensity) >= 3) {
                                             let NoticeArea = '\n設定之通知地區震度：';
                                             for (let i = 0; i < shakingArea.length; i++) {
                                                 if (earthquake_notification_list[x].area.indexOf(shakingArea[i].areaName) > -1) {
@@ -101,8 +104,7 @@ module.exports = {
                                 for (let i = 0; i < NoticeList.length; i++) {
                                     LineBotClient.pushMessage(NoticeList[i].id, MsgFormat.Text(allmsg + NoticeList[i].area));
                                 }
-                                console.log('reportimg: ' + reportimg);
-                                UploadPicToImgurByURL.start(reportimg, allmsg).then(function (pic_link) {
+                                UploadPicToImgurByURL.start(reportimg, allmsg).then(pic_link => {
                                     for (let i = 0; i < NoticeList.length; i++) {
                                         LineBotClient.pushMessage(NoticeList[i].id, MsgFormat.Image(pic_link, pic_link));
                                     }

@@ -12,13 +12,10 @@ const LineBotClient = new LineBotSDK.Client(Config);
 
 // ================================================== My Functions Start ================================================== 
 
-const DBref = require('./Variables').DBref;
-
 const UTC8Time = require('./UTC8Time'); //ok.include: getNowTime(function), value
 const MsgFormat = require('./MsgFormat'); //ok.include: Text(function), Sticker(function), Image(function), Video(function), Audio(function), Location(function)
 const GetRandomNumber = require('./GetRandomNumber'); //ok.include: start(function)
 const UploadPicToImgurByURL = require('./UploadPicToImgurByURL'); //ok.include: start(function)
-const ConnectDB = require('./ConnectDB');
 
 fs.readdir('./ChatlogFiles', function (err, files) { if (err) { fs.mkdir('./ChatlogFiles', function () { console.log('Spawned ChatlogFiles dir.'); }); } });
 fs.readdir('./database', function (err, files) { if (err) { fs.mkdir('./database', function () { console.log('Spawned database dir.'); }); } });
@@ -80,6 +77,7 @@ module.exports = {
                         } else {
                             console.log('CREATE TABLE userIds (id TEXT, displayName TEXT)');
                             db_Ids.run('CREATE TABLE userIds (id TEXT, displayName TEXT)').then(function () {
+                                db_Ids.run('PRAGMA auto_vacuum = FULL;');
                                 console.log('INSERT INTO userIds VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
                                 db_Ids.run('INSERT INTO userIds VALUES ("' + event.source.userId + '", "' + SourceData.Profile.displayName + '")');
                             });
@@ -110,7 +108,7 @@ module.exports = {
         var SaveData;
         switch (event.message.type) {
             case 'text':
-                SaveData = event.message.text;
+                SaveData = encodeURIComponent(event.message.text);
                 break;
             case 'image':
                 SaveData = '[圖片] id: ' + event.message.id;
@@ -163,6 +161,7 @@ module.exports = {
             } else {
                 console.log('CREATE TABLE ' + SourceData.id + ' (id TEXT, displayName TEXT, messageType TEXT, timestamp INTEGER, message TEXT)');
                 db_GroupChatlog.run('CREATE TABLE ' + SourceData.id + ' (id TEXT, displayName TEXT, messageType TEXT, timestamp INTEGER, message TEXT)').then(function () {
+                    db_GroupChatlog.run('PRAGMA auto_vacuum = FULL;');
                     console.log('INSERT INTO ' + SourceData.id + ' VALUES ("' + SourceData.userId + '", "' + SourceData.Profile.displayName + '", "' + event.message.type + '", ' + event.timestamp + ', "' + SaveData + '")');
                     db_GroupChatlog.run('INSERT INTO ' + SourceData.id + ' VALUES ("' + SourceData.userId + '", "' + SourceData.Profile.displayName + '", "' + event.message.type + '", ' + event.timestamp + ', "' + SaveData + '")');
                 });
@@ -196,11 +195,11 @@ module.exports = {
                     if (data.length != 0) {
                         let replyMsg = '';
                         UTC8Time.getNowTimePromise(data[0].timestamp).then(function (time) {
-                            replyMsg = time.time_hr + ':' + time.time_min + ' ' + data[0].displayName + '-> ' + data[0].message;
+                            replyMsg = time.time_year + '/' + time.time_month + '/' + time.time_day + ' ' + time.time_hr + ':' + time.time_min + ' ' + data[0].displayName + '-> ' + decodeURIComponent(data[0].message);
                         });
                         for (let i = 1; i < data.length; i++) {
                             UTC8Time.getNowTimePromise(data[i].timestamp).then(function (time) {
-                                replyMsg = time.time_hr + ':' + time.time_min + ' ' + data[i].displayName + '-> ' + data[i].message + '\n' + replyMsg;
+                                replyMsg = time.time_year + '/' + time.time_month + '/' + time.time_day + ' ' + time.time_hr + ':' + time.time_min + ' ' + data[i].displayName + '-> ' + decodeURIComponent(data[i].message) + '\n' + replyMsg;
                                 if (i == data.length - 1) {
                                     resolve(replyMsg);
                                 }
@@ -218,11 +217,11 @@ module.exports = {
                     if (data.length != 0) {
                         let replyMsg = '';
                         UTC8Time.getNowTimePromise(data[0].timestamp).then(function (time) {
-                            replyMsg = time.time_hr + ':' + time.time_min + ' ' + data[0].displayName + '-> ' + data[0].message;
+                            replyMsg = time.time_hr + ':' + time.time_min + ' ' + data[0].displayName + '-> ' + decodeURIComponent(data[0].message);
                         });
                         for (let i = 1; i < data.length; i++) {
                             UTC8Time.getNowTimePromise(data[i].timestamp).then(function (time) {
-                                replyMsg = time.time_hr + ':' + time.time_min + ' ' + data[i].displayName + '-> ' + data[i].message + '\n' + replyMsg;
+                                replyMsg = time.time_hr + ':' + time.time_min + ' ' + data[i].displayName + '-> ' + decodeURIComponent(data[i].message) + '\n' + replyMsg;
                                 if (i == data.length - 1) {
                                     resolve(replyMsg);
                                 }
@@ -237,11 +236,11 @@ module.exports = {
                     if (data.length != 0) {
                         let replyMsg = '';
                         UTC8Time.getNowTimePromise(data[0].timestamp).then(function (time) {
-                            replyMsg = time.time_hr + ':' + time.time_min + ' ' + data[0].displayName + '-> ' + data[0].message;
+                            replyMsg = time.time_hr + ':' + time.time_min + ' ' + data[0].displayName + '-> ' + decodeURIComponent(data[0].message);
                         });
                         for (let i = 1; i < data.length; i++) {
                             UTC8Time.getNowTimePromise(data[i].timestamp).then(function (time) {
-                                replyMsg = time.time_hr + ':' + time.time_min + ' ' + data[i].displayName + '-> ' + data[i].message + '\n' + replyMsg;
+                                replyMsg = time.time_hr + ':' + time.time_min + ' ' + data[i].displayName + '-> ' + decodeURIComponent(data[i].message) + '\n' + replyMsg;
                                 if (i == data.length - 1) {
                                     resolve(replyMsg);
                                 }
