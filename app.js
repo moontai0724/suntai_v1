@@ -860,7 +860,7 @@ async function MessageHandler(event) {
 										}
 										break;
 									case 'fortune': case 'f':
-										if (msgs[2]) startReply(MsgFormat.Text(Fortune.seeOriginal(Number(msg[2]) - 1)));
+										if (msgs[2]) startReply(MsgFormat.Text(Fortune.seeOriginal(Number(msgs[2]) - 1)));
 										else startReply(MsgFormat.Text('參數錯誤。'));
 										break;
 									default:
