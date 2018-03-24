@@ -35,10 +35,12 @@ router.post('/', ctx => {
 			ctx.status = 401;
 		}
 	} else if (ctx.request.header['user-agent'].includes('Bitbucket')) {
-		server.close(() => {
-			console.log('Received Bitbucket push message, server restarted.');
-			process.exit();
-		});
+		setTimeout(() => {
+			server.close(() => {
+				console.log('Received Bitbucket push message, server restarted.');
+				process.exit();
+			});
+		}, 2000);
 	}
 })
 
@@ -870,7 +872,7 @@ async function MessageHandler(event) {
 								break;
 						}
 					} else {
-						if (event.message.text.replace(/\s/, '').indexOf('運勢')) {
+						if (event.message.text.replace(/\s/, '').includes('運勢')) {
 							startReply(MsgFormat.Text(Fortune.draw()));
 						} else if (event.message.text.replace(/\s/, '') == '87') {
 							startReply(MsgFormat.Text('你說誰 87，你全家都 87'));
