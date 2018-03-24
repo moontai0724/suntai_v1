@@ -24,7 +24,7 @@ app.use(KoaBodyParser());
 // Webhook
 router.post('/', ctx => {
 	console.log(JSON.stringify(ctx.request.header));
-	if (ctx.request.header['user-agent'].include('LineBotWebhook')) {
+	if (ctx.request.header['user-agent'].includes('LineBotWebhook')) {
 		const req = ctx.request;
 		if (LineBotSDK.validateSignature(req.rawBody, Config.channelSecret, req.headers['x-line-signature'])) {
 			ctx.status = 200;
@@ -34,13 +34,11 @@ router.post('/', ctx => {
 			ctx.body = '驗證失敗';
 			ctx.status = 401;
 		}
-	} else if (ctx.request.header['user-agent'] || false) {
-		if (ctx.request.header['user-agent'].include('Bitbucket')) {
-			server.close(() => {
-				console.log('Received Bitbucket push message, server restarted.');
-				process.exit();
-			});
-		}
+	} else if (ctx.request.header['user-agent'].includes('Bitbucket')) {
+		server.close(() => {
+			console.log('Received Bitbucket push message, server restarted.');
+			process.exit();
+		});
 	}
 })
 
