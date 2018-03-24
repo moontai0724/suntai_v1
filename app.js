@@ -23,25 +23,25 @@ app.use(KoaBodyParser());
 
 // Webhook
 router.post('/', ctx => {
-	// if (ctx.request.header['x-forwarded-for'] == '203.104.146.152') {
-	const req = ctx.request;
-	if (LineBotSDK.validateSignature(req.rawBody, Config.channelSecret, req.headers['x-line-signature'])) {
-		ctx.status = 200;
-		console.log('YES');
-		req.body.events.map(MessageHandler);
+	console.log(JSON.stringify(ctx.request.header));
+	if (ctx.request.header['x-forwarded-for'] == '203.104.146.152') {
+		const req = ctx.request;
+		if (LineBotSDK.validateSignature(req.rawBody, Config.channelSecret, req.headers['x-line-signature'])) {
+			ctx.status = 200;
+			req.body.events.map(MessageHandler);
+		}
+		else {
+			ctx.body = '驗證失敗';
+			ctx.status = 401;
+		}
+	} else if (ctx.request.header['user-agent'] || false) {
+		if (ctx.request.header['user-agent'].indexOf('Bitbucket') > -1) {
+			server.close(() => {
+				console.log('Received Bitbucket push message, server restarted.');
+				process.exit();
+			});
+		}
 	}
-	else {
-		ctx.body = '驗證失敗';
-		ctx.status = 401;
-	}
-	// } else if (ctx.request.header['user-agent'] || false) {
-	// 	if (ctx.request.header['user-agent'].indexOf('Bitbucket') > -1) {
-	// 		server.close(() => {
-	// 			console.log('Received Bitbucket push message, server restarted.');
-	// 			process.exit();
-	// 		});
-	// 	}
-	// }
 })
 
 app.use(router.routes());
