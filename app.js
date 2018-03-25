@@ -823,12 +823,11 @@ async function MessageHandler(event) {
 														}
 													} else if (FullTimeCommand.indexOf(msgs[i]) > -1) {
 														let FullTime = msgs[i + 1].split('-');
-														console.log(FullTime);
 														if (FullTime.length == 6) {
 															let firstword = msgs[i].replace('-', '').replace('Time', '');
 															let lastword = ['Year', 'Month', 'Day', 'Hour', 'Minute', 'Second'];
 															for (let x = 0; x < FullTime.length; x++) {
-																settings[firstword + lastword[x]] = Number(FullTime[i]);
+																settings[firstword + lastword[x]] = Number(FullTime[x]);
 															}
 														} else {
 															startReply(MsgFormat.Text('所賦予的參數有錯誤。'));
