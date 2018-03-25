@@ -823,6 +823,7 @@ async function MessageHandler(event) {
 														}
 													} else if (FullTimeCommand.indexOf(msgs[i]) > -1) {
 														let FullTime = msgs[i + 1].split('-');
+														console.log(FullTime);
 														if (FullTime.length == 6) {
 															let firstword = msgs[i].replace('-', '').replace('Time', '');
 															let lastword = ['Year', 'Month', 'Day', 'Hour', 'Minute', 'Second'];
