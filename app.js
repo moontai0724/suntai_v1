@@ -34,10 +34,10 @@ router.post('/', ctx => {
 			ctx.body = '驗證失敗';
 			ctx.status = 401;
 		}
-	} else if (ctx.request.header['user-agent'].includes('Bitbucket')) {
+	} else if (ctx.request.header['user-agent'].includes('GitHub')) {
 		setTimeout(() => {
 			server.close(() => {
-				console.log('Received Bitbucket push message, server restarted.');
+				console.log('Received GitHub push message, server restarted.');
 				process.exit();
 			});
 		}, 2000);
