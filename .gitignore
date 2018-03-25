@@ -3,5 +3,4 @@ versions
 database
 ChatlogFiles
 config
-functions/test.js
-functions/test.json
+functions/test
