@@ -827,7 +827,7 @@ async function MessageHandler(event) {
 															let firstword = msgs[i].replace('-', '').replace('Time', '');
 															let lastword = ['Year', 'Month', 'Day', 'Hour', 'Minute', 'Second'];
 															for (let x = 0; x < FullTime.length; x++) {
-																settings[firstword + lastword[x]] = Number(msgs[i + 1]);
+																settings[firstword + lastword[x]] = Number(FullTime[i]);
 															}
 														} else {
 															startReply(MsgFormat.Text('所賦予的參數有錯誤。'));
