@@ -9,7 +9,7 @@ module.exports = {
             '\n查看詳細：/st f ' + FortuneStick[rn].id;
     },
     seeOriginal: function (StickNumber) {
-        let replyMsg = '籤號：' + FortuneStick[StickNumber].id + '：' + FortuneStick[StickNumber].type + '！\n解籤：' + FortuneStick[rn].explain;
+        let replyMsg = '籤號：' + FortuneStick[StickNumber].id + '：' + FortuneStick[StickNumber].type + '！\n解籤：' + FortuneStick[StickNumber].explain;
         let result = JSON.stringify(FortuneStick[StickNumber].result).replace('{', '').replace('}', '').replace(/\"/g, '').replace(/\:/g, '：').split(',');
         for (let i = 0; i < result.length; i++) {
             replyMsg += '\n' + result[i];
