@@ -6,7 +6,7 @@ const parseString = require('xml2js').parseString;
 const sqlite = require('sqlite');
 
 // Require config
-const Config = require('../config/config');
+const Config = require('../config/config.json');
 // ================================================== My Functions Start ==================================================
 
 const Country = require('./Variables').Country;
@@ -18,15 +18,16 @@ const MsgFormat = require('./MsgFormat'); //ok.include: Text(function), Sticker(
 const GetRandomNumber = require('./GetRandomNumber'); //ok.include: start(function)
 const UploadPicToImgurByURL = require('./UploadPicToImgurByURL'); //ok.include: start(function)
 
+
 // ================================================== My Functions Over ==================================================
 
 // ID 參考：https://opendata.cwb.gov.tw/datalist
-// 檔案下載： http://opendata.cwb.gov.tw/opendataapi?dataid=ID&authorizationkey=***REMOVED***
-// 檔案下載： http://opendata.cwb.gov.tw/opendataapi?dataid=F-D0047-001&authorizationkey=***REMOVED***
+// 檔案下載： http://opendata.cwb.gov.tw/opendataapi?dataid=ID&authorizationkey=KEY
+// 檔案下載： http://opendata.cwb.gov.tw/opendataapi?dataid=F-D0047-001&authorizationkey=KEY
 
 // RESTful
 // URL Format: https://opendata.cwb.gov.tw/api/v1/rest/datastore/{dataid}?locationName={locationName}&elementName={elementName}&sort={sort}&startTime={startTime}&timeFrom={timeFrom}&timeTo={timeTo}
-// https://opendata.cwb.gov.tw/api/v1/rest/datastore/{dataid}?Authorization=***REMOVED***
+// https://opendata.cwb.gov.tw/api/v1/rest/datastore/{dataid}?Authorization=KEY
 
 // 各鄉鎮預報：
 const WeatherArea = [{ areaName: '宜蘭縣', id: 'F-D0047-001' }, { areaName: '桃園市', id: 'F-D0047-005' }, { areaName: '新竹縣', id: 'F-D0047-009' }, { areaName: '苗栗縣', id: 'F-D0047-013' }, { areaName: '彰化縣', id: 'F-D0047-017' }, { areaName: '南投縣', id: 'F-D0047-021' }, { areaName: '雲林縣', id: 'F-D0047-025' }, { areaName: '嘉義縣', id: 'F-D0047-029' }, { areaName: '屏東縣', id: 'F-D0047-033' }, { areaName: '臺東縣', id: 'F-D0047-037' }, { areaName: '花蓮縣', id: 'F-D0047-041' }, { areaName: '澎湖縣', id: 'F-D0047-045' }, { areaName: '基隆市', id: 'F-D0047-049' }, { areaName: '新竹市', id: 'F-D0047-053' }, { areaName: '嘉義市', id: 'F-D0047-057' }, { areaName: '臺北市', id: 'F-D0047-061' }, { areaName: '高雄市', id: 'F-D0047-065' }, { areaName: '新北市', id: 'F-D0047-069' }, { areaName: '台中市', id: 'F-D0047-073' }, { areaName: '台南市', id: 'F-D0047-077' }, { areaName: '連江縣', id: 'F-D0047-081' }, { areaName: '金門縣', id: 'F-D0047-085' }];
@@ -52,7 +53,7 @@ function getAllWeather() {
     return new Promise(function (resolve) {
         $({
             type: 'GET',
-            url: 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=***REMOVED***',
+            url: 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=' + Config.Weather.AuthorizationKey,
             success: function (data) {
                 data = JSON.parse(data);
                 let weather = [];
@@ -111,7 +112,7 @@ function getAllWeather() {
 // function getCityHelper() {
 //     $({
 //         type: 'GET',
-//         url: 'http://opendata.cwb.gov.tw/opendataapi?dataid=' + helper[].id + '&authorizationkey=***REMOVED***',
+//         url: 'http://opendata.cwb.gov.tw/opendataapi?dataid=' + helper[].id + '&authorizationkey=' + Config.Weather.AuthorizationKey
 //         success: function (data) {
 //             parseString(data, function (err, result) {
 //                 console.log(result.cwbopendata.dataset[0].parameterSet[0].parameter);

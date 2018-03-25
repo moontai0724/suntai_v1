@@ -2,6 +2,7 @@ const DBref = require('./Variables').DBref; //ok
 
 const najax = $ = require('najax');
 const UTC8Time = require('./UTC8Time');
+const Config = require('../config/config.json');
 
 module.exports = {
     writeDB: function (sheet, range1, range2, value, column1, column2, formattedname) {
@@ -58,9 +59,9 @@ module.exports = {
                 type: "POST",
                 url: "https://www.googleapis.com/oauth2/v4/token",
                 contentType: "application/x-www-form-urlencoded;",
-                data: 'refresh_token=***REMOVED***&' +
-                    'client_id=***REMOVED***&' +
-                    'client_secret=***REMOVED***&' +
+                data: 'refresh_token=' + Config.GoogleSpreadsheet.refresh_token + '&' +
+                    'client_id=' + Config.GoogleSpreadsheet.client_id + '&' +
+                    'client_secret=' + Config.GoogleSpreadsheet.client_secret + '&' +
                     'redirect_uri=urn:ietf:wg:oauth:2.0:oob&' +
                     'grant_type=refresh_token',
                 success: function (data) {

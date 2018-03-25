@@ -14,10 +14,10 @@ const sqlite = require('sqlite');
 const ping = require('ping-net');
 
 // Require config
-const Config = require('./config/config');
+const Config = require('./config/config.json');
 const app = new Koa();
 const router = new KoaRouter();
-const LineBotClient = new LineBotSDK.Client(Config);
+const LineBotClient = new LineBotSDK.Client(Config.LineBot);
 
 app.use(KoaBodyParser());
 

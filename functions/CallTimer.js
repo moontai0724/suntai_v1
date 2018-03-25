@@ -2,8 +2,8 @@
 const LineBotSDK = require('@line/bot-sdk');
 
 // Require config
-const Config = require('../config/config');
-const LineBotClient = new LineBotSDK.Client(Config);
+const Config = require('../config/config.json');
+const LineBotClient = new LineBotSDK.Client(Config.LineBot);
 
 const sqlite = require('sqlite');
 const GetRandomNumber = require('./GetRandomNumber'); //ok.include: start(function)

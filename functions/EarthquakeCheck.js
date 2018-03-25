@@ -3,7 +3,7 @@ const LineBotSDK = require('@line/bot-sdk');
 
 // Require config
 const Config = require('../config/config');
-const LineBotClient = new LineBotSDK.Client(Config);
+const LineBotClient = new LineBotSDK.Client(Config.LineBot);
 
 const Country = require('./Variables').Country;
 const AllCity = require('./Variables').AllCity;
@@ -18,11 +18,6 @@ var db_settings;
 setTimeout(async function () {
     db_settings = await sqlite.open('./database/settings.sqlite', { Promise });
 });
-
-// API key: ***REMOVED***
-// https://alerts.ncdr.nat.gov.tw/***REMOVED***/
-
-// http://www.cwb.gov.tw/V7/earthquake/Data/quake/EC0219224753066.htm
 
 module.exports = {
     opendata: function () {

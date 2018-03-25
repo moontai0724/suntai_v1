@@ -7,8 +7,8 @@ const sqlite = require('sqlite');
 const fs = require('fs');
 
 // Require config
-const Config = require('../config/config');
-const LineBotClient = new LineBotSDK.Client(Config);
+const Config = require('../config/config.json');
+const LineBotClient = new LineBotSDK.Client(Config.LineBot);
 
 // ================================================== My Functions Start ================================================== 
 
@@ -233,6 +233,9 @@ module.exports = {
                 });
             }
         })
+    },
+    searchHistoryWithKeyWords: function () {
+
     },
     getFile: function (event, SourceData, FileId) {
         let Fileinfo = {

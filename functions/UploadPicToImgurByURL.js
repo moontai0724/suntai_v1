@@ -1,5 +1,6 @@
 const najax = $ = require('najax');
 const UTC8Time = require('./UTC8Time');
+const Config = require('../config/config');
 
 module.exports = {
     start: function (imgurl, description) {
@@ -8,9 +9,9 @@ module.exports = {
                 type: "POST",
                 url: "https://api.imgur.com/oauth2/token",
                 contentType: "application/x-www-form-urlencoded;",
-                data: 'refresh_token=***REMOVED***&' +
-                    'client_id=***REMOVED***&' +
-                    'client_secret=***REMOVED***&' +
+                data: 'refresh_token=' + Config.Imgur.refresh_token + '&' +
+                    'client_id=' + Config.Imgur.client_id + '&' +
+                    'client_secret=' + Config.Imgur.client_secret + '&' +
                     'grant_type=refresh_token',
                 success: function (data) {
                     data = JSON.parse(data);
