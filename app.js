@@ -829,8 +829,10 @@ async function MessageHandler(event) {
 															for (let x = 0; x < FullTime.length; x++) {
 																settings[firstword + lastword[x]] = Number(msgs[i + 1]);
 															}
+														} else {
+															startReply(MsgFormat.Text('所賦予的參數有錯誤。'));
+															break;
 														}
-														else break;
 														if (msgs[i] == '-StartTime') changelog.start = true;
 														else if (msgs[i] == '-OverTime') changelog.over = true;
 														else if (msgs[i] == '-FullTime') changelog.specific = true;
@@ -839,9 +841,7 @@ async function MessageHandler(event) {
 														break;
 													}
 													if (i >= msgs.length - 2) {
-														Chatlog.searchHistory(SourceData, Number(msgs[2]), settings, changelog).then(data => {
-															startReply(MsgFormat.Text(data));
-														});
+														Chatlog.searchHistory(SourceData, Number(msgs[2]), settings, changelog).then(data => startReply(MsgFormat.Text(data)));
 													}
 												} else {
 													startReply(MsgFormat.Text('所賦予的參數有錯誤。'));
@@ -849,9 +849,7 @@ async function MessageHandler(event) {
 												}
 											}
 											if (msgs.length < 4) {
-												Chatlog.searchHistory(SourceData, Number(msgs[2]), settings, changelog).then(data => {
-													startReply(MsgFormat.Text(data));
-												});
+												Chatlog.searchHistory(SourceData, Number(msgs[2]), settings, changelog).then(data => startReply(MsgFormat.Text(data)));
 											}
 										} else {
 											Chatlog.searchHistory(SourceData, 5, settings, changelog).then(data => {
@@ -860,7 +858,7 @@ async function MessageHandler(event) {
 										}
 										break;
 									case 'fortune': case 'f':
-										if (msgs[2]) startReply(MsgFormat.Text(Fortune.seeOriginal(Number(msgs[2]) - 1)));
+										if (msgs[2] && msgs[2] < 101 && msgs[2] > 0) startReply(MsgFormat.Text(Fortune.seeOriginal(Number(msgs[2]) - 1)));
 										else startReply(MsgFormat.Text('參數錯誤。'));
 										break;
 									default:

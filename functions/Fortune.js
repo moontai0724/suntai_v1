@@ -1,6 +1,6 @@
 const GetRandomNumber = require('./GetRandomNumber');
 const FortuneStick = require('./FortuneStick.json');
-
+// https://gist.github.com/d94bb0a9f37cfd362453
 module.exports = {
     draw: function () {
         let rn = GetRandomNumber.start(0, 99);
