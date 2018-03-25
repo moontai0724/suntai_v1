@@ -469,7 +469,7 @@ async function MessageHandler(event) {
 											break;
 										case 'send':
 											if (msgs[2] && msgs[3]) {
-												LineBotClient.pushMessage(encodeURI(msgs[2]), MsgFormat.Text(event.source.text.replace('/mt send ' + msgs[2] + ' ', '')));
+												LineBotClient.pushMessage(encodeURI(msgs[2]), MsgFormat.Text(event.message.text.replace('/mt send ' + msgs[2] + ' ', '')));
 												startReply(MsgFormat.Text('傳送完成；\n目標： ' + msgs[2] + '\n訊息： ' + event.source.text.replace('/mt send ' + msgs[2] + ' ', '')));
 											} else {
 												startReply(MsgFormat.Text('參數錯誤。'));
