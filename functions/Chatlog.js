@@ -181,6 +181,7 @@ module.exports = {
             if (settings.StartHour > 24) settings.StartHour = 24; else if (settings.StartHour < 0) settings.StartHour = 0;
             if (settings.StartMinute > 60) settings.StartMinute = 60; else if (settings.StartMinute < 0) settings.StartMinute = 0;
             if (settings.StartSecond > 60) settings.StartSecond = 60; else if (settings.StartSecond < 0) settings.StartSecond = 0;
+            console.log(SourceData, count, settings, changelog);
             if (changelog.start == true || changelog.over == true) {
                 let startDate = new Date(settings.StartYear, settings.StartMonth - 1, settings.StartDay, settings.StartHour, settings.StartMinute, settings.StartSecond);
                 let overDate = new Date(settings.OverYear, settings.OverMonth - 1, settings.OverDay, settings.OverHour, settings.OverMinute, settings.OverSecond);
