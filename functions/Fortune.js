@@ -8,6 +8,10 @@ module.exports = {
             '！\n籤詩：' + FortuneStick[rn].poem +
             '\n查看詳細：/st f ' + FortuneStick[rn].id;
     },
+    drawOnly: function () {
+        let rn = GetRandomNumber.start(0, 99);
+        return replyMsg = FortuneStick[rn].id + ': ' + FortuneStick[rn].type;
+    },
     seeOriginal: function (StickNumber) {
         let replyMsg = '籤號：' + FortuneStick[StickNumber].id + '：' + FortuneStick[StickNumber].type + '！\n解籤：' + FortuneStick[StickNumber].explain;
         let result = JSON.stringify(FortuneStick[StickNumber].result).replace('{', '').replace('}', '').replace(/\"/g, '').replace(/\:/g, '：').split(',');

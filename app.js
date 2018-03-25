@@ -871,6 +871,8 @@ async function MessageHandler(event) {
 						}
 					} else {
 						if (event.message.text.replace(/\s/, '').includes('運勢')) {
+							startReply(MsgFormat.Text(Fortune.drawOnly()));
+						} else if (event.message.text.replace(/\s/, '').includes('籤運')) {
 							startReply(MsgFormat.Text(Fortune.draw()));
 						} else if (event.message.text.replace(/\s/, '') == '87') {
 							startReply(MsgFormat.Text('你說誰 87，你全家都 87'));
