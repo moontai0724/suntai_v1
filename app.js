@@ -870,11 +870,14 @@ async function MessageHandler(event) {
 								break;
 						}
 					} else {
-						if (event.message.text.replace(/\s/, '').includes('運勢')) {
+						let msg = event.message.text.replace(/\s/, '');
+						if (msg.includes('運勢')) {
 							startReply(MsgFormat.Text(Fortune.drawOnly()));
-						} else if (event.message.text.replace(/\s/, '').includes('籤運')) {
+						} else if (msg.includes('籤運')) {
 							startReply(MsgFormat.Text(Fortune.draw()));
-						} else if (event.message.text.replace(/\s/, '') == '87') {
+						} else if (msg.includes('@日太(dev)') && msg.includes('求') && msg.includes('的機率')) {
+							startReply(MsgFormat.Text(GetRandomNumber.start(0, 100) + ' %'));
+						} else if (msg == '87') {
 							startReply(MsgFormat.Text('你說誰 87，你全家都 87'));
 						}
 					}
