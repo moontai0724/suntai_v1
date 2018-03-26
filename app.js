@@ -65,6 +65,7 @@ const UploadPicToImgurByURL = require('./functions/UploadPicToImgurByURL');
 const CallTimer = require('./functions/CallTimer');
 const Chatlog = require('./functions/Chatlog');
 const Fortune = require('./functions/Fortune');
+const Weather = require('./functions/Weather');
 
 // ================================================== My Functions Over ==================================================
 // ================================================== Start My Program ==================================================
@@ -138,7 +139,8 @@ async function MessageHandler(event) {
 												'\n/mt owners notice <userId>' +
 												'\n/mt calltimer <groupId/userId>' +
 												'\n/mt renewquizdb' +
-												'\n/mt send <groupId> <msg>'));
+												'\n/mt send <groupId> <msg>' +
+												'\n/mt weather refresh'));
 											break;
 										case 'ngrok':
 											switch (msgs[2]) {
@@ -475,6 +477,16 @@ async function MessageHandler(event) {
 												startReply(MsgFormat.Text('參數錯誤。'));
 											}
 											break;
+										case 'weather':
+											switch (msgs[2]) {
+												case 'refresh':
+													Weather.refreshCityWeather().then(() => startReply(MsgFormat.Text('已重新獲取。')));
+													break;
+												default:
+													startReply(MsgFormat.Text('參數錯誤。'));
+													break;
+											}
+											break;
 										default:
 											startReply(MsgFormat.Text('參數錯誤。'));
 											break;
@@ -488,6 +500,7 @@ async function MessageHandler(event) {
 									case 'help':
 										startReply(MsgFormat.Text('可用指令如下：' +
 											'\n/st help' +
+											'\n/st keyword list' +
 											'\n/st time get' +
 											'\n/st time getall' +
 											'\n/st calltimer' +
@@ -500,7 +513,15 @@ async function MessageHandler(event) {
 											// '\n/st (history || h) (getfile || gf) <FileId>' +
 											'\n/st (history || h) [SpecificCount] [Parameters]' +
 											'\n　獲取更多協助請打 /st h help' +
-											'\n　註：最多指定 50 筆資料，若無指定預設 5 筆。'));
+											'\n　註：最多指定 50 筆資料，若無指定預設 5 筆。' +
+											'\n/st (weather || w) 36hr <CityNumber>'));
+										break;
+									case 'keyword':
+										startReply(MsgFormat.Text('特定回應列表回應如下：' +
+											'\n87' +
+											'\n運勢' +
+											'\n籤運' +
+											'\n@日太 求 機率'));
 										break;
 									case 'get':
 										if (msgs[2] == "myid" && event.source.userId) {
@@ -860,6 +881,19 @@ async function MessageHandler(event) {
 									case 'fortune': case 'f':
 										if (msgs[2] && msgs[2] < 101 && msgs[2] > 0) startReply(MsgFormat.Text(Fortune.seeOriginal(Number(msgs[2]) - 1)));
 										else startReply(MsgFormat.Text('參數錯誤。'));
+										break;
+									case 'weather': case 'w':
+										switch (msgs[2]) {
+											case '36hr':
+												if (Number(msgs[2]) > 0 && Number(msgs[2]) < 23) {
+													Weather.getCityWeather(AllCity[Number(msgs[2])]).then(data => startReply(MsgFormat.Text(data)));
+												} else if (AllCity.includes(msgs[2])) {
+													Weather.getCityWeather(msgs[2]).then(data => startReply(MsgFormat.Text(data)));
+												} else {
+													startReply(MsgFormat.Text('缺少地區參數，請重新輸入指令。下列為可選地區：' + AllCityList));
+												}
+												break;
+										}
 										break;
 									default:
 										startReply(MsgFormat.Text('參數錯誤。'));
