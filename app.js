@@ -514,7 +514,7 @@ async function MessageHandler(event) {
 											'\n/st (history || h) [SpecificCount] [Parameters]' +
 											'\n　獲取更多協助請打 /st h help' +
 											'\n　註：最多指定 50 筆資料，若無指定預設 5 筆。' +
-											'\n/st (weather || w) 36hr <CityNumber>'));
+											'\n/st (weather || w) 36hr <CityNumber || CityName>'));
 										break;
 									case 'keyword':
 										startReply(MsgFormat.Text('特定回應列表回應如下：' +
@@ -885,12 +885,12 @@ async function MessageHandler(event) {
 									case 'weather': case 'w':
 										switch (msgs[2]) {
 											case '36hr':
-												if (Number(msgs[2]) > 0 && Number(msgs[2]) < 23) {
-													Weather.getCityWeather(AllCity[Number(msgs[2])]).then(data => startReply(MsgFormat.Text(data)));
-												} else if (AllCity.includes(msgs[2])) {
-													Weather.getCityWeather(msgs[2]).then(data => startReply(MsgFormat.Text(data)));
+												if (Number(msgs[3]) > 0 && Number(msgs[3]) < 23) {
+													Weather.getCityWeather(AllCity[Number(msgs[3])]).then(data => startReply(MsgFormat.Text(data)));
+												} else if (AllCity.includes(msgs[3])) {
+													Weather.getCityWeather(msgs[3]).then(data => startReply(MsgFormat.Text(data)));
 												} else {
-													startReply(MsgFormat.Text('缺少地區參數，請重新輸入指令。下列為可選地區：' + AllCityList));
+													startReply(MsgFormat.Text('缺少地區參數，請重新輸入指令。下列為可選地區：' + AllCityName));
 												}
 												break;
 										}

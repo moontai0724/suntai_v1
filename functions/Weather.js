@@ -53,7 +53,7 @@ module.exports = {
         });
     }
 }
-getAllWeather().then(data => console.log(data));
+
 function getAllWeather() {
     return new Promise(function (resolve, reject) {
         if (weather.length != 0) resolve(weather); else $({
