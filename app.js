@@ -875,7 +875,7 @@ async function MessageHandler(event) {
 							startReply(MsgFormat.Text(Fortune.drawOnly()));
 						} else if (msg.includes('籤運')) {
 							startReply(MsgFormat.Text(Fortune.draw()));
-						} else if (msg.includes('@日太(dev)') && msg.includes('求') && msg.includes('的機率')) {
+						} else if (msg.includes('@日太') && msg.includes('求') && msg.includes('的機率')) {
 							startReply(MsgFormat.Text(GetRandomNumber.start(0, 100) + ' %'));
 						} else if (msg == '87') {
 							startReply(MsgFormat.Text('你說誰 87，你全家都 87'));
