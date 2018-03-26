@@ -890,7 +890,7 @@ async function MessageHandler(event) {
 												} else if (AllCity.includes(msgs[3])) {
 													Weather.getCityWeather(msgs[3]).then(data => startReply(MsgFormat.Text(data)));
 												} else {
-													startReply(MsgFormat.Text('缺少地區參數，請重新輸入指令。下列為可選地區：' + AllCityName));
+													startReply(MsgFormat.Text('缺少地區參數，請重新輸入指令。下列為可選地區：' + AllCityList));
 												}
 												break;
 										}
@@ -909,7 +909,7 @@ async function MessageHandler(event) {
 							startReply(MsgFormat.Text(Fortune.drawOnly()));
 						} else if (msg.includes('籤運')) {
 							startReply(MsgFormat.Text(Fortune.draw()));
-						} else if (msg.includes('@日太') && msg.includes('求') && msg.includes('的機率')) {
+						} else if (msg.includes('求') && msg.includes('的機率')) {
 							startReply(MsgFormat.Text(GetRandomNumber.start(0, 100) + ' %'));
 						} else if (msg == '87') {
 							startReply(MsgFormat.Text('你說誰 87，你全家都 87'));
