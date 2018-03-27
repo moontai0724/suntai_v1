@@ -886,7 +886,7 @@ async function MessageHandler(event) {
 										switch (msgs[2]) {
 											case '36hr':
 												if (Number(msgs[3]) > 0 && Number(msgs[3]) < 23) {
-													Weather.getCityWeather(AllCity[Number(msgs[3])]).then(data => startReply(MsgFormat.Text(data)));
+													Weather.getCityWeather(AllCity[Number(msgs[3]) + 1]).then(data => startReply(MsgFormat.Text(data)));
 												} else if (AllCity.includes(msgs[3])) {
 													Weather.getCityWeather(msgs[3]).then(data => startReply(MsgFormat.Text(data)));
 												} else {
