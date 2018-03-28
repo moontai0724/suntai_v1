@@ -961,7 +961,7 @@ async function MessageHandler(event) {
 				'\n　 d. 如指令以 <> 括住，代表該參數為必要參數，必須要輸入，否則無法運行。' +
 				'\n以上就是日太的操作說明與提醒事項囉！' +
 				'\n\n開發者：月太 moontai0724' +
-				'\n小屋：https://home.gamer.com.tw/mootai0724'));
+				'\n小屋：https://home.gamer.com.tw/moontai0724'));
 			break;
 		case 'leave':
 			switch (event.source.type) {
