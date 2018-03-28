@@ -108,9 +108,9 @@ async function MessageHandler(event) {
 			switch (event.message.type) {
 				case 'text':
 					if (event.message.text.startsWith('/')) {
+						var msgs = event.message.text.replace(/\n/g, '').split(' ');
 						switch (msgs[0]) {
 							case '/mt':
-								var msgs = event.message.text.replace(/\n/g, '').split(' ');
 								if (authorize == true) {
 									switch (msgs[1]) {
 										case 'help':
