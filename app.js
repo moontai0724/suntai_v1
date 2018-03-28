@@ -937,11 +937,13 @@ async function MessageHandler(event) {
 		case 'join':
 			switch (event.source.type) {
 				case 'group':
+					db_settings.run('INSERT INTO Groups VALUES ("' + event.source.groupId + '")');
 					for (let i = 0; i < owners_notice.length; i++) {
 						LineBotClient.pushMessage(owners_notice[i].id, MsgFormat.Text(UTC8Time.getNowTime() + '\n日太加入了群組: ' + event.source.groupId));
 					}
 					break;
 				case 'room':
+					db_settings.run('INSERT INTO Rooms VALUES ("' + event.source.roomId + '")');
 					for (let i = 0; i < owners_notice.length; i++) {
 						LineBotClient.pushMessage(owners_notice[i].id, MsgFormat.Text(UTC8Time.getNowTime() + '\n日太加入了聊天室: ' + event.source.roomId));
 					}
@@ -957,7 +959,9 @@ async function MessageHandler(event) {
 				'\n　 b. 如指令以 () 括住，代表在括弧內的指令皆可通用。例如： /st (history || h) 代表 /st history 功能同等於 /st h。' +
 				'\n　 c. 如指令以 [] 括住，代表該參數為選擇性，加或不加皆可。' +
 				'\n　 d. 如指令以 <> 括住，代表該參數為必要參數，必須要輸入，否則無法運行。' +
-				'\n以上就是日太的操作說明與提醒事項囉！'));
+				'\n以上就是日太的操作說明與提醒事項囉！' +
+				'\n\n開發者：月太 moontai0724' +
+				'\n小屋：https://home.gamer.com.tw/mootai0724'));
 			break;
 		case 'leave':
 			switch (event.source.type) {
