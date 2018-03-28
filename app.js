@@ -99,8 +99,7 @@ async function MessageHandler(event) {
 		case 'group': SourceData.id = event.source.groupId; break;
 		case 'room': SourceData.id = event.source.roomId; break;
 	}
-
-	var msgs = event.message.text.replace(/\n/g, '').split(' '), authorize = false;
+	var authorize = false;
 	if (owners.findIndex(element => { return element.id == SourceData.userId; }) != -1) authorize = true;
 
 	switch (event.type) {
@@ -111,6 +110,7 @@ async function MessageHandler(event) {
 					if (event.message.text.startsWith('/')) {
 						switch (msgs[0]) {
 							case '/mt':
+								var msgs = event.message.text.replace(/\n/g, '').split(' ');
 								if (authorize == true) {
 									switch (msgs[1]) {
 										case 'help':
