@@ -27,7 +27,7 @@ const WeatherArea = [{ areaName: '宜蘭縣', id: 'F-D0047-001' }, { areaName: '
 // 各地區小助手：document http://opendata.cwb.gov.tw/opendataapi?dataid=F-D0047-001&authorizationkey=KEY
 const helper = [{ areaName: '台北市', id: 'F-C0032-009' }, { areaName: '新北市', id: 'F-C0032-010' }, { areaName: '基隆市', id: 'F-C0032-011' }, { areaName: '花蓮縣', id: 'F-C0032-012' }, { areaName: '宜蘭縣', id: 'F-C0032-013' }, { areaName: '金門縣', id: 'F-C0032-014' }, { areaName: '澎湖縣', id: 'F-C0032-015' }, { areaName: '台南市', id: 'F-C0032-016' }, { areaName: '高雄市', id: 'F-C0032-017' }, { areaName: '嘉義縣', id: 'F-C0032-018' }, { areaName: '嘉義市', id: 'F-C0032-019' }, { areaName: '苗栗縣', id: 'F-C0032-020' }, { areaName: '台中市', id: 'F-C0032-021' }, { areaName: '桃園市', id: 'F-C0032-022' }, { areaName: '新竹縣', id: 'F-C0032-023' }, { areaName: '新竹市', id: 'F-C0032-024' }, { areaName: '屏東縣', id: 'F-C0032-025' }, { areaName: '南投縣', id: 'F-C0032-026' }, { areaName: '台東縣', id: 'F-C0032-027' }, { areaName: '彰化縣', id: 'F-C0032-028' }, { areaName: '雲林縣', id: 'F-C0032-029' }, { areaName: '連江縣', id: 'F-C0032-030' }];
 
-var weather = [];
+var weather = [], lastGet = 0;
 module.exports = {
     getCityWeather: function (city) {
         return new Promise(resolve => {
@@ -56,12 +56,14 @@ module.exports = {
 
 function getAllWeather() {
     return new Promise(function (resolve, reject) {
-        if (weather.length != 0) resolve(weather); else $({
+        let time = new Date();
+        if (weather.length != 0 && (time.getTime() - 21600000) > lastGet) resolve(weather); else $({
             type: 'GET',
             url: 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=' + Config.Weather.AuthorizationKey,
             success: function (data) {
                 data = JSON.parse(data);
                 weather = [];
+                lastGet = time.getTime();
                 console.log('\n\ngetData\n\n');
                 for (let i = 0; i < data.records.location.length; i++) {
                     weather[weather.length] = {
