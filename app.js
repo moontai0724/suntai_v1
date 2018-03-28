@@ -506,7 +506,7 @@ async function MessageHandler(event) {
 											'\n/st calltimer' +
 											'\n/st (earthquakenotification || eqn)' +
 											'\n/st quiz [bsn]' +
-											'\n/st quizans <bsn>' +
+											'\n/st quizans <sn>' +
 											'\n　註：bsn 為巴哈姆特看板編號。' +
 											'\n/st ping <address> [port] [attempt]' +
 											'\n　註：attempt 預設 2，port 預設 80' +
@@ -518,10 +518,10 @@ async function MessageHandler(event) {
 										break;
 									case 'keyword':
 										startReply(MsgFormat.Text('特定回應列表回應如下：' +
-											'\n87' +
-											'\n運勢' +
-											'\n籤運' +
-											'\n@日太 求 機率'));
+											'\n87（完整符合）' +
+											'\n...運勢...' +
+											'\n...籤運...' +
+											'\n...求...的機率...'));
 										break;
 									case 'get':
 										if (msgs[2] == "myid" && event.source.userId) {
@@ -629,7 +629,7 @@ async function MessageHandler(event) {
 												}
 											});
 										} else {
-											startReply(MsgFormat.Text('請以數字選擇接收通知地區，當選擇的地區最大震度二級即會通知。請使用指令：/st eqn <地區編號>\n' + AllCityList));
+											startReply(MsgFormat.Text('請以數字選擇接收通知地區，當選擇的地區最大震度三級即會通知。請使用指令：/st eqn <地區編號>\n' + AllCityList));
 										}
 										break;
 									case 'quiz':
@@ -947,6 +947,17 @@ async function MessageHandler(event) {
 					}
 					break;
 			}
+			LineBotClient.replyMessage(event.replyToken, MsgFormat.Text('您好，我是日太！在和我互動前請先詳讀以下事項：' +
+				'\n1. 由於 Developer Trial 帳號限制最大好友數為 50 人，因此請勿加入好友。' +
+				'\n　 由於 Developer Trial 帳號限制最大好友數為 50 人，因此請勿加入好友！' +
+				'\n　 由於 Developer Trial 帳號限制最大好友數為 50 人，因此請勿加入好友！！\n' +
+				'\n2. 如需獲得任何指令協助，請輸入：/st help' +
+				'\n3. 本帳號以 Minecraft 指令為參考，以下為說明：' +
+				'\n　 a. 兩條直線 || 為「或者」的意思，代表兩個功能是一樣的。' +
+				'\n　 b. 如指令以 () 括住，代表在括弧內的指令皆可通用。例如： /st (history || h) 代表 /st history 功能同等於 /st h。' +
+				'\n　 c. 如指令以 [] 括住，代表該參數為選擇性，加或不加皆可。' +
+				'\n　 d. 如指令以 <> 括住，代表該參數為必要參數，必須要輸入，否則無法運行。' +
+				'\n以上就是日太的操作說明與提醒事項囉！'));
 			break;
 		case 'leave':
 			switch (event.source.type) {
