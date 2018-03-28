@@ -100,9 +100,8 @@ async function MessageHandler(event) {
 		case 'room': SourceData.id = event.source.roomId; break;
 	}
 
-	// SourceData.Profile = await LineBotClient.getProfile(event.source.userId); // displayName, userId, pictureUrl, statusMessage
-	// SourceData.Profile = await LineBotClient.getGroupMemberProfile(event.source.groupId, event.source.userId); // displayName, userId, pictureUrl
-	// SourceData.Profile = await LineBotClient.getRoomMemberProfile(event.source.roomId, event.source.userId); // displayName, userId, pictureUrl
+	var msgs = event.message.text.replace(/\n/g, '').split(' '), authorize = false;
+	if (owners.findIndex(element => { return element.id == SourceData.userId; }) != -1) authorize = true;
 
 	switch (event.type) {
 		case 'message':
@@ -110,8 +109,6 @@ async function MessageHandler(event) {
 			switch (event.message.type) {
 				case 'text':
 					if (event.message.text.startsWith('/')) {
-						var msgs = event.message.text.replace(/\n/g, '').split(' '), authorize = false;
-						if (owners.findIndex(element => { return element.id == SourceData.userId; }) != -1) authorize = true;
 						switch (msgs[0]) {
 							case '/mt':
 								if (authorize == true) {
@@ -913,6 +910,8 @@ async function MessageHandler(event) {
 							startReply(MsgFormat.Text(GetRandomNumber.start(0, 100) + ' %'));
 						} else if (msg == '87') {
 							startReply(MsgFormat.Text('你說誰 87，你全家都 87'));
+						} else if (msg.includes('@日太 說') && authorize == true) {
+							startReply(MsgFormat.Text(event.message.text.replace('@日太 說', '')));
 						}
 					}
 					break;
