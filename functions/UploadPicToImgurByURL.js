@@ -1,6 +1,6 @@
 const najax = $ = require('najax');
 const UTC8Time = require('./UTC8Time');
-const Config = require('../config/config');
+const Config = require('../config/config.json');
 
 module.exports = {
     start: function (imgurl, description) {
