@@ -561,7 +561,7 @@ async function MessageHandler(event) {
 										if (msgs[2] == 'list') {
 											db_settings.all('SELECT * FROM EarthquakeNotification').then(earthquake_notification_list => {
 												if (earthquake_notification_list.find(element => { return element.id == SourceData.id; })) {
-													let eqn_area_list = earthquake_notification_list.find(element => { return element.id == SourceData.id; }).area;
+													let eqn_area_list = earthquake_notification_list.find(element => { return element.id == SourceData.id; }).area.split(', ');
 													let replyMsg = eqn_area_list[0];
 													for (let i = 1; i < eqn_area_list.length; i++) {
 														replyMsg += '、' + eqn_area_list[i];
@@ -598,7 +598,7 @@ async function MessageHandler(event) {
 														})
 													}
 												} else if (earthquake_notification_list.findIndex(element => { return element.id == SourceData.id; }) > -1) {
-													db_settings.all('SELECT * FROM EarthquakeNotification WHERE id=' + SourceData.id).then(data => {
+													db_settings.all('SELECT * FROM EarthquakeNotification WHERE id="' + SourceData.id + '"').then(data => {
 														if (data.area.indexOf(AllCity[Number(msgs[2]) - 1]) > -1) {
 															let areas = data.area.split(', ');
 															areas.splice(areas.indexOf(AllCity[Number(msgs[2]) - 1]), 1);
