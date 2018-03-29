@@ -57,7 +57,7 @@ module.exports = {
 function getAllWeather() {
     return new Promise(function (resolve, reject) {
         let time = new Date();
-        if (weather.length != 0 && (time.getTime() - 21600000) > lastGet) resolve(weather); else $({
+        if (weather.length != 0 && (time.getTime() - 3600000) > lastGet) resolve(weather); else $({
             type: 'GET',
             url: 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=' + Config.Weather.AuthorizationKey,
             success: function (data) {

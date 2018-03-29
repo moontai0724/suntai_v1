@@ -598,7 +598,7 @@ async function MessageHandler(event) {
 														})
 													}
 												} else if (earthquake_notification_list.findIndex(element => { return element.id == SourceData.id; }) > -1) {
-													db_settings.all('SELECT * FROM EarthquakeNotification WHERE id="' + SourceData.id + '"').then(data => {
+													db_settings.get('SELECT * FROM EarthquakeNotification WHERE id="' + SourceData.id + '"').then(data => {
 														if (data.area.indexOf(AllCity[Number(msgs[2]) - 1]) > -1) {
 															let areas = data.area.split(', ');
 															areas.splice(areas.indexOf(AllCity[Number(msgs[2]) - 1]), 1);
