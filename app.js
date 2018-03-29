@@ -604,7 +604,7 @@ async function MessageHandler(event) {
 															areas.splice(areas.indexOf(AllCity[Number(msgs[2]) - 1]), 1);
 															let afterChanged = areas[0];
 															for (let i = 1; i < areas.length; i++) {
-																afterChanged += ', ' + areas[1];
+																afterChanged += ', ' + areas[i];
 															}
 															db_settings.run('UPDATE EarthquakeNotification SET area="' + afterChanged + '" WHERE id="' + SourceData.id + '"').then(() => {
 																startReply(MsgFormat.Text(Number(msgs[2]) + '. ' + AllCity[Number(msgs[2]) - 1] + ' 地區的地震通知已經關閉。'));
