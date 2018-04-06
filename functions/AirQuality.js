@@ -62,11 +62,12 @@ module.exports = {
                         }
                     }
                     reply = '\n空氣品質指標 AQI: ';
-                    if (0 <= result.AQI && result.AQI <= 50) reply += '良好 (' + result.AQI + ')';
-                    else if (51 <= result.AQI && result.AQI <= 100) reply += '普通 (' + result.AQI + ')';
-                    else if (101 <= result.AQI && result.AQI <= 199) reply += '不良 (' + result.AQI + ')';
-                    else if (200 <= result.AQI && result.AQI <= 299) reply += '非常不良 (' + result.AQI + ')';
-                    else if (300 <= result.AQI && result.AQI <= 500) reply += '有害 (' + result.AQI + ')';
+                    if (0 <= result.AQI && result.AQI <= 50) reply += '良好 (' + result.AQI + '): 空氣品質為良好，污染程度低或無污染。';
+                    else if (51 <= result.AQI && result.AQI <= 100) reply += '普通 (' + result.AQI + '): 空氣品質普通，但對非常少數之極敏感族群產生輕微影響。';
+                    else if (101 <= result.AQI && result.AQI <= 150) reply += '對敏感族群不健康 (' + result.AQI + '): 空氣污染物可能會對敏感族群的健康造成影響，但是對一般大眾的影響不明顯。';
+                    else if (151 <= result.AQI && result.AQI <= 200) reply += '對所有族群不健康 (' + result.AQI + '): 對所有人的健康開始產生影響，對於敏感族群可能產生較嚴重的健康影響。';
+                    else if (201 <= result.AQI && result.AQI <= 300) reply += '非常不健康 (' + result.AQI + '): 健康警報：所有人都可能產生較嚴重的健康影響。';
+                    else if (301 <= result.AQI && result.AQI <= 500) reply += '危害 (' + result.AQI + '): 健康威脅達到緊急，所有人都可能受到影響。';
                     reply += '\n細懸浮微粒 PM2.5: ';
                     if (0 <= result['PM2.5'] && result['PM2.5'] <= 11) reply += '1 低 (' + result['PM2.5'] + ')';
                     else if (12 <= result['PM2.5'] && result['PM2.5'] <= 23) reply += '2 低 (' + result['PM2.5'] + ')';
