@@ -66,6 +66,8 @@ const CallTimer = require('./functions/CallTimer');
 const Chatlog = require('./functions/Chatlog');
 const Fortune = require('./functions/Fortune');
 const Weather = require('./functions/Weather');
+const AirQuality = require('./AirQuality');
+const Ultraviolet = require('./Ultraviolet');
 
 // ================================================== My Functions Over ==================================================
 // ================================================== Start My Program ==================================================
@@ -515,10 +517,12 @@ async function MessageHandler(event) {
 										break;
 									case 'keyword':
 										startReply(MsgFormat.Text('特定回應列表回應如下：' +
-											'\n87（完整符合）' +
-											'\n...運勢...' +
-											'\n...籤運...' +
-											'\n...求...的機率...'));
+											'\n需完整符合：' +
+											'\n87' +
+											'\n部分符合即可：' +
+											'\n運勢' +
+											'\n籤運' +
+											'\n求...的機率'));
 										break;
 									case 'get':
 										if (msgs[2] == "myid" && event.source.userId) {
@@ -626,7 +630,7 @@ async function MessageHandler(event) {
 												}
 											});
 										} else {
-											startReply(MsgFormat.Text('請以數字選擇接收通知地區，當選擇的地區最大震度三級即會通知。請使用指令：/st eqn <地區編號>\n' + AllCityList));
+											startReply(MsgFormat.Text('請以數字選擇接收通知地區，當選擇的地區最大震度三級即會通知。請使用指令：/st eqn <地區編號>\n' + AllCityList + '\n輸入 /st eqn list 可察看目前設定通知區域。'));
 										}
 										break;
 									case 'quiz':
@@ -890,6 +894,9 @@ async function MessageHandler(event) {
 													startReply(MsgFormat.Text('缺少地區參數，請重新輸入指令。下列為可選地區：' + AllCityList));
 												}
 												break;
+											default:
+
+												break;
 										}
 										break;
 									default:
@@ -912,6 +919,14 @@ async function MessageHandler(event) {
 							startReply(MsgFormat.Text('你說誰 87，你全家都 87'));
 						} else if (msg.includes('@日太 說') && authorize == true) {
 							startReply(MsgFormat.Text(event.message.text.replace('@日太 說', '')));
+						} else if (msg.includes('氣象')) {
+							AllCity.forEach(element => {
+								if (msg.includes(element)) {
+									startReply(MsgFormat.Text(Weather.getCityWeather(element)),
+										MsgFormat.Text('目前觀測：' + AirQuality.get(element) + Ultraviolet.get(element)));
+									break;
+								}
+							});
 						}
 					}
 					break;

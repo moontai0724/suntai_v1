@@ -36,7 +36,7 @@ module.exports = {
                 if (weather) {
                     let reply = '以下是 ' + city + ' 的未來 36 小時天氣概況：';
                     for (let i = 0; i < 3; i++) {
-                        reply += '\n' + weather.time[i].startDate + ' ' + weather.time[i].startHour + ' 時至 ' + weather.time[i].endDate + ' ' + weather.time[i].endHour + ' 時' +
+                        reply += '\n\n' + weather.time[i].startDate + ' ' + weather.time[i].startHour + ' 時至 ' + weather.time[i].endDate + ' ' + weather.time[i].endHour + ' 時' +
                             '\n氣溫：' + weather.minTamperature[i] + ' ~ ' + weather.maxTamperature[i] +
                             '\n降雨機率：' + weather.rainfall[i] +
                             '\n整體天氣狀況：' + weather.weatherDescription[i] + ' ' + weather.tamperatureDestription[i];
