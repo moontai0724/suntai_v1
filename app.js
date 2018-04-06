@@ -922,8 +922,8 @@ async function MessageHandler(event) {
 						} else if (msg.includes('氣象')) {
 							AllCity.forEach(element => {
 								if (msg.includes(element)) {
-									startReply(MsgFormat.Text(Weather.getCityWeather(element)),
-										MsgFormat.Text('目前觀測：' + AirQuality.get(element) + Ultraviolet.get(element)));
+									startReply(MsgFormat.Text(await Weather.getCityWeather(element)),
+										MsgFormat.Text('目前觀測：' + await AirQuality.get(element) + await Ultraviolet.get(element)));
 								}
 							});
 						}
