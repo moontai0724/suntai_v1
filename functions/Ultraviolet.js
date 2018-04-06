@@ -28,10 +28,10 @@ module.exports = {
                     UVI = Math.round(UVI);
                     reply = '\n紫外線指數：';
                     if (0 <= UVI && UVI <= 2) reply += '􀔃􀇫small green triangle􏿿微量級 (' + UVI + '): 對於一般人無危險';
-                    else if (3 <= UVI && UVI <= 5) reply += '􂜁􀆑.􏿿低量級 (' + UVI + '): 無保護暴露於陽光中有較輕傷害的風險';
+                    else if (3 <= UVI && UVI <= 5) reply += '􂘁􀆊up􏿿低量級 (' + UVI + '): 無保護暴露於陽光中有較輕傷害的風險';
                     else if (6 <= UVI && UVI <= 7) reply += '􀔃􀇪small yellow reversed triangle􏿿中量級 (' + UVI + '): 無保護暴露於陽光中有很大傷害的風險';
                     else if (8 <= UVI && UVI <= 10) reply += '􂘁􀆑.􏿿過量級 (' + UVI + '): 暴露於陽光中有極高風險';
-                    else if (11 <= UVI) reply += '􂘁􀆋down􏿿危險級 (' + UVI + '): 暴露於陽光中極其危險';
+                    else if (11 <= UVI) reply += '􂠁􀆐.􏿿危險級 (' + UVI + '): 暴露於陽光中極其危險';
                     resolve(reply);
                 }
             });
