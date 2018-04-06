@@ -924,7 +924,6 @@ async function MessageHandler(event) {
 								if (msg.includes(element)) {
 									startReply(MsgFormat.Text(Weather.getCityWeather(element)),
 										MsgFormat.Text('目前觀測：' + AirQuality.get(element) + Ultraviolet.get(element)));
-									break;
 								}
 							});
 						}
