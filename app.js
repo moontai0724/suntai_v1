@@ -66,8 +66,8 @@ const CallTimer = require('./functions/CallTimer');
 const Chatlog = require('./functions/Chatlog');
 const Fortune = require('./functions/Fortune');
 const Weather = require('./functions/Weather');
-const AirQuality = require('./AirQuality');
-const Ultraviolet = require('./Ultraviolet');
+const AirQuality = require('./functions/AirQuality');
+const Ultraviolet = require('./functions/Ultraviolet');
 
 // ================================================== My Functions Over ==================================================
 // ================================================== Start My Program ==================================================
