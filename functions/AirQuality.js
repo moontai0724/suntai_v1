@@ -20,56 +20,53 @@ module.exports = {
         return new Promise(resolve => {
             let time = new Date().getDate + new Date().getHours;
             if (lastTime != time) {
-                await new Promise(resolve => {
-                    lastTime = time;
-                    $({
-                        mode: "GET",
-                        url: "http://opendata2.epa.gov.tw/AQI.json",
-                        success: function (data) {
-                            data = JSON.parse(data);
-                            result = {
-                                "County": 0,
-                                "AQI": 0,
-                                "Pollutant": "",
-                                "Status": "",
-                                "SO2": 0,
-                                "CO": 0,
-                                "CO_8hr": 0,
-                                "O3": 0,
-                                "O3_8hr": 0,
-                                "PM10": 0,
-                                "PM2.5": 0,
-                                "NO2": 0,
-                                "NOx": 0,
-                                "NO": 0,
-                                "WindSpeed": 0,
-                                "WindDirec": 0,
-                                "PM2.5_AVG": 0,
-                                "PM10_AVG": 0
-                            }
-                            data.forEach(element => {
-                                if (element.County == county) {
-                                    result.Status = element.Status;
-                                    result.County = element.County;
-                                    for (let i = 0; i < item.length; i++) {
-                                        if (!isNaN(element[item[i]]))
-                                            result[item[i]] = (Number(result[item[i]]) + Number(element[item[i]])) / 2;
-                                    }
-                                }
-                            });
-                            for (let i = 0; i < item.length; i++) {
-                                switch (item[i]) {
-                                    case 'SO2': case 'CO': case 'CO_8hr': case 'NO2': case 'NOx': case 'NO':
-                                        result[item[i]] = Math.round(result[item[i]] * 10) / 10;
-                                        break;
-                                    default:
-                                        result[item[i]] = Math.round(result[item[i]]);
-                                        break;
-                                }
-                            }
-                            resolve(result);
+                lastTime = time;
+                await $({
+                    mode: "GET",
+                    url: "http://opendata2.epa.gov.tw/AQI.json",
+                    success: function (data) {
+                        data = JSON.parse(data);
+                        result = {
+                            "County": 0,
+                            "AQI": 0,
+                            "Pollutant": "",
+                            "Status": "",
+                            "SO2": 0,
+                            "CO": 0,
+                            "CO_8hr": 0,
+                            "O3": 0,
+                            "O3_8hr": 0,
+                            "PM10": 0,
+                            "PM2.5": 0,
+                            "NO2": 0,
+                            "NOx": 0,
+                            "NO": 0,
+                            "WindSpeed": 0,
+                            "WindDirec": 0,
+                            "PM2.5_AVG": 0,
+                            "PM10_AVG": 0
                         }
-                    })
+                        data.forEach(element => {
+                            if (element.County == county) {
+                                result.Status = element.Status;
+                                result.County = element.County;
+                                for (let i = 0; i < item.length; i++) {
+                                    if (!isNaN(element[item[i]]))
+                                        result[item[i]] = (Number(result[item[i]]) + Number(element[item[i]])) / 2;
+                                }
+                            }
+                        });
+                        for (let i = 0; i < item.length; i++) {
+                            switch (item[i]) {
+                                case 'SO2': case 'CO': case 'CO_8hr': case 'NO2': case 'NOx': case 'NO':
+                                    result[item[i]] = Math.round(result[item[i]] * 10) / 10;
+                                    break;
+                                default:
+                                    result[item[i]] = Math.round(result[item[i]]);
+                                    break;
+                            }
+                        }
+                    }
                 });
             }
             reply = '\n空氣品質指標 AQI: ';
