@@ -920,13 +920,17 @@ async function MessageHandler(event) {
 						} else if (msg.includes('@日太 說') && authorize == true) {
 							startReply(MsgFormat.Text(event.message.text.replace('@日太 說', '')));
 						} else if (msg.includes('氣象')) {
-							setTimeout(async function () {
-								AllCity.forEach(element => {
-									if (msg.includes(element)) {
-										startReply(MsgFormat.Text(await Weather.getCityWeather(element)),
-											MsgFormat.Text('目前觀測：' + await AirQuality.get(element) + await Ultraviolet.get(element)));
-									}
-								});
+							AllCity.forEach(element => {
+								if (msg.includes(element)) {
+									Weather.getCityWeather(element).then(weather => {
+										AirQuality.get(element).then(AirQualityNow => {
+											Ultraviolet.get(element).then(UltravioletNow => {
+												startReply(MsgFormat.Text(weather),
+													MsgFormat.Text('目前觀測：' + AirQualityNow + UltravioletNow));
+											});
+										});
+									});
+								}
 							});
 						}
 					}
