@@ -63,7 +63,7 @@ module.exports = {
                     }
                     reply = '\n空氣品質指標 AQI: (1~6)\n';
                     if (0 <= result.AQI && result.AQI <= 50) reply += '􀔃􀇫small green triangle􏿿1 良好 (' + result.AQI + '): 空氣品質為良好，污染程度低或無污染。';
-                    else if (51 <= result.AQI && result.AQI <= 100) reply += '􀔃􀇫small green triangle􏿿􂘁􀆊up􏿿2 普通 (' + result.AQI + '): 空氣品質普通，但對非常少數之極敏感族群產生輕微影響。';
+                    else if (51 <= result.AQI && result.AQI <= 100) reply += '􂘁􀆊up􏿿2 普通 (' + result.AQI + '): 空氣品質普通，但對非常少數之極敏感族群產生輕微影響。';
                     else if (101 <= result.AQI && result.AQI <= 150) reply += '􀔃􀇪small yellow reversed triangle􏿿3 對敏感族群不健康 (' + result.AQI + '): 空氣污染物可能會對敏感族群的健康造成影響，但是對一般大眾的影響不明顯。';
                     else if (151 <= result.AQI && result.AQI <= 200) reply += '􂘁􀆑.􏿿4 對所有族群不健康 (' + result.AQI + '): 對所有人的健康開始產生影響，對於敏感族群可能產生較嚴重的健康影響。';
                     else if (201 <= result.AQI && result.AQI <= 300) reply += '􂠁􀆐.􏿿5 非常不健康 (' + result.AQI + '): 健康警報：所有人都可能產生較嚴重的健康影響。';
@@ -77,7 +77,7 @@ module.exports = {
                     else if (48 <= result['PM2.5'] && result['PM2.5'] <= 53) reply += '􀔃􀇪small yellow reversed triangle􏿿6 中 (' + result['PM2.5'] + ')';
                     else if (54 <= result['PM2.5'] && result['PM2.5'] <= 58) reply += '􂘁􀆑.􏿿7 高 (' + result['PM2.5'] + ')';
                     else if (59 <= result['PM2.5'] && result['PM2.5'] <= 64) reply += '􂘁􀆑.􏿿8 高 (' + result['PM2.5'] + ')';
-                    else if (65 <= result['PM2.5'] && result['PM2.5'] <= 70) reply += '􂘁􀆑.􏿿􂠁􀆐.􏿿9 高 (' + result['PM2.5'] + ')';
+                    else if (65 <= result['PM2.5'] && result['PM2.5'] <= 70) reply += '􂘁􀆑.􏿿9 高 (' + result['PM2.5'] + ')';
                     else if (71 <= result['PM2.5']) reply += '􀔃􀇢red circle􏿿10 非常高 (' + result['PM2.5'] + ')';
                     resolve(reply);
                 }
