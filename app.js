@@ -920,6 +920,7 @@ async function MessageHandler(event) {
 						} else if (msg.includes('@日太 說') && authorize == true) {
 							startReply(MsgFormat.Text(event.message.text.replace('@日太 說', '')));
 						} else if (msg.includes('氣象')) {
+							msg.replace(/台/g, '臺');
 							AllCity.forEach(element => {
 								if (msg.includes(element)) {
 									Weather.getCityWeather(element).then(weather => {
