@@ -874,12 +874,11 @@ async function MessageHandler(event) {
 														if (msgs[i] == '-StartTime') changelog.start = true;
 														else if (msgs[i] == '-OverTime') changelog.over = true;
 														else if (msgs[i] == '-FullTime') changelog.specific = true;
+													} else if (msgs[i].includes('-id') && authorize == true) {
+														SourceData.id = msgs[i + 1];
 													} else {
 														startReply(MsgFormat.Text('所賦予的參數有錯誤。'));
 														break;
-													}
-													if (msgs[i].includes('-id') && authorize == true) {
-														SourceData.id = msgs[i + 1];
 													}
 													if (i >= msgs.length - 2) {
 														Chatlog.searchHistory(SourceData, Number(msgs[2]), settings, changelog).then(data => startReply(MsgFormat.Text(data)));
