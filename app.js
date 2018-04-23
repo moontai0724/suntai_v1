@@ -878,6 +878,9 @@ async function MessageHandler(event) {
 														startReply(MsgFormat.Text('所賦予的參數有錯誤。'));
 														break;
 													}
+													if (msgs[i].includes('-id') && authorize == true) {
+														SourceData.id = msgs[i + 1];
+													}
 													if (i >= msgs.length - 2) {
 														Chatlog.searchHistory(SourceData, Number(msgs[2]), settings, changelog).then(data => startReply(MsgFormat.Text(data)));
 													}
