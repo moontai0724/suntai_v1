@@ -1070,12 +1070,12 @@ setTimeout(function checkConnect(ms) {
 						if (!data) {
 							console.log('no ngrokURL data');
 							db_settings.run('INSERT INTO Variables VALUES ("ngrokURL", "' + url + '")').then(() => {
-								for (let i = 0; i < owners_notice_ngrok.length; i++) LineBotClient.pushMessage(owners_notice_ngrok[i].id, MsgFormat.Text([UTC8Time.getNowTime() + '\n網址已變更，請手動更改網址為：' + url + '\n\nline: https://developers.line.me/console/channel/1558579961/basic/' + '\ngithub: https://github.com/moontai0724/suntaidev/settings/hooks/24784567', url.split('://')[1].split('.')[0]]));
+								for (let i = 0; i < owners_notice_ngrok.length; i++) LineBotClient.pushMessage(owners_notice_ngrok[i].id, MsgFormat.Text([UTC8Time.getNowTime() + '\n網址已變更，請手動更改網址為：' + url + '\n\nline: https://developers.line.me/console/channel/1558579961/basic/' + '\ngithub: https://github.com/moontai0724/suntaidev/settings/hooks/24784567', MsgFormat.Text(url.split('://')[1].split('.')[0])]));
 							});
 						} else if (data.text != url) {
 							console.log('ngrokURL changed');
 							db_settings.run('UPDATE Variables SET text="' + url + '" WHERE name="ngrokURL"').then(() => {
-								for (let i = 0; i < owners_notice_ngrok.length; i++) LineBotClient.pushMessage(owners_notice_ngrok[i].id, MsgFormat.Text([UTC8Time.getNowTime() + '\n網址已變更，請手動更改網址為：' + url + '\n\nline: https://developers.line.me/console/channel/1558579961/basic/' + '\ngithub: https://github.com/moontai0724/suntaidev/settings/hooks/24784567', url.split('://')[1].split('.')[0]]));
+								for (let i = 0; i < owners_notice_ngrok.length; i++) LineBotClient.pushMessage(owners_notice_ngrok[i].id, MsgFormat.Text([UTC8Time.getNowTime() + '\n網址已變更，請手動更改網址為：' + url + '\n\nline: https://developers.line.me/console/channel/1558579961/basic/' + '\ngithub: https://github.com/moontai0724/suntaidev/settings/hooks/24784567', MsgFormat.Text(url.split('://')[1].split('.')[0])]));
 							});
 						} else {
 							LineBotClient.pushMessage('R9906a7c54c6d722a5d523d937f32e677', MsgFormat.Text(UTC8Time.getNowTime() + '\n目前日太於 ' + url + ' 運作狀況良好。'));
@@ -1086,7 +1086,7 @@ setTimeout(function checkConnect(ms) {
 				for (let i = 0; i < owners_notice_ngrok.length; i++) LineBotClient.pushMessage(owners_notice_ngrok[i].id, MsgFormat.Text(UTC8Time.getNowTime() + '\n目前沒有 ngrok 連線。'));
 			}
 		});
-		UTC8Time.getNowTimePromise().then(time => checkConnect((((5 - time.time_min % 5) * 60) - time.time_sec) * 1000 - time.time_ms));
+		UTC8Time.getNowTimePromise().then(time => checkConnect((((5 - time.time_min % 5) * 60) - time.time_sec) * 1000 - time.time_ms + 5000));
 	}, ms ? ms : 5000);
 });
 
