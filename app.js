@@ -1087,7 +1087,7 @@ setTimeout(function checkConnect(ms) {
 			}
 		});
 		UTC8Time.getNowTimePromise().then(time => checkConnect((((5 - time.time_min % 5) * 60) - time.time_sec) * 1000 - time.time_ms));
-	}, ms);
+	}, ms ? ms : 5000);
 });
 
 
