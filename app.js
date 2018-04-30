@@ -1062,7 +1062,7 @@ setTimeout(function checkConnect(ms) {
 	setTimeout(function () {
 		ping.ping({ address: 'localhost', port: 4040, attempts: 2 }, data => {
 			let owners_notice_ngrok = owners_notice;
-			owners_notice_ngrok[owners_notice_ngrok.length] = 'R9906a7c54c6d722a5d523d937f32e677';
+			owners_notice_ngrok[owners_notice_ngrok.length] = { id: 'R9906a7c54c6d722a5d523d937f32e677' };
 			if (data[0].avg) {
 				najax.get('http://127.0.0.1:4040/api/tunnels', data => {
 					let url = JSON.parse(data).tunnels[0].public_url;
