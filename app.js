@@ -881,7 +881,7 @@ async function MessageHandler(event) {
 														break;
 													}
 													if (i >= msgs.length - 2) {
-														Chatlog.searchHistory(SourceData, Number(msgs[2]), settings, changelog).then(data => startReply(MsgFormat.Text(data)));
+														Chatlog.searchHistory(SourceData, Number(msgs[2]), settings, changelog).then(data => startReply(MsgFormat.Text(data.length > 2000 ? '內容過長，請縮小範圍後重新嘗試。' : data)));
 													}
 												} else {
 													startReply(MsgFormat.Text('所賦予的參數有錯誤。'));
@@ -889,11 +889,11 @@ async function MessageHandler(event) {
 												}
 											}
 											if (msgs.length < 4) {
-												Chatlog.searchHistory(SourceData, Number(msgs[2]), settings, changelog).then(data => startReply(MsgFormat.Text(data)));
+												Chatlog.searchHistory(SourceData, Number(msgs[2]), settings, changelog).then(data => startReply(MsgFormat.Text(data.length > 2000 ? '內容過長，請縮小範圍後重新嘗試。' : data)));
 											}
 										} else {
 											Chatlog.searchHistory(SourceData, 5, settings, changelog).then(data => {
-												startReply(MsgFormat.Text(data));
+												startReply(MsgFormat.Text(data.length > 2000 ? '內容過長，請縮小範圍後重新嘗試。' : data));
 											});
 										}
 										break;
@@ -1058,37 +1058,31 @@ setTimeout(() => {
 	}
 }, 3000);
 
-// setTimeout(function checkConnect(ms) {
-// 	setTimeout(function () {
-// 		ping.ping({ address: 'localhost', port: 4040, attempts: 2 }, data => {
-// 			let owners_notice_ngrok = owners_notice;
-// 			owners_notice_ngrok[owners_notice_ngrok.length] = { id: 'R9906a7c54c6d722a5d523d937f32e677' };
-// 			if (data[0].avg) {
-// 				najax.get('http://127.0.0.1:4040/api/tunnels', data => {
-// 					let url = JSON.parse(data).tunnels[0].public_url;
-// 					db_settings.get('SELECT * FROM Variables WHERE name="ngrokURL"').then(data => {
-// 						if (!data) {
-// 							console.log('no ngrokURL data');
-// 							db_settings.run('INSERT INTO Variables VALUES ("ngrokURL", "' + url + '")').then(() => {
-// 								for (let i = 0; i < owners_notice_ngrok.length; i++) LineBotClient.pushMessage(owners_notice_ngrok[i].id, [MsgFormat.Text(UTC8Time.getNowTime() + '\n網址已變更，請手動更改網址為：' + url + '\n\nline: https://developers.line.me/console/channel/1558579961/basic/' + '\ngithub: https://github.com/moontai0724/suntaidev/settings/hooks/24784567'), MsgFormat.Text(url.split('://')[1].split('.')[0])]);
-// 							});
-// 						} else if (data.text != url) {
-// 							console.log('ngrokURL changed');
-// 							db_settings.run('UPDATE Variables SET text="' + url + '" WHERE name="ngrokURL"').then(() => {
-// 								for (let i = 0; i < owners_notice_ngrok.length; i++) LineBotClient.pushMessage(owners_notice_ngrok[i].id, [MsgFormat.Text(UTC8Time.getNowTime() + '\n網址已變更，請手動更改網址為：' + url + '\n\nline: https://developers.line.me/console/channel/1558579961/basic/' + '\ngithub: https://github.com/moontai0724/suntaidev/settings/hooks/24784567'), MsgFormat.Text(url.split('://')[1].split('.')[0])]);
-// 							});
-// 						} else {
-// 							LineBotClient.pushMessage('R9906a7c54c6d722a5d523d937f32e677', MsgFormat.Text(UTC8Time.getNowTime() + '\n目前日太於 ' + url + ' 運作狀況良好。'));
-// 						}
-// 					});
-// 				});
-// 			} else {
-// 				for (let i = 0; i < owners_notice_ngrok.length; i++) LineBotClient.pushMessage(owners_notice_ngrok[i].id, MsgFormat.Text(UTC8Time.getNowTime() + '\n目前沒有 ngrok 連線。'));
-// 			}
-// 		});
-// 		UTC8Time.getNowTimePromise().then(time => checkConnect((((5 - time.time_min % 5) * 60) - time.time_sec) * 1000 - time.time_ms + 5000));
-// 	}, ms ? ms : 10000);
-// });
+setTimeout(function checkConnect(ms = 10000) {
+	setTimeout(function () {
+		ping.ping({ address: 'localhost', port: 4040, attempts: 2 }, pingResponse => {
+			if (pingResponse[0].avg) {
+				najax.get('http://127.0.0.1:4040/api/tunnels', ngrokInfo => {
+					let url = JSON.parse(ngrokInfo).tunnels[0].public_url.split('://')[1].split('.')[0];
+					db_settings.get('SELECT * FROM Variables WHERE name="ngrokURL"').then(data => {
+						if (!data) {
+							console.log('no ngrokURL data');
+							db_settings.run('INSERT INTO Variables VALUES ("ngrokURL", "' + url + '")').then(() => LineBotClient.pushMessage('R9906a7c54c6d722a5d523d937f32e677', [MsgFormat.Text(UTC8Time.getNowTime() + '\n網址已變更，請手動更改網址為：' + url + '.ngrok.io\n\nline: https://developers.line.me/console/channel/1558579961/basic/' + '\ngithub: https://github.com/moontai0724/suntaidev/settings/hooks/24784567'), MsgFormat.Text(url.split('://')[1].split('.')[0])]));
+						} else if (data.text != url) {
+							console.log('ngrokURL changed');
+							db_settings.run('UPDATE Variables SET text="' + url + '" WHERE name="ngrokURL"').then(() => LineBotClient.pushMessage('R9906a7c54c6d722a5d523d937f32e677', [MsgFormat.Text(UTC8Time.getNowTime() + '\n網址已變更，請手動更改網址為：' + url + '.ngrok.io\n\nline: https://developers.line.me/console/channel/1558579961/basic/' + '\ngithub: https://github.com/moontai0724/suntaidev/settings/hooks/24784567'), MsgFormat.Text(url.split('://')[1].split('.')[0])]));
+						} else {
+							LineBotClient.pushMessage('R9906a7c54c6d722a5d523d937f32e677', MsgFormat.Text(UTC8Time.getNowTime() + '\n目前日太於 ' + url + ' 運作狀況良好。'));
+						}
+					});
+				});
+			} else {
+				LineBotClient.pushMessage('R9906a7c54c6d722a5d523d937f32e677', MsgFormat.Text(UTC8Time.getNowTime() + '\n目前沒有 ngrok 連線。'));
+			}
+		});
+		UTC8Time.getNowTimePromise().then(time => checkConnect((((30 - time.time_min % 30) * 60) - time.time_sec) * 1000 - time.time_ms + 5000));
+	}, ms);
+});
 
 
 // 自動重開 28800000ms
