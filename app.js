@@ -106,7 +106,7 @@ async function MessageHandler(event) {
 
 	switch (event.type) {
 		case 'message':
-			if (!(event.message.text.startsWith('//') && authorize == true)) Chatlog.log(event);
+			if (!(event.message.type == 'text' && event.message.text.startsWith('//') && authorize == true)) Chatlog.log(event);
 			switch (event.message.type) {
 				case 'text':
 					if (event.message.text.startsWith('/')) {
