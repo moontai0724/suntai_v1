@@ -43,7 +43,7 @@ router.post('/', ctx => {
 })
 
 app.use(router.routes());
-app.use(console.log);
+app.use(ctx => console.log(ctx));
 
 // Service Startup
 const server = app.listen(8080);
