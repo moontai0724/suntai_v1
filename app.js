@@ -23,10 +23,6 @@ app.use(KoaBodyParser());
 
 // Webhook
 router.post('/', ctx => {
-	console.log('ctx', JSON.stringify(ctx));
-	console.log('ctx.request', JSON.stringify(ctx.request));
-	console.log('ctx.request.body', ctx.request.body);
-	console.log('ctx.request.header', JSON.stringify(ctx.request.header));
 	if (ctx.request.header['user-agent'].includes('LineBotWebhook')) {
 		const req = ctx.request;
 		if (LineBotSDK.validateSignature(req.rawBody, Config.LineBot.channelSecret, req.headers['x-line-signature'])) {
@@ -38,6 +34,10 @@ router.post('/', ctx => {
 			ctx.status = 401;
 		}
 	} else if (ctx.request.header['user-agent'].includes('GitHub')) {
+		console.log('ctx', JSON.stringify(ctx));
+		console.log('ctx.request', JSON.stringify(ctx.request));
+		console.log('ctx.request.body', ctx.request.body);
+		console.log('ctx.request.header', JSON.stringify(ctx.request.header));
 		ctx.status = 200;
 		server.close(() => {
 			console.log('Received GitHub push message, server restarted.');
