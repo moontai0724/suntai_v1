@@ -34,6 +34,7 @@ router.post('/', ctx => {
 			ctx.status = 401;
 		}
 	} else if (ctx.request.header['user-agent'].includes('GitHub')) {
+		console.log(ctx.request.rawBody);
 		ctx.status = 200;
 		server.close(() => {
 			console.log('Received GitHub push message, server restarted.');
