@@ -25,9 +25,8 @@ app.use(KoaBodyParser());
 router.post('/', ctx => {
 	console.log('ctx', JSON.stringify(ctx));
 	console.log('ctx.request', JSON.stringify(ctx.request));
+	console.log('ctx.request.body', ctx.request.body);
 	console.log('ctx.request.header', JSON.stringify(ctx.request.header));
-	console.log('ctx.req', ctx.req);
-	console.log('ctx.res', ctx.req);
 	if (ctx.request.header['user-agent'].includes('LineBotWebhook')) {
 		const req = ctx.request;
 		if (LineBotSDK.validateSignature(req.rawBody, Config.LineBot.channelSecret, req.headers['x-line-signature'])) {
