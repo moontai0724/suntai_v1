@@ -19,7 +19,7 @@ const app = new Koa();
 const router = new KoaRouter();
 const LineBotClient = new LineBotSDK.Client(Config.LineBot);
 
-app.use((KoaBodyParser(), console.log));
+app.use(KoaBodyParser());
 
 // Webhook
 router.post('/', ctx => {
