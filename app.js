@@ -30,15 +30,11 @@ router.post('/', ctx => {
 			ctx.request.body.events.map(MessageHandler);
 		}
 		else {
-			ctx.body = '驗證失敗';
+			ctx.body = 'Authorize failed.';
 			ctx.status = 401;
 		}
 	} else if (ctx.request.header['user-agent'].includes('GitHub')) {
-		console.log(Config.GitHub.webhookSecret);
-		console.log(ctx.request.header);
-		console.log(ctx.request.header['X-Hub-Signature']);
-		console.log('sha1=' + crypto.createHmac('SHA1', Config.GitHub.webhookSecret).update(ctx.request.rawBody).digest('hex'));
-		if (ctx.request.header['X-Hub-Signature'] == 'sha1=' + crypto.createHmac('SHA1', Config.GitHub.webhookSecret).update(ctx.request.rawBody).digest('hex')) {
+		if (ctx.request.header['x-hub-signature'] == 'sha1=' + crypto.createHmac('SHA1', Config.GitHub.webhookSecret).update(ctx.request.rawBody).digest('hex')) {
 			ctx.status = 200;
 			ctx.body = 'Server Restarted.';
 			server.close(() => {
@@ -48,6 +44,7 @@ router.post('/', ctx => {
 		} else {
 			ctx.status = 401;
 			ctx.body = 'Authorize failed.';
+			console.log('Received a fake GitHub webhook!');
 		}
 	}
 });
