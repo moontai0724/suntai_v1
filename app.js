@@ -19,15 +19,10 @@ const app = new Koa();
 const router = new KoaRouter();
 const LineBotClient = new LineBotSDK.Client(Config.LineBot);
 
-app.use(ctx => {
-	console.log(ctx);
-	KoaBodyParser();
-});
-// app.use(KoaBodyParser());
+app.use((KoaBodyParser(), console.log));
 
 // Webhook
 router.post('/', ctx => {
-	console.log('HAVE MSG');
 	if (ctx.request.header['user-agent'].includes('LineBotWebhook')) {
 		const req = ctx.request;
 		if (LineBotSDK.validateSignature(req.rawBody, Config.LineBot.channelSecret, req.headers['x-line-signature'])) {
@@ -45,7 +40,7 @@ router.post('/', ctx => {
 			process.exit();
 		});
 	}
-})
+});
 
 app.use(router.routes());
 
