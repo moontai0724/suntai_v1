@@ -119,7 +119,7 @@ async function MessageHandler(event) {
 											startReply(MsgFormat.Text('可用指令如下：' +
 												'\n* /st get myid' +
 												'\n/mt ngrok (noauth || auth)' +
-												'\n/mt (shutdown || restart) [sec]' +
+												'\n/mt restart [sec]' +
 												'\n/mt addfriend' +
 												'\n/mt (calltimertest || ctt) [groupId/userId]' +
 												'\n/mt get (id || i) (group/room)' +
@@ -181,7 +181,7 @@ async function MessageHandler(event) {
 													break;
 											}
 											break;
-										case 'shutdown': case 'restart':
+										case 'restart':
 											if (msgs[2]) {
 												setTimeout(() => {
 													server.close(() => {
@@ -1067,10 +1067,10 @@ setTimeout(function checkConnect(ms = 10000) {
 					db_settings.get('SELECT * FROM Variables WHERE name="ngrokURL"').then(data => {
 						if (!data) {
 							console.log('no ngrokURL data');
-							db_settings.run('INSERT INTO Variables VALUES ("ngrokURL", "' + url + '")').then(() => LineBotClient.pushMessage('R9906a7c54c6d722a5d523d937f32e677', [MsgFormat.Text(UTC8Time.getNowTime() + '\n網址已變更，請手動更改網址為： ' + url + '.ngrok.io\n\nline: https://developers.line.me/console/channel/1558579961/basic/' + '\ngithub: https://github.com/moontai0724/suntaidev/settings/hooks/24784567'), MsgFormat.Text(url)]));
+							db_settings.run('INSERT INTO Variables VALUES ("ngrokURL", "' + url + '")').then(() => LineBotClient.pushMessage('R9906a7c54c6d722a5d523d937f32e677', [MsgFormat.Text(UTC8Time.getNowTime() + '\n網址已變更，請手動更改網址為： ' + url + '.ngrok.io\n\nline: https://developers.line.me/console/channel/1558579961/basic/' + '\ngithub: https://github.com/moontai0724/suntaidev_old/settings/hooks/24784567'), MsgFormat.Text(url)]));
 						} else if (data.text != url) {
 							console.log('ngrokURL changed');
-							db_settings.run('UPDATE Variables SET text="' + url + '" WHERE name="ngrokURL"').then(() => LineBotClient.pushMessage('R9906a7c54c6d722a5d523d937f32e677', [MsgFormat.Text(UTC8Time.getNowTime() + '\n網址已變更，請手動更改網址為： ' + url + '.ngrok.io\n\nline: https://developers.line.me/console/channel/1558579961/basic/' + '\ngithub: https://github.com/moontai0724/suntaidev/settings/hooks/24784567'), MsgFormat.Text(url)]));
+							db_settings.run('UPDATE Variables SET text="' + url + '" WHERE name="ngrokURL"').then(() => LineBotClient.pushMessage('R9906a7c54c6d722a5d523d937f32e677', [MsgFormat.Text(UTC8Time.getNowTime() + '\n網址已變更，請手動更改網址為： ' + url + '.ngrok.io\n\nline: https://developers.line.me/console/channel/1558579961/basic/' + '\ngithub: https://github.com/moontai0724/suntaidev_old/settings/hooks/24784567'), MsgFormat.Text(url)]));
 						} else {
 							LineBotClient.pushMessage('R9906a7c54c6d722a5d523d937f32e677', MsgFormat.Text(UTC8Time.getNowTime() + '\n目前日太於 ' + url + ' 運作狀況良好。'));
 						}
