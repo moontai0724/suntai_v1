@@ -12,6 +12,7 @@ const najax = $ = require('najax');
 const parseString = require('xml2js').parseString;
 const sqlite = require('sqlite');
 const ping = require('ping-net');
+const crypto = require('crypto'); // nodejs built-in package
 
 // Require config
 const Config = require('./config/config.json');
@@ -24,22 +25,26 @@ app.use(KoaBodyParser());
 // Webhook
 router.post('/', ctx => {
 	if (ctx.request.header['user-agent'].includes('LineBotWebhook')) {
-		const req = ctx.request;
-		if (LineBotSDK.validateSignature(req.rawBody, Config.LineBot.channelSecret, req.headers['x-line-signature'])) {
+		if (LineBotSDK.validateSignature(ctx.request.rawBody, Config.LineBot.channelSecret, ctx.request.headers['x-line-signature'])) {
 			ctx.status = 200;
-			req.body.events.map(MessageHandler);
+			ctx.request.body.events.map(MessageHandler);
 		}
 		else {
 			ctx.body = '驗證失敗';
 			ctx.status = 401;
 		}
 	} else if (ctx.request.header['user-agent'].includes('GitHub')) {
-		console.log(ctx.request.rawBody);
-		ctx.status = 200;
-		server.close(() => {
-			console.log('Received GitHub push message, server restarted.');
-			process.exit();
-		});
+		if (ctx.request.header['X-Hub-Signature'] == 'sha1=' + crypto.createHmac('SHA1', Config.GitHub.webhookSecret).update(ctx.request.rawBody).digest('hex')) {
+			ctx.status = 200;
+			ctx.body = 'Server Restarted.';
+			server.close(() => {
+				console.log('Received GitHub push message, server restarted.');
+				process.exit();
+			});
+		} else {
+			ctx.status = 401;
+			ctx.body = 'Authorize failed.';
+		}
 	}
 });
 
