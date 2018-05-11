@@ -26,8 +26,8 @@ router.post('/', ctx => {
 	console.log('ctx', JSON.stringify(ctx));
 	console.log('ctx.request', JSON.stringify(ctx.request));
 	console.log('ctx.request.header', JSON.stringify(ctx.request.header));
-	console.log('req', JSON.stringify(req));
-	console.log('res', JSON.stringify(res));
+	console.log('ctx.req', JSON.stringify(ctx.req));
+	console.log('ctx.res', JSON.stringify(ctx.res));
 	if (ctx.request.header['user-agent'].includes('LineBotWebhook')) {
 		const req = ctx.request;
 		if (LineBotSDK.validateSignature(req.rawBody, Config.LineBot.channelSecret, req.headers['x-line-signature'])) {
@@ -40,12 +40,10 @@ router.post('/', ctx => {
 		}
 	} else if (ctx.request.header['user-agent'].includes('GitHub')) {
 		ctx.status = 200;
-		setTimeout(() => {
-			server.close(() => {
-				console.log('Received GitHub push message, server restarted.');
-				process.exit();
-			});
-		}, 2000);
+		server.close(() => {
+			console.log('Received GitHub push message, server restarted.');
+			process.exit();
+		});
 	}
 })
 
