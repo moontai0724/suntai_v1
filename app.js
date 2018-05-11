@@ -21,7 +21,7 @@ const LineBotClient = new LineBotSDK.Client(Config.LineBot);
 
 app.use(ctx => {
 	console.log(ctx);
-	KoaBodyParser(ctx);
+	KoaBodyParser();
 });
 // app.use(KoaBodyParser());
 
