@@ -181,62 +181,37 @@ module.exports = {
             if (settings.StartHour > 24) settings.StartHour = 24; else if (settings.StartHour < 0) settings.StartHour = 0;
             if (settings.StartMinute > 60) settings.StartMinute = 60; else if (settings.StartMinute < 0) settings.StartMinute = 0;
             if (settings.StartSecond > 60) settings.StartSecond = 60; else if (settings.StartSecond < 0) settings.StartSecond = 0;
+            var searchParameter = '', fulltime = false;
             if (changelog.start == true || changelog.over == true) {
                 let startDate = new Date(settings.StartYear, settings.StartMonth - 1, settings.StartDay, settings.StartHour, settings.StartMinute, settings.StartSecond);
                 let overDate = new Date(settings.OverYear, settings.OverMonth - 1, settings.OverDay, settings.OverHour, settings.OverMinute, settings.OverSecond);
                 let startTime = startDate.getTime();
                 let overTime = overDate.getTime();
-                db_GroupChatlog.all('SELECT * FROM ' + SourceData.id + ' WHERE timestamp BETWEEN ' + startTime + ' AND ' + overTime + ' ORDER BY timestamp DESC LIMIT ' + count).then(data => {
-                    if (data.length != 0) {
-                        let replyMsg = '';
-                        UTC8Time.getNowTimePromise(data[0].timestamp).then(time => {
-                            replyMsg = time.time_year + '/' + time.time_month + '/' + time.time_day + ' ' + time.time_hr + ':' + time.time_min + ' ' + decodeURIComponent(data[0].displayName) + '-> ' + decodeURIComponent(data[0].message);
-                            if (data.length == 1) resolve(replyMsg);
-                        });
-                        for (let i = 1; i < data.length; i++) {
-                            UTC8Time.getNowTimePromise(data[i].timestamp).then(time => {
-                                replyMsg = time.time_year + '/' + time.time_month + '/' + time.time_day + ' ' + time.time_hr + ':' + time.time_min + ' ' + decodeURIComponent(data[i].displayName) + '-> ' + decodeURIComponent(data[i].message) + '\n' + replyMsg;
-                                if (i == data.length - 1) resolve(replyMsg);
-                            });
-                        }
-                    } else resolve('沒有任何紀錄。');
-                });
+                fulltime = true;
+                searchParameter = 'SELECT * FROM ' + SourceData.id + ' WHERE timestamp BETWEEN ' + startTime + ' AND ' + overTime + ' ORDER BY timestamp DESC LIMIT ' + count;
             } else if (changelog.specific == true) {
                 let overDate = new Date();
                 let overTime = overDate.getTime();
                 let SpecificTime = settings.Year * 1000 * 60 * 60 * 24 * 265 + settings.Month * 1000 * 60 * 60 * 24 * 30 + settings.Day * 1000 * 60 * 60 * 24 + settings.Hour * 1000 * 60 * 60 + settings.Minute * 1000 * 60 + settings.Second * 1000;
-                db_GroupChatlog.all('SELECT * FROM ' + SourceData.id + ' WHERE timestamp BETWEEN ' + (overTime - SpecificTime) + ' AND ' + overTime + ' ORDER BY timestamp DESC LIMIT ' + count).then(data => {
-                    if (data.length != 0) {
-                        let replyMsg = '';
-                        UTC8Time.getNowTimePromise(data[0].timestamp).then(time => {
-                            replyMsg = time.time_hr + ':' + time.time_min + ' ' + decodeURIComponent(data[0].displayName) + '-> ' + decodeURIComponent(data[0].message);
-                            if (data.length == 1) resolve(replyMsg);
-                        });
-                        for (let i = 1; i < data.length; i++) {
-                            UTC8Time.getNowTimePromise(data[i].timestamp).then(time => {
-                                replyMsg = time.time_hr + ':' + time.time_min + ' ' + decodeURIComponent(data[i].displayName) + '-> ' + decodeURIComponent(data[i].message) + '\n' + replyMsg;
-                                if (i == data.length - 1) resolve(replyMsg);
-                            });
-                        }
-                    } else resolve('沒有任何紀錄。');
-                });
+                searchParameter = 'SELECT * FROM ' + SourceData.id + ' WHERE timestamp BETWEEN ' + (overTime - SpecificTime) + ' AND ' + overTime + ' ORDER BY timestamp DESC LIMIT ' + count;
             } else {
-                db_GroupChatlog.all('SELECT * FROM ' + SourceData.id + ' ORDER BY timestamp DESC LIMIT ' + count).then(data => {
-                    if (data.length != 0) {
-                        let replyMsg = '';
-                        UTC8Time.getNowTimePromise(data[0].timestamp).then(time => {
-                            replyMsg = time.time_hr + ':' + time.time_min + ' ' + decodeURIComponent(data[0].displayName) + '-> ' + decodeURIComponent(data[0].message);
-                            if (data.length == 1) resolve(replyMsg);
-                        });
-                        for (let i = 1; i < data.length; i++) {
-                            UTC8Time.getNowTimePromise(data[i].timestamp).then(time => {
-                                replyMsg = time.time_hr + ':' + time.time_min + ' ' + decodeURIComponent(data[i].displayName) + '-> ' + decodeURIComponent(data[i].message) + '\n' + replyMsg;
-                                if (i == data.length - 1) resolve(replyMsg);
-                            });
-                        }
-                    } else resolve('沒有任何紀錄。');
-                });
+                searchParameter = 'SELECT * FROM ' + SourceData.id + ' ORDER BY timestamp DESC LIMIT ' + count;
             }
+            db_GroupChatlog.all(searchParameter).then(data => {
+                if (data.length != 0) {
+                    let replyMsg = '';
+                    UTC8Time.getNowTimePromise(data[0].timestamp).then(time => {
+                        replyMsg = (fulltime ? time.time_year + '/' + time.time_month + '/' + time.time_day + ' ' : '') + time.time_hr + ':' + time.time_min + ' ' + decodeURIComponent(data[0].displayName) + '-> ' + decodeURIComponent(data[0].message);
+                        if (data.length == 1) resolve(replyMsg);
+                    });
+                    for (let i = 1; i < data.length; i++) {
+                        UTC8Time.getNowTimePromise(data[i].timestamp).then(time => {
+                            replyMsg = (fulltime ? time.time_year + '/' + time.time_month + '/' + time.time_day + ' ' : '') + time.time_hr + ':' + time.time_min + ' ' + decodeURIComponent(data[i].displayName) + '-> ' + decodeURIComponent(data[i].message) + '\n' + replyMsg;
+                            if (i == data.length - 1) resolve(replyMsg);
+                        });
+                    }
+                } else resolve('沒有任何紀錄。');
+            });
         })
     },
     searchHistoryWithKeyWords: function () {
