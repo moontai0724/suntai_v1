@@ -189,14 +189,16 @@ module.exports = {
                 db_GroupChatlog.all('SELECT * FROM ' + SourceData.id + ' WHERE timestamp BETWEEN ' + startTime + ' AND ' + overTime + ' ORDER BY timestamp DESC LIMIT ' + count).then(data => {
                     if (data.length != 0) {
                         let replyMsg = '';
-                        UTC8Time.getNowTimePromise(data[0].timestamp).then(time => replyMsg = time.time_year + '/' + time.time_month + '/' + time.time_day + ' ' + time.time_hr + ':' + time.time_min + ' ' + decodeURIComponent(data[0].displayName) + '-> ' + decodeURIComponent(data[0].message));
+                        UTC8Time.getNowTimePromise(data[0].timestamp).then(time => {
+                            replyMsg = time.time_year + '/' + time.time_month + '/' + time.time_day + ' ' + time.time_hr + ':' + time.time_min + ' ' + decodeURIComponent(data[0].displayName) + '-> ' + decodeURIComponent(data[0].message);
+                            if (data.length == 1) resolve(replyMsg);
+                        });
                         for (let i = 1; i < data.length; i++) {
                             UTC8Time.getNowTimePromise(data[i].timestamp).then(time => {
                                 replyMsg = time.time_year + '/' + time.time_month + '/' + time.time_day + ' ' + time.time_hr + ':' + time.time_min + ' ' + decodeURIComponent(data[i].displayName) + '-> ' + decodeURIComponent(data[i].message) + '\n' + replyMsg;
                                 if (i == data.length - 1) resolve(replyMsg);
                             });
                         }
-                        if (data.length == 1) resolve(replyMsg);
                     } else resolve('沒有任何紀錄。');
                 });
             } else if (changelog.specific == true) {
@@ -208,6 +210,7 @@ module.exports = {
                         let replyMsg = '';
                         UTC8Time.getNowTimePromise(data[0].timestamp).then(time => {
                             replyMsg = time.time_hr + ':' + time.time_min + ' ' + decodeURIComponent(data[0].displayName) + '-> ' + decodeURIComponent(data[0].message);
+                            if (data.length == 1) resolve(replyMsg);
                         });
                         for (let i = 1; i < data.length; i++) {
                             UTC8Time.getNowTimePromise(data[i].timestamp).then(time => {
@@ -215,7 +218,6 @@ module.exports = {
                                 if (i == data.length - 1) resolve(replyMsg);
                             });
                         }
-                        if (data.length == 1) resolve(replyMsg);
                     } else resolve('沒有任何紀錄。');
                 });
             } else {
@@ -224,6 +226,7 @@ module.exports = {
                         let replyMsg = '';
                         UTC8Time.getNowTimePromise(data[0].timestamp).then(time => {
                             replyMsg = time.time_hr + ':' + time.time_min + ' ' + decodeURIComponent(data[0].displayName) + '-> ' + decodeURIComponent(data[0].message);
+                            if (data.length == 1) resolve(replyMsg);
                         });
                         for (let i = 1; i < data.length; i++) {
                             UTC8Time.getNowTimePromise(data[i].timestamp).then(time => {
@@ -231,7 +234,6 @@ module.exports = {
                                 if (i == data.length - 1) resolve(replyMsg);
                             });
                         }
-                        if (data.length == 1) resolve(replyMsg);
                     } else resolve('沒有任何紀錄。');
                 });
             }
