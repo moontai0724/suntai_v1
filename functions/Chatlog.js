@@ -196,6 +196,7 @@ module.exports = {
                                 if (i == data.length - 1) resolve(replyMsg);
                             });
                         }
+                        if (data.length == 1) resolve(replyMsg);
                     } else resolve('沒有任何紀錄。');
                 });
             } else if (changelog.specific == true) {
@@ -214,6 +215,7 @@ module.exports = {
                                 if (i == data.length - 1) resolve(replyMsg);
                             });
                         }
+                        if (data.length == 1) resolve(replyMsg);
                     } else resolve('沒有任何紀錄。');
                 });
             } else {
@@ -229,6 +231,7 @@ module.exports = {
                                 if (i == data.length - 1) resolve(replyMsg);
                             });
                         }
+                        if (data.length == 1) resolve(replyMsg);
                     } else resolve('沒有任何紀錄。');
                 });
             }
