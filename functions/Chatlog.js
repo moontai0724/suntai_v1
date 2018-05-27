@@ -181,18 +181,20 @@ module.exports = {
             if (settings.StartHour > 24) settings.StartHour = 24; else if (settings.StartHour < 0) settings.StartHour = 0;
             if (settings.StartMinute > 60) settings.StartMinute = 60; else if (settings.StartMinute < 0) settings.StartMinute = 0;
             if (settings.StartSecond > 60) settings.StartSecond = 60; else if (settings.StartSecond < 0) settings.StartSecond = 0;
-            let searchParameter = '', fulltime = false;
+            let searchParameter = '', fulltime = false, reverse = true;
             if (changelog.start == true || changelog.over == true) {
                 let startDate = new Date(settings.StartYear, settings.StartMonth - 1, settings.StartDay, settings.StartHour, settings.StartMinute, settings.StartSecond);
                 let overDate = new Date(settings.OverYear, settings.OverMonth - 1, settings.OverDay, settings.OverHour, settings.OverMinute, settings.OverSecond);
                 let startTime = startDate.getTime();
                 let overTime = overDate.getTime();
                 fulltime = true;
+                reverse = false;
                 searchParameter = 'SELECT * FROM ' + SourceData.id + ' WHERE timestamp BETWEEN ' + startTime + ' AND ' + overTime + ' ORDER BY timestamp ASC LIMIT ' + count;
             } else if (changelog.specific == true) {
                 let overDate = new Date();
                 let overTime = overDate.getTime();
                 let SpecificTime = settings.Year * 1000 * 60 * 60 * 24 * 265 + settings.Month * 1000 * 60 * 60 * 24 * 30 + settings.Day * 1000 * 60 * 60 * 24 + settings.Hour * 1000 * 60 * 60 + settings.Minute * 1000 * 60 + settings.Second * 1000;
+                reverse = false;
                 searchParameter = 'SELECT * FROM ' + SourceData.id + ' WHERE timestamp BETWEEN ' + (overTime - SpecificTime) + ' AND ' + overTime + ' ORDER BY timestamp ASC LIMIT ' + count;
             } else {
                 searchParameter = 'SELECT * FROM ' + SourceData.id + ' ORDER BY timestamp DESC LIMIT ' + count;
@@ -206,7 +208,8 @@ module.exports = {
                         option.month = 'numeric';
                         option.day = 'numeric';
                     }
-                    replyMsg = data.map(value => (new Date(value.timestamp)).toLocaleString('zh-tw', option) + ' ' + decodeURIComponent(value.displayName) + '-> ' + decodeURIComponent(value.message)).reverse().join('\n');
+                    if (reverse) data = data.reverse();
+                    replyMsg = data.map(value => (new Date(value.timestamp)).toLocaleString('zh-tw', option) + ' ' + decodeURIComponent(value.displayName) + '-> ' + decodeURIComponent(value.message)).join('\n');
                 }
                 resolve(replyMsg);
             });
