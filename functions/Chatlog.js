@@ -181,7 +181,7 @@ module.exports = {
             if (settings.StartHour > 24) settings.StartHour = 24; else if (settings.StartHour < 0) settings.StartHour = 0;
             if (settings.StartMinute > 60) settings.StartMinute = 60; else if (settings.StartMinute < 0) settings.StartMinute = 0;
             if (settings.StartSecond > 60) settings.StartSecond = 60; else if (settings.StartSecond < 0) settings.StartSecond = 0;
-            var searchParameter = '', fulltime = false;
+            let searchParameter = '', fulltime = false;
             if (changelog.start == true || changelog.over == true) {
                 let startDate = new Date(settings.StartYear, settings.StartMonth - 1, settings.StartDay, settings.StartHour, settings.StartMinute, settings.StartSecond);
                 let overDate = new Date(settings.OverYear, settings.OverMonth - 1, settings.OverDay, settings.OverHour, settings.OverMinute, settings.OverSecond);
@@ -198,19 +198,17 @@ module.exports = {
                 searchParameter = 'SELECT * FROM ' + SourceData.id + ' ORDER BY timestamp DESC LIMIT ' + count;
             }
             db_GroupChatlog.all(searchParameter).then(data => {
+                let replyMsg = '沒有任何紀錄。';
                 if (data.length != 0) {
-                    let replyMsg = '';
-                    UTC8Time.getNowTimePromise(data[0].timestamp).then(time => {
-                        replyMsg = (fulltime ? time.time_year + '/' + time.time_month + '/' + time.time_day + ' ' : '') + time.time_hr + ':' + time.time_min + ' ' + decodeURIComponent(data[0].displayName) + '-> ' + decodeURIComponent(data[0].message);
-                        if (data.length == 1) resolve(replyMsg);
-                    });
-                    for (let i = 1; i < data.length; i++) {
-                        UTC8Time.getNowTimePromise(data[i].timestamp).then(time => {
-                            replyMsg = (fulltime ? time.time_year + '/' + time.time_month + '/' + time.time_day + ' ' : '') + time.time_hr + ':' + time.time_min + ' ' + decodeURIComponent(data[i].displayName) + '-> ' + decodeURIComponent(data[i].message) + '\n' + replyMsg;
-                            if (i == data.length - 1) resolve(replyMsg);
-                        });
+                    let option = { hour12: false, hour: 'numeric', minute: 'numeric' };
+                    if (fulltime) {
+                        option.year = 'numeric';
+                        option.month = 'numeric';
+                        option.day = 'numeric';
                     }
-                } else resolve('沒有任何紀錄。');
+                    replyMsg = data.map(value => (new Date(value.timestamp)).toLocaleString('zh-tw', option) + '' + decodeURIComponent(value.displayName) + '-> ' + decodeURIComponent(value.message)).join('\n');
+                }
+                resolve(replyMsg);
             });
         })
     },
