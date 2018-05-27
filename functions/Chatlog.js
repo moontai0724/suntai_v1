@@ -188,12 +188,12 @@ module.exports = {
                 let startTime = startDate.getTime();
                 let overTime = overDate.getTime();
                 fulltime = true;
-                searchParameter = 'SELECT * FROM ' + SourceData.id + ' WHERE timestamp BETWEEN ' + startTime + ' AND ' + overTime + ' ORDER BY timestamp DESC LIMIT ' + count;
+                searchParameter = 'SELECT * FROM ' + SourceData.id + ' WHERE timestamp BETWEEN ' + startTime + ' AND ' + overTime + ' ORDER BY timestamp ASC LIMIT ' + count;
             } else if (changelog.specific == true) {
                 let overDate = new Date();
                 let overTime = overDate.getTime();
                 let SpecificTime = settings.Year * 1000 * 60 * 60 * 24 * 265 + settings.Month * 1000 * 60 * 60 * 24 * 30 + settings.Day * 1000 * 60 * 60 * 24 + settings.Hour * 1000 * 60 * 60 + settings.Minute * 1000 * 60 + settings.Second * 1000;
-                searchParameter = 'SELECT * FROM ' + SourceData.id + ' WHERE timestamp BETWEEN ' + (overTime - SpecificTime) + ' AND ' + overTime + ' ORDER BY timestamp DESC LIMIT ' + count;
+                searchParameter = 'SELECT * FROM ' + SourceData.id + ' WHERE timestamp BETWEEN ' + (overTime - SpecificTime) + ' AND ' + overTime + ' ORDER BY timestamp ASC LIMIT ' + count;
             } else {
                 searchParameter = 'SELECT * FROM ' + SourceData.id + ' ORDER BY timestamp DESC LIMIT ' + count;
             }
@@ -206,7 +206,7 @@ module.exports = {
                         option.month = 'numeric';
                         option.day = 'numeric';
                     }
-                    replyMsg = data.map(value => (new Date(value.timestamp)).toLocaleString('zh-tw', option) + '' + decodeURIComponent(value.displayName) + '-> ' + decodeURIComponent(value.message)).join('\n');
+                    replyMsg = data.map(value => (new Date(value.timestamp)).toLocaleString('zh-tw', option) + ' ' + decodeURIComponent(value.displayName) + '-> ' + decodeURIComponent(value.message)).reverse().join('\n');
                 }
                 resolve(replyMsg);
             });
