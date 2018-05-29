@@ -504,6 +504,54 @@ async function MessageHandler(event) {
 													break;
 											}
 											break;
+										case 'ping':
+											if (msgs[2] || SourceData.id == 'C0170a911180661dae5d2ec25bdffceae') {
+												if (msgs[2]) {
+													msgs[2] = msgs[2].replace('http://', '').replace('https://', '');
+													msgs[2] = encodeURIComponent(msgs[2].split('/')[0]);
+												}
+
+												let pingport, pingattempts, replyMsg;
+
+												if (msgs[3]) {
+													if (65536 > Number(msgs[3]) && Number(msgs[3]) > 0) {
+														pingport = Number(msgs[3]);
+													} else {
+														pingport = 80;
+													}
+												} else {
+													pingport = 80;
+												}
+
+												if (msgs[4]) {
+													if (6 > Number(msgs[4]) && Number(msgs[4]) > 0) {
+														pingattempts = Number(msgs[4]);
+													} else {
+														pingattempts = 2;
+													}
+												} else {
+													pingattempts = 2;
+												}
+
+												if (!msgs[2] && SourceData.id == 'C0170a911180661dae5d2ec25bdffceae') {
+													msgs[2] = 'dokidokiweebclub.ddns.net';
+													pingport = 25565;
+												}
+
+												ping.ping({ address: msgs[2], port: pingport, attempts: pingattempts }, data => {
+													replyMsg = '目標位址： ' + data[0].address + '\n連接埠： ' + data[0].port + '\n嘗試次數： ' + data[0].attempts;
+													if (data[0].avg) {
+														replyMsg += '\n狀態： 線上' + '\n平均時間： ' + data[0].avg;
+													} else {
+														replyMsg += '\n狀態： 離線';
+													}
+
+													startReply(MsgFormat.Text(replyMsg));
+												});
+											} else {
+												startReply(MsgFormat.Text('參數錯誤。'));
+											}
+											break;
 										default:
 											startReply(MsgFormat.Text('參數錯誤。'));
 											break;
@@ -737,54 +785,6 @@ async function MessageHandler(event) {
 													});
 												});
 											}
-										} else {
-											startReply(MsgFormat.Text('參數錯誤。'));
-										}
-										break;
-									case 'ping':
-										if (msgs[2] || SourceData.id == 'C0170a911180661dae5d2ec25bdffceae') {
-											if (msgs[2]) {
-												msgs[2] = msgs[2].replace('http://', '').replace('https://', '');
-												msgs[2] = encodeURIComponent(msgs[2].split('/')[0]);
-											}
-
-											let pingport, pingattempts, replyMsg;
-
-											if (msgs[3]) {
-												if (65536 > Number(msgs[3]) && Number(msgs[3]) > 0) {
-													pingport = Number(msgs[3]);
-												} else {
-													pingport = 80;
-												}
-											} else {
-												pingport = 80;
-											}
-
-											if (msgs[4]) {
-												if (6 > Number(msgs[4]) && Number(msgs[4]) > 0) {
-													pingattempts = Number(msgs[4]);
-												} else {
-													pingattempts = 2;
-												}
-											} else {
-												pingattempts = 2;
-											}
-
-											if (!msgs[2] && SourceData.id == 'C0170a911180661dae5d2ec25bdffceae') {
-												msgs[2] = 'dokidokiweebclub.ddns.net';
-												pingport = 25565;
-											}
-
-											ping.ping({ address: msgs[2], port: pingport, attempts: pingattempts }, data => {
-												replyMsg = '目標位址： ' + data[0].address + '\n連接埠： ' + data[0].port + '\n嘗試次數： ' + data[0].attempts;
-												if (data[0].avg) {
-													replyMsg += '\n狀態： 線上' + '\n平均時間： ' + data[0].avg;
-												} else {
-													replyMsg += '\n狀態： 離線';
-												}
-
-												startReply(MsgFormat.Text(replyMsg));
-											});
 										} else {
 											startReply(MsgFormat.Text('參數錯誤。'));
 										}
