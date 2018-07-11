@@ -9,29 +9,34 @@ A project of chatbot which use Developer Trial plan.
 * Bot 用到 sqlite database，若沒有已經可以使用的 database (settings/settings.sqlite) 將無法正常運作。
 
 ### Database (settings/settings.sqlite) 內容
+
 **Groups** -> 加入的群組
-    `CREATE TABLE 'Groups' (
-        'id'	TEXT UNIQUE,
-        PRIMARY KEY('id')
-    );`
+`CREATE TABLE 'Groups' (
+    'id'	TEXT UNIQUE,
+    PRIMARY KEY('id')
+);`
+
 **Rooms** -> 加入的聊天室
-    `CREATE TABLE 'Rooms' (
-        'id'    TEXT UNIQUE,
-        PRIMARY KEY('id')
-    );`
+`CREATE TABLE 'Rooms' (
+    'id'    TEXT UNIQUE,
+    PRIMARY KEY('id')
+);`
+
 **Owners** -> 管理員
-    `CREATE TABLE 'Owners' (
-        'id'	TEXT UNIQUE,
-        PRIMARY KEY('id')
-    );`
+`CREATE TABLE 'Owners' (
+    'id'	TEXT UNIQUE,
+    PRIMARY KEY('id')
+);`
+
 **OwnersNotice** -> 會接收提醒的管理員
-    `CREATE TABLE 'OwnersNotice' (
-        'id'	TEXT UNIQUE,
-        PRIMARY KEY('id')
-    );`
+`CREATE TABLE 'OwnersNotice' (
+    'id'	TEXT UNIQUE,
+    PRIMARY KEY('id')
+);`
+
 **Variables** -> 變數
-    `CREATE TABLE 'Variables' (
-        'id'    TEXT UNIQUE,
-        'data'  TEXT,
-        PRIMARY KEY('id')
-    );`
+`CREATE TABLE 'Variables' (
+    'id'    TEXT UNIQUE,
+    'data'  TEXT,
+    PRIMARY KEY('id')
+);`
