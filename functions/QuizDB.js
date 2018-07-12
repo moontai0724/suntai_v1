@@ -14,7 +14,7 @@ module.exports = {
     get: function () {
         return new Promise(function (resolve) {
             if (quizdbget == true) resolve(data_quiz); else {
-                for (let x = 2; x < 10; x++) {
+                for (let x = 1; x < 9; x++) {
                     $.get('https://spreadsheets.google.com/feeds/list/1bV8nZP0Iahgp1GoqTT7qNlgvQYPWmg2yT5Wcsta6lbo/' + x + '/public/values?alt=json', function (data) {
                         data = JSON.parse(data);
                         let nowlength = data_quiz.length;
